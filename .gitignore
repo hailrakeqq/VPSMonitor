@@ -1,2 +1,8 @@
 .idea/*
 .vscode/*
+
+/VPSMonitor.Client/.vscode/*
+/VPSMonitor.Client/.idea/*
+
+/VPSMonitor.API/.vscode/*
+/VPSMonitor.API/.idea/*
