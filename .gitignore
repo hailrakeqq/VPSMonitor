@@ -6,3 +6,5 @@
 
 /VPSMonitor.API/.vscode/*
 /VPSMonitor.API/.idea/*
+/VPSMonitor.API/obj/*
+/VPSMonitor.API/bin/*
