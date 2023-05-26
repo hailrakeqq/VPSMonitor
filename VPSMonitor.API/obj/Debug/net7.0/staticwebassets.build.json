@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "CZMcgPqXXWf6MyxEI04XM3tNzsIQxEHqEoUtlFCORls=",
+  "Source": "VPSMonitor.API",
+  "BasePath": "_content/VPSMonitor.API",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
