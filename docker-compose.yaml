@@ -1,0 +1,39 @@
+services:
+  backend:
+    depends_on:
+      - "db"
+    build:
+      context: ./VPSMonitor.API/.
+    ports:
+      - "5045:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    restart: always
+ 
+  frontend:
+    build:
+      context: ./VPSMonitor.Client/.
+    ports:
+      - 4200:4200
+    restart: always
+
+  db:
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1
+      - POSTGRES_DB=vpsmonitor
+    ports:
+      - "5433:5432"
+    restart: always
+    volumes:
+      - app_data:/var/lib/postgresql/data
+    networks:
+      - dev
+
+volumes:
+  app_data:
+ 
+networks:
+  dev:
+    driver: bridge
