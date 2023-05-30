@@ -8,3 +8,6 @@
 /VPSMonitor.API/.idea/*
 /VPSMonitor.API/obj/*
 /VPSMonitor.API/bin/*
+
+/VPSMonitor.Tests/bin/*
+/VPSMonitor.Tests/obj/*
