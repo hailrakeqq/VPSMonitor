@@ -1,0 +1,12 @@
+nav {
+  @apply flex flex-col bg-gray-200 h-screen w-64;
+
+  .menu-item {
+    @apply py-2 px-4 hover:bg-gray-300 cursor-pointer;
+  }
+}
+
+.menu{
+    margin-top: 50px;
+    margin-left: 25px;
+}

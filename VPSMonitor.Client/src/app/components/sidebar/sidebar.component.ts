@@ -2,14 +2,14 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  selector: 'app-sidebar',
+  templateUrl: './sidebar.component.html',
+  styleUrls: ['./sidebar.component.scss']
 })
-export class HeaderComponent {
-    constructor(private router: Router) { }
-    
-    title = 'VPSMonitor.Client'
+export class SidebarComponent {
+    isUserLogin = localStorage.getItem("access-token") 
+   
+constructor(private router: Router) { }
     
     public HomeRedirect(): void{
         this.router.navigate([''])
@@ -23,4 +23,13 @@ export class HeaderComponent {
     public SignUpRedirect (): void{
         this.router.navigate(['/signup'])
     }
+    public SignOut(): void{
+        localStorage.clear()
+        window.location.reload()
+        this.router.navigate([''])
+    }
 }
+
+
+
+

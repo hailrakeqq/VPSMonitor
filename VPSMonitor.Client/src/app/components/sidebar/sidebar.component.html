@@ -1,0 +1,13 @@
+<nav class="flex flex-col bg-gray-200 h-screen w-64">
+   <ul class="menu">
+      <li class="menu-item" (click)="HomeRedirect()"><button>Home</button></li>
+      <li class="menu-item" (click)="AboutRedirect()"><button>About</button></li>
+      <div *ngIf="isUserLogin == '' || isUserLogin == undefined">      
+         <li class="menu-item" (click)="SignInRedirect()"><button>Sign in</button></li>
+         <li class="menu-item" (click)="SignUpRedirect()"><button >Sign up</button></li>
+      </div>
+      <div *ngIf="isUserLogin != undefined">
+         <li class="menu-item" (click)="SignOut()"><button>Sign Out</button></li>
+      </div>
+    </ul>
+</nav>
