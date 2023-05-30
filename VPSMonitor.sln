@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VPSMonitor.API", "VPSMonito
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VPSMonitor.Tests", "VPSMonitor.Tests\VPSMonitor.Tests.csproj", "{2464AC9E-F46E-47C9-82D7-AF722C9D0079}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VPSMonitor.Core", "VPSMonitor.Core\VPSMonitor.Core.csproj", "{3EABF5C6-3FEE-44C5-BFFC-206B8B44D350}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,5 +21,9 @@ Global
 		{2464AC9E-F46E-47C9-82D7-AF722C9D0079}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2464AC9E-F46E-47C9-82D7-AF722C9D0079}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2464AC9E-F46E-47C9-82D7-AF722C9D0079}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3EABF5C6-3FEE-44C5-BFFC-206B8B44D350}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EABF5C6-3FEE-44C5-BFFC-206B8B44D350}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EABF5C6-3FEE-44C5-BFFC-206B8B44D350}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EABF5C6-3FEE-44C5-BFFC-206B8B44D350}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
