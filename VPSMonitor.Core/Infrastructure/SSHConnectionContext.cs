@@ -2,9 +2,9 @@ using Renci.SshNet;
 
 namespace VPSMonitor.Core.Infrastructure;
 
-public class VpsConnectionContext
+public static class SSHConnectionContext
 {
-    public SshClient Connect(string host, string username, string password)
+    public static SshClient Connect(string host, string username, string password)
     {
         var connectionInfo =
             new ConnectionInfo(host, username, new PasswordAuthenticationMethod(username, password));
@@ -14,7 +14,7 @@ public class VpsConnectionContext
         return sshClient;
     }
 
-    public void Disconect(SshClient sshClient)
+    public static void Disconect(SshClient sshClient)
     {
         if(sshClient.IsConnected)
             sshClient.Disconnect();

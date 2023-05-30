@@ -12,6 +12,7 @@ builder.Services.AddCurrentUser();
 builder.Services.AddTokenService();
 builder.Services.AddLoginResponse();
 builder.Services.AddUserService();
+builder.Services.AddSSHService();
 
 
 builder.Services.AddControllers();
