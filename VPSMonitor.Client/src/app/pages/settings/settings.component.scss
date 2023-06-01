@@ -1,0 +1,33 @@
+h2 {
+  @apply text-2xl font-bold mb-4;
+}
+
+h3 {
+  @apply text-lg font-bold my-4;
+}
+
+form {
+  @apply flex flex-col;
+  margin-bottom: 2rem; // Застосуйте відступ відповідно до вашого вимоги
+}
+
+label {
+  @apply mb-2;
+}
+
+input {
+  @apply border border-gray-300 rounded px-3 py-2 w-full mb-2;
+}
+
+button {
+  @apply bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded;
+}
+textarea {
+  @apply border border-gray-300 rounded px-3 py-2 w-full
+        focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+        resize-none;
+        --textarea-width: 600px;
+        --textarea-height: 250px;
+        width: var(--textarea-width);
+        height: var(--textarea-height);
+}

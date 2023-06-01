@@ -1,9 +1,8 @@
 export class Toolchain{
     static ValidateInputData(email: string, password: string, confirmPassword?: string): boolean {
         const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const uppercaseRegex = /[A-Z]/;
-        // && uppercaseRegex.test(password)
-        if (email && password && emailPattern.test(email) && password.length >= 6) {
+
+        if (email && password && this.ValidateInputEmail(email) && password.length >= 6) {
             if (confirmPassword) {
                 return password === confirmPassword;
             } else {
@@ -11,6 +10,20 @@ export class Toolchain{
             }
         }
   
+        return false;
+    }
+    
+    static ValidateInputForChangePassword(newPassword: string, confirmPassword: string): boolean{
+        if (newPassword !== confirmPassword && newPassword.length >= 6)
+            return true;
+        return false;
+    }
+
+    static ValidateInputEmail(email: string): boolean {
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        
+        if (emailPattern.test(email))
+            return true
         return false;
     }
 }

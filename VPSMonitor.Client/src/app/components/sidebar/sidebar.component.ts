@@ -23,6 +23,9 @@ constructor(private router: Router) { }
     public SignUpRedirect (): void{
         this.router.navigate(['/signup'])
     }
+    public SettingsRedirect(): void{
+        this.router.navigate(['/settings'])
+    }
     public SignOut(): void{
         localStorage.clear()
         window.location.reload()

@@ -1,0 +1,48 @@
+<h2>User Settings</h2>
+<h3>Change Email</h3>
+<form (ngSubmit)="changeEmail()">
+  <label>
+    New Email:
+    <input type="email" [(ngModel)]="newEmail" name="newEmail" required>
+  </label>
+  <label>
+    Confirm password:
+    <input type="password" [(ngModel)]="confirmPassword" name="confirmPassword" required>
+  </label>
+  <button type="submit">Change Email!</button>
+</form>
+
+<h3>Change Password</h3>
+<form (ngSubmit)="changePassword()">
+  <label>
+    Current password:
+    <input type="password" [(ngModel)]="confirmPassword" name="confirmPassword" required>
+  </label>
+  <label>
+    New password:
+    <input type="password" [(ngModel)]="newPassword" name="newPassword" required>
+  </label>
+  <button type="submit">Change password</button>
+</form>
+
+<h3>Delete Account</h3>
+<form (ngSubmit)="deleteAccount()">
+  <label>
+    Confirm password:
+    <input type="password" [(ngModel)]="confirmPassword" name="confirmPassword" required>
+  </label>
+  <!--//TODO: додати модальне вікно-->
+  <button type="submit">Delete Account</button>
+</form>
+
+<h3>Add SSH key</h3>
+<form (ngSubmit)="addSSHKey()">
+    <p>SSH Key:</p>
+    <textarea type="text" [(ngModel)]="sshKey" name="sshKey" required></textarea>
+  <label>
+    Username - (name that you use for connect to VPS):
+    <input type="text" [(ngModel)]="username" name="username" required>
+  </label>
+  <button type="submit">Add SSH Key!</button>
+</form>
+
