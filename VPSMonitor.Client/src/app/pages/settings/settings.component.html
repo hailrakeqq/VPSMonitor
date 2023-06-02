@@ -35,14 +35,3 @@
   <button type="submit">Delete Account</button>
 </form>
 
-<h3>Add SSH key</h3>
-<form (ngSubmit)="addSSHKey()">
-    <p>SSH Key:</p>
-    <textarea type="text" [(ngModel)]="sshKey" name="sshKey" required></textarea>
-  <label>
-    Username - (name that you use for connect to VPS):
-    <input type="text" [(ngModel)]="username" name="username" required>
-  </label>
-  <button type="submit">Add SSH Key!</button>
-</form>
-

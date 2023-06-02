@@ -24,7 +24,6 @@ public static class DIContainer
 
     public static IServiceCollection AddSSHService(this IServiceCollection services)
     {
-        //TODO: add ISSHRepository or ISSHService
-        return services.AddTransient<SSHService>();
+        return services.AddTransient<ISshRepository ,SshService>();
     }
 }

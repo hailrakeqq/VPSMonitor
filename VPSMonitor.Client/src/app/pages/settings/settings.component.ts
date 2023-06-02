@@ -78,26 +78,4 @@ export class SettingsComponent {
         alert(response)
       }
   }
-
-  async addSSHKey(): Promise<void> {
-      const sshKeyObject = {
-        Username: this.username,
-        SSHKey: this.sshKey
-      }
-
-      const request = await fetch(`http://localhost:5081/api/UserSettings/AddSSHKey/${localStorage.getItem('id')}`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `bearer ${localStorage.getItem('access-token')}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(sshKeyObject)
-      })
-
-      if (request.status == 200) {
-        const response = await request.json()
-        alert(response)
-      }
-    
-  }
 }

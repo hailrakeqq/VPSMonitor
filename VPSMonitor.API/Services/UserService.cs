@@ -46,6 +46,7 @@ public class UserService : IUserRepository
     {
         await Delete(item.Id);
         await Create(item);
+        Save();
     }
 
     public async Task Delete(string id)
@@ -54,6 +55,7 @@ public class UserService : IUserRepository
         if (user != null)
         {
             _context.users.Remove(user);
+            Save();
         }
     }
 

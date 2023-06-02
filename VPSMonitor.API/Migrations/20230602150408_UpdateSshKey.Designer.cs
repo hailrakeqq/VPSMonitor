@@ -12,8 +12,8 @@ using VPSMonitor.API;
 namespace VPSMonitor.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230530141158_UpdateSSHKeysTable")]
-    partial class UpdateSSHKeysTable
+    [Migration("20230602150408_UpdateSshKey")]
+    partial class UpdateSshKey
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -47,6 +47,25 @@ namespace VPSMonitor.API.Migrations
                     b.ToTable("refreshtokens");
                 });
 
+            modelBuilder.Entity("VPSMonitor.API.Entities.SshKey", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Ssh")
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("sshkeys");
+                });
+
             modelBuilder.Entity("VPSMonitor.API.Entities.User", b =>
                 {
                     b.Property<string>("Id")
@@ -61,25 +80,6 @@ namespace VPSMonitor.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("users");
-                });
-
-            modelBuilder.Entity("VPSMonitor.API.Entities.UsersSSHKeys", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
-
-                    b.Property<string>("SSHKey")
-                        .HasColumnType("text");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Username")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("sshkeys");
                 });
 #pragma warning restore 612, 618
         }

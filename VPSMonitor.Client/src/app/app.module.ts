@@ -10,6 +10,8 @@ import { HomeComponent } from './pages/home/home.component';
 import { SignupComponent } from './pages/auth/signup/signup.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { SettingsComponent } from './pages/settings/settings.component';
+import { SshkeysComponent } from './pages/sshkeys/sshkeys.component';
+import { ModalComponent } from './components/modal/modal.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +21,9 @@ import { SettingsComponent } from './pages/settings/settings.component';
     HomeComponent,
     SignupComponent,
     SidebarComponent,
-    SettingsComponent
+    SettingsComponent,
+    SshkeysComponent,
+    ModalComponent
   ],
   imports: [
     BrowserModule,
