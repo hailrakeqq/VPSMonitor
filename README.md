@@ -45,7 +45,7 @@ After build you can get access to services by next URL's:
 - [ ] Obtaining information about status of the VPS
 - [ ] File management
 - [ ] Proccess management 
-- [ ] Execution bash scripts and other commands
+- [X] Execution bash scripts and other commands
 
 #### Technology stack:
 - ASP.NET Core WebAPI
