@@ -1,0 +1,44 @@
+.console {
+  width: 1000px;
+  height: 500px;
+}
+
+.console-output {
+  font-family: monospace;
+  margin: 4px 0;
+}
+.console-content{
+  padding: 8px;
+  margin-top: 5px;
+  overflow-y: auto;
+  max-height: 500px;
+  width: 980px;
+}
+.console-input {
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: white;
+  font-family: monospace;
+  width: 100%;
+  padding: 4px;
+}
+
+.console-input-prefix {
+  margin-right: 4px;
+}
+
+.console-input-field {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: white;
+  font-family: monospace;
+  flex-grow: 1;
+}
+
+.console-input-field::selection {
+  background: transparent;
+}

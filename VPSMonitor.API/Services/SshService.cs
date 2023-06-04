@@ -15,9 +15,9 @@ public class SshService : ISshRepository
         _context = context;
     }
     
-    public SshClient Connect(string host, string username, string sshKey)
+    public SshClient Connect(string host, string username, string password)
     {
-        return SshConnectionContext.Connect(host, username, sshKey);
+        return SshConnectionContext.Connect(host, username, password);
     }
     
     public void Disconnect(SshClient sshClient)

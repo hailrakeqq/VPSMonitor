@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using VPSMonitor.API.Entities;
 using VPSMonitor.API.Repository;
 
 namespace VPSMonitor.API.Controllers;
@@ -16,23 +17,18 @@ public class CoreController : Controller
 
    [HttpPost]
    [Route("ExecuteCommand")]
-   public async Task<IActionResult> ExecuteCommand([FromBody]Test test)//(string host, string sshId, string command)
+   public async Task<IActionResult> ExecuteCommand([FromBody] SshRequest request)
    {
-      if (string.IsNullOrWhiteSpace(test.Host) || string.IsNullOrWhiteSpace(test.Command))
+      if (string.IsNullOrWhiteSpace(request.Host) || string.IsNullOrWhiteSpace(request.Command))
       {
          return BadRequest("Invalid input parameters.");
       }
 
       try
       {
-         // var sshKey = await _sshService.GetSshKeyById(sshId);
+         var sshClient = _sshService.Connect(request.Host, request.Username,request.Password);
 
-         //var sshClient = _sshService.Connect(host, sshKey.Username, sshKey.Ssh);
-         
-         var sshClient = _sshService.Connect(test.Host, test.Username, test.Rsa);
-         var response = await _sshService.ExecuteCommandAsync(sshClient, test.Command);
-         
-         //var response = await _sshService.ExecuteCommandAsync(sshClient, command);
+         var response = await _sshService.ExecuteCommandAsync(sshClient, request.Command);
          _sshService.Disconnect(sshClient);
 
          return Ok(response);
@@ -41,27 +37,5 @@ public class CoreController : Controller
       {
          return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
       }
-      
-      
-      // if (string.IsNullOrWhiteSpace(host) || string.IsNullOrWhiteSpace(command))
-      // {
-      //    return BadRequest("Invalid input parameters.");
-      // }
-      //
-      // try
-      // {
-      //    var sshKey = await _sshService.GetSshKeyById(sshId);
-      //
-      //    var sshClient = _sshService.Connect(host, sshKey.Username, sshKey.Ssh);
-      //
-      //    var response = await _sshService.ExecuteCommandAsync(sshClient, command);
-      //    _sshService.Disconnect(sshClient);
-      //
-      //    return Ok(response);
-      // }
-      // catch (Exception ex)
-      // {
-      //    return StatusCode(StatusCodes.Status500InternalServerError, $"An error occurred: {ex.Message}");
-      // }
    }
 }

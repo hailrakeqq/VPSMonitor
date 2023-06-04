@@ -7,7 +7,7 @@ import { SignupComponent } from './pages/auth/signup/signup.component';
 import { AboutComponent } from './pages/about/about.component';
 import { SettingsComponent } from './pages/settings/settings.component';
 import { SshkeysComponent } from './pages/sshkeys/sshkeys.component';
-
+import { TerminalComponent } from './pages/terminal/terminal.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -15,7 +15,8 @@ const routes: Routes = [
   { path: 'signup', component: SignupComponent },
   { path: 'about', component: AboutComponent },
   { path: 'settings', component: SettingsComponent },
-  { path: 'sshkeys', component: SshkeysComponent}
+  { path: 'sshkeys', component: SshkeysComponent },
+  { path: 'terminal', component: TerminalComponent}
 ];
 
 @NgModule({

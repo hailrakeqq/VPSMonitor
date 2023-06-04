@@ -1,15 +1,13 @@
-using System.Text;
 using Renci.SshNet;
 
 namespace VPSMonitor.Core.Infrastructure;
 
 public static class SshConnectionContext
 {
-    public static SshClient Connect(string host, string username, string sshKey)
+    public static SshClient Connect(string host, string username, string password)
     {
-        var sshKeyFile = new PrivateKeyFile(new MemoryStream(Encoding.ASCII.GetBytes(sshKey)));
         var connectionInfo =
-            new ConnectionInfo(host, username, new PrivateKeyAuthenticationMethod(username, sshKeyFile));
+            new ConnectionInfo(host, username, new PasswordAuthenticationMethod(username, password));
         var sshClient = new SshClient(connectionInfo);
         
         sshClient.Connect();

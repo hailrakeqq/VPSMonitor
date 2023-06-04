@@ -39,7 +39,7 @@ export class SshkeysComponent {
       Username: this.username,
       SSHKey: this.sshKey
     }
-    const request = await fetch(`http://localhost:5081/api/UserSettings/AddSSHKey/${localStorage.getItem('id')}`, {
+    const request = await fetch(`http://localhost:5081/api/Ssh/AddSshKey/${localStorage.getItem('id')}`, {
       method: 'POST',
       headers: {
         'Authorization': `bearer ${localStorage.getItem('access-token')}`,

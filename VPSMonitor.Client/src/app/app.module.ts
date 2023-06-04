@@ -12,6 +12,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { SettingsComponent } from './pages/settings/settings.component';
 import { SshkeysComponent } from './pages/sshkeys/sshkeys.component';
 import { ModalComponent } from './components/modal/modal.component';
+import { TerminalComponent } from './pages/terminal/terminal.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { ModalComponent } from './components/modal/modal.component';
     SidebarComponent,
     SettingsComponent,
     SshkeysComponent,
-    ModalComponent
+    ModalComponent,
+    TerminalComponent
   ],
   imports: [
     BrowserModule,

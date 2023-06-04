@@ -5,7 +5,7 @@ namespace VPSMonitor.API.Repository;
 
 public interface ISshRepository
 {
-    SshClient Connect(string host, string username, string sshKey);
+    SshClient Connect(string host, string username, string password);
     void Disconnect(SshClient sshClient);
     Task<string> ExecuteCommandAsync(SshClient sshClient, string command);
     Task<List<SshKey>> GetUserSshKeys(CurrentUser currentUser);
