@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using VPSMonitor.API.Services;
-using VPSMonitor.Core.Application;
-using VPSMonitor.Core.Infrastructure;
+using VPSMonitor.API.Entities;
+using VPSMonitor.API.Repository;
 
 namespace VPSMonitor.API.Controllers;
 
@@ -9,27 +8,28 @@ namespace VPSMonitor.API.Controllers;
 [Route("api/[controller]")]
 public class CoreController : Controller
 {
-   private readonly SSHService _sshService;
-   public CoreController(SSHService sshService)
+   private readonly ISshRepository _sshService;
+
+   public CoreController(ISshRepository sshService)
    {
       _sshService = sshService;
    }
-   
+
    [HttpPost]
    [Route("ExecuteCommand")]
-   public async Task<IActionResult> ExecuteCommand(string host, string username, string password, string command)
+   public async Task<IActionResult> ExecuteCommand([FromBody] SshRequest request)
    {
-      if (string.IsNullOrWhiteSpace(host) || string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(command))
+      if (string.IsNullOrWhiteSpace(request.Host) || string.IsNullOrWhiteSpace(request.Command))
       {
          return BadRequest("Invalid input parameters.");
       }
+
       try
       {
-         var sshService = new SSHService();
-         var sshClient = _sshService.Connect(host, username, password);
+         var sshClient = _sshService.Connect(request.Host, request.Username,request.Password);
 
-         var response = await sshService.ExecuteCommandAsync(sshClient, command);
-         sshService.Disconnect(sshClient);
+         var response = await _sshService.ExecuteCommandAsync(sshClient, request.Command);
+         _sshService.Disconnect(sshClient);
 
          return Ok(response);
       }

@@ -2,7 +2,7 @@ using Renci.SshNet;
 
 namespace VPSMonitor.Core.Infrastructure;
 
-public static class SSHConnectionContext
+public static class SshConnectionContext
 {
     public static SshClient Connect(string host, string username, string password)
     {

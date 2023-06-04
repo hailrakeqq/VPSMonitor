@@ -1,0 +1,16 @@
+.modal-overlay {
+  transition: opacity 0.2s;
+}
+
+.modal-container {
+  transition: opacity 0.2s;
+}
+
+.modal-content { 
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.modal-close {
+  outline: none;
+}
