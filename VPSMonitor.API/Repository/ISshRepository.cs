@@ -8,9 +8,4 @@ public interface ISshRepository
     SshClient Connect(string host, string username, string password);
     void Disconnect(SshClient sshClient);
     Task<string> ExecuteCommandAsync(SshClient sshClient, string command);
-    Task<List<SshKey>> GetUserSshKeys(CurrentUser currentUser);
-    Task<SshKey> GetSshKeyById(string id);
-    Task Create(SshKey sshKey);
-    Task Update(SshKey newSshKey);
-    Task Delete(string id);
 }

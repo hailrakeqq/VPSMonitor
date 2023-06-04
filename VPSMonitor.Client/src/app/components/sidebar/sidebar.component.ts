@@ -23,9 +23,6 @@ constructor(private router: Router) { }
     public SignUpRedirect (): void{
         this.router.navigate(['/signup'])
     }
-    public SSHKeysPageRedirect(): void{
-        this.router.navigate(['/sshkeys'])
-    }
     public TerminalPageRedirect(): void{
         this.router.navigate(['/terminal'])
     }        
