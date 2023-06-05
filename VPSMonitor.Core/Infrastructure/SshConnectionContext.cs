@@ -16,9 +16,7 @@ public static class SshConnectionContext
 
     public static void Disconect(SshClient sshClient)
     {
-        if(sshClient.IsConnected)
-            sshClient.Disconnect();
-        
+        sshClient.Disconnect();
         sshClient.Dispose();
     }
 }

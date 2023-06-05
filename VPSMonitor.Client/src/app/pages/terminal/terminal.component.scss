@@ -1,18 +1,22 @@
 .console {
-  width: 1000px;
-  height: 500px;
+  width: 1300px;
+  height: 800px;
+  background-color: black;
+  color: white;
 }
 
 .console-output {
   font-family: monospace;
   margin: 4px 0;
+  display: inline;
+  white-space: pre-wrap;
 }
 .console-content{
   padding: 8px;
   margin-top: 5px;
   overflow-y: auto;
-  max-height: 500px;
-  width: 980px;
+  max-height: 800px;
+  width: 1300px;
 }
 .console-input {
   display: flex;

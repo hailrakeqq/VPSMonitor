@@ -8,13 +8,6 @@ namespace VPSMonitor.API.Services;
 
 public class SshService : ISshRepository
 {
-    private readonly ApplicationDbContext _context;
-
-    public SshService(ApplicationDbContext context)
-    {
-        _context = context;
-    }
-    
     public SshClient Connect(string host, string username, string password)
     {
         return SshConnectionContext.Connect(host, username, password);

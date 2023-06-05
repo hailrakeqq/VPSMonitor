@@ -86,10 +86,9 @@ export class TerminalComponent {
         })
 
         if (request.status === 200) {
-          const response = await request.text()
-          //TODO: парсити обьекты в залежності від команди
+          let response = await request.text()
           console.log(response);
-          
+          response = '\n' + response 
           this.outputs.push(response)
         }
         return

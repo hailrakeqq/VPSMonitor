@@ -12,6 +12,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { SettingsComponent } from './pages/settings/settings.component';
 import { ModalComponent } from './components/modal/modal.component';
 import { TerminalComponent } from './pages/terminal/terminal.component';
+import { MonitoringComponent } from './pages/monitoring/monitoring.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { TerminalComponent } from './pages/terminal/terminal.component';
     SidebarComponent,
     SettingsComponent,
     ModalComponent,
-    TerminalComponent
+    TerminalComponent,
+    MonitoringComponent
   ],
   imports: [
     BrowserModule,

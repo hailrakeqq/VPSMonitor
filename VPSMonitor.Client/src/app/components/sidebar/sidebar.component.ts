@@ -23,6 +23,9 @@ constructor(private router: Router) { }
     public SignUpRedirect (): void{
         this.router.navigate(['/signup'])
     }
+    public MonitoringPageRedirect(): void {
+        this.router.navigate(['/monitoring'])
+    }
     public TerminalPageRedirect(): void{
         this.router.navigate(['/terminal'])
     }        
