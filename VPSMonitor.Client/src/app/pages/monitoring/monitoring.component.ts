@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { httpExecuteBashCommandRequest } from '../../../httpExecuteBashCommandRequest'
-import { Parser } from 'src/parser';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-monitoring',
@@ -13,31 +12,43 @@ export class MonitoringComponent {
   diskpartUsage: string | undefined
   uptime: string | undefined
 
+  constructor(private router: Router) { }
+  
   async ngOnInit() {
-    
     const start = performance.now();
+    
+    const hostAddress = sessionStorage.getItem('host')?.split('@');
+    const password = sessionStorage.getItem('password')
 
-    const [mpstatResult, freeResult, dfResult, uptimeResult] = await Promise.all([
-      httpExecuteBashCommandRequest("mpstat -P ALL -o JSON"),
-      httpExecuteBashCommandRequest("free -h"),
-      httpExecuteBashCommandRequest("df -h"),
-      httpExecuteBashCommandRequest("uptime")
-    ]);
+    if (hostAddress == undefined && password == undefined) {
+      this.router.navigate(['/terminal'])
+      return;
+    }
+    
+    const objectToSend: Object = {
+      host: hostAddress?.[1],
+      username: hostAddress?.[0],
+      password: password,
+    }
+    const request = await fetch(`http://localhost:5081/api/Core/GetResourcesUsageInfo`, {
+      method: "POST",
+      headers: {
+        'Authorization': `bearer ${localStorage.getItem('access-token')}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(objectToSend)
+    })
+      
+    let response = await request.json()
 
-    const [cpuUsage, memoryUsage, diskpartUsage] = await Promise.all([
-      Parser.mpstatCommandParse(mpstatResult),
-      Parser.freeCommandParse(freeResult),
-      Parser.dfCommandParse(dfResult)
-    ]);
-
-    this.cpuUsage = cpuUsage;
-    this.memoryUsage = memoryUsage;
-    this.diskpartUsage = diskpartUsage;
-    this.uptime = uptimeResult;
-
+    this.cpuUsage = response[0];
+    this.memoryUsage = response[1]
+    this.diskpartUsage = response[2]
+    this.uptime = response[3]
 
     const end = performance.now()
-
     console.log(`execution time: ${(end - start / 1000)} seconds`);
   }
 }
+
+
