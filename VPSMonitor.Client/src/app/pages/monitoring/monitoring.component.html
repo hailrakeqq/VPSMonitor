@@ -1,9 +1,71 @@
+<!-- 
+<h1>VPS resources usage: </h1>
+<ul>
+  <li><strong>CPU Usage:</strong> {{cpuUsage}}</li>
+  <li><strong>Memory Usage:</strong> {{memoryUsage}}</li>
+  <li><strong>Diskpart Usage:</strong> {{diskpartUsage}}</li>
+  <li><strong>Upload:</strong> {{uptime}}</li>
+</ul> -->
+<div>
+  <h2>Monitoring VPS</h2>
 
- <h1>VPS resources usage: </h1>
-  <ul>
-    <li><strong>CPU Usage:</strong> {{cpuUsage}}</li>
-    <li><strong>Memory Usage:</strong> {{memoryUsage}}</li>
-    <li><strong>Diskpart Usage:</strong> {{diskpartUsage}}</li>
-    <li><strong>Upload:</strong> {{uptime}}</li>
-  </ul>
+  <div *ngIf="loading">Loading...</div>
+
+  <div *ngIf="!loading">
+    <div class="item">
+      <h3>System Information</h3>
+      <ul>
+        <li class="sysInfo-item">Hostname: {{systemInfo.hostname}}</li>
+        <li class="sysInfo-item">OS: {{systemInfo.os}}</li>
+        <li class="sysInfo-item">Kernel: {{systemInfo.kernel}}</li>
+        <li class="sysInfo-item">CPU architecture: {{systemInfo.cpuArchitecture}}</li>
+        <li class="sysInfo-item">Date Time: {{systemInfo.dateTime}}</li>
+      </ul>
+    </div>
+
+    <div class="item">
+      <h3>Processor usage(CPU)</h3>
+      <ul>
+        <li *ngFor="let item of cpuInfo">- {{item}}</li>
+      </ul>
+    </div> 
+    <!--
+    <div>
+      <h3>Использование памяти (RAM)</h3>
+    
+    </div>
+
+    <div>
+      <h3>Использование дискового пространства</h3>
+
+    </div>
+
+    <div>
+      <h3>Сетевая активность</h3>
+     
+    </div>
+
+    <div>
+      <h3>Системная нагрузка</h3>
+
+    </div>
+
+    <div>
+      <h3>Информация о пользователе</h3>
+
+    </div>
+
+    <div>
+      <h3>Логи и журналы</h3>
+
+    </div>
+
+    <div>
+      <h3>Управление сервером</h3>
+
+    </div> -->
+  </div>
+</div>
+
+<button class="btn" (click)="reboot()">Reboot VPS!</button>
 

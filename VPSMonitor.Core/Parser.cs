@@ -13,15 +13,24 @@ public static class Parser
         return $"{result[1].Trim()} / {result[0].Trim()}";
     }
 
-    public static string mpstatCommandParse(string data)
+    public static string[] mpstatCommandParse(string data)
     {
         var jsonObject = JObject.Parse(data);
-        var cpuLoad = jsonObject["sysstat"]
-                                ["hosts"][0]
-                                ["statistics"][0]
-                                ["cpu-load"][0]["idle"].Value<double>();
+        JArray cpuLoadArray = (JArray)jsonObject["sysstat"]["hosts"][0]["statistics"][0]["cpu-load"];
+        var idleValues = cpuLoadArray.Select(item => (double)item["idle"]).ToArray();
+        string[] result = new string[idleValues.Length];
+        
+        for (int i = 0; i < idleValues.Length; i++)
+        {
+            if (i == 0)
+            {
+                result[i] = $"ALL:    {Math.Round(100 - idleValues[i], 2)}%";
+                continue;
+            }
+            result[i] = $"{i - 1}:    {Math.Round(100 - idleValues[i], 2)}%";
+        }
 
-        return $"{Math.Round(100 - cpuLoad, 2).ToString()}%";
+        return result;
     }
 
     public static string dfCommandParse(string command)
