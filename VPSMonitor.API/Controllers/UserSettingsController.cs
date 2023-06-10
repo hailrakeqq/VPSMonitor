@@ -29,10 +29,20 @@ public class UserSettingsController : Controller
             if (existingUser.Password == Toolchain.GenerateHash(newUserData.ConfirmPassword))
             {
                 if (!string.IsNullOrEmpty(newUserData.Email))
-                    existingUser.Email= newUserData.Email;
-                
+                {
+                    var userWithNewEmail = await _userRepository.GetUserByEmail(newUserData.Email);
+                    if (userWithNewEmail != null)
+                        return Conflict("User with this email already exist.");
+                    
+                    existingUser.Email = newUserData.Email;
+                }
+
                 if (!string.IsNullOrEmpty(newUserData.Password))
+                {
+                    if (existingUser.Password == Toolchain.GenerateHash(newUserData.Password))
+                        return Conflict("You cannot set the password you had before.");
                     existingUser.Password = Toolchain.GenerateHash(newUserData.Password);
+                }
                 
                 _userRepository.Update(existingUser);
 

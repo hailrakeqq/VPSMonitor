@@ -1,53 +1,38 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-
+import { HttpClient } from 'src/HttpClient';
+import { ServerMonitoringService } from 'src/app/Service/ServerMonitoringService';
+import "../../entities/systemInfo"
 @Component({
   selector: 'app-monitoring',
   templateUrl: './monitoring.component.html',
   styleUrls: ['./monitoring.component.scss']
 })
 export class MonitoringComponent {
-  cpuUsage: string | undefined
-  memoryUsage: string | undefined
-  diskpartUsage: string | undefined
-  uptime: string | undefined
+  loading: boolean = true
+  systemInfo: systemInfo = { hostname: '', os: '', kernel: '', cpuArchitecture: '', dateTime: '' };
+  cpuInfo: string[] = []
+  ramInfo: string = ''
+  diskpartInfo: string = ''
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private monitoringService: ServerMonitoringService) { }
   
   async ngOnInit() {
     const start = performance.now();
     
-    const hostAddress = sessionStorage.getItem('host')?.split('@');
-    const password = sessionStorage.getItem('password')
-
-    if (hostAddress == undefined && password == undefined) {
-      this.router.navigate(['/terminal'])
-      return;
-    }
+    this.systemInfo = await this.monitoringService.getSystemInfo();
+    this.cpuInfo = await this.monitoringService.getCpuUsage();
+    this.ramInfo = await this.monitoringService.getRamUsage();
+    this.diskpartInfo = await this.monitoringService.getDiskpartUsage();
     
-    const objectToSend: Object = {
-      host: hostAddress?.[1],
-      username: hostAddress?.[0],
-      password: password,
-    }
-    const request = await fetch(`http://localhost:5081/api/Core/GetResourcesUsageInfo`, {
-      method: "POST",
-      headers: {
-        'Authorization': `bearer ${localStorage.getItem('access-token')}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(objectToSend)
-    })
-      
-    let response = await request.json()
-
-    this.cpuUsage = response[0];
-    this.memoryUsage = response[1]
-    this.diskpartUsage = response[2]
-    this.uptime = response[3]
-
     const end = performance.now()
     console.log(`execution time: ${(end - start / 1000)} seconds`);
+    this.loading = false
+  }
+  
+  async reboot(): Promise<void> {
+    HttpClient.httpExecuteBashCommandRequest('reboot')
+    alert("The VPS was successfully reloaded")
   }
 }
 
