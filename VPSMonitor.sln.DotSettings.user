@@ -1,5 +1,5 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=0e91869b_002Dbafb_002D4c87_002Da146_002D4597f7e2e045/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Session" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=0e91869b_002Dbafb_002D4c87_002Da146_002D4597f7e2e045/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Session" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Or&gt;
     &lt;ProjectFile&gt;2464AC9E-F46E-47C9-82D7-AF722C9D0079/f:AuthControllerTest.cs&lt;/ProjectFile&gt;
     &lt;ProjectFile&gt;2464AC9E-F46E-47C9-82D7-AF722C9D0079/f:UserSettingsControllerTest.cs&lt;/ProjectFile&gt;
@@ -8,7 +8,7 @@
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=66f5e5eb_002D8a69_002D4bf0_002Dbfe9_002D3d313dfc54c4/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from Solution" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Solution /&gt;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=eac4a1e0_002Dd9df_002D4c61_002Db784_002D219e44cabab9/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from AuthControllerTest.cs" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=eac4a1e0_002Dd9df_002D4c61_002Db784_002D219e44cabab9/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from AuthControllerTest.cs" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;Or&gt;
     &lt;ProjectFile&gt;2464AC9E-F46E-47C9-82D7-AF722C9D0079/f:AuthControllerTest.cs&lt;/ProjectFile&gt;
     &lt;ProjectFile&gt;2464AC9E-F46E-47C9-82D7-AF722C9D0079/f:UserSettingsControllerTest.cs&lt;/ProjectFile&gt;

@@ -13,7 +13,7 @@
 
   <div *ngIf="!loading">
     <div class="item">
-      <h3>System Information</h3>
+      <h3>System Information:</h3>
       <ul>
         <li class="sysInfo-item">Hostname: {{systemInfo.hostname}}</li>
         <li class="sysInfo-item">OS: {{systemInfo.os}}</li>
@@ -24,22 +24,23 @@
     </div>
 
     <div class="item">
-      <h3>Processor usage(CPU)</h3>
+      <h3>Processor usage(CPU):</h3>
       <ul>
-        <li *ngFor="let item of cpuInfo">- {{item}}</li>
+        <li class="cpu-item" *ngFor="let item of cpuInfo">
+          <pre>-{{item}}</pre>
+        </li>
       </ul>
     </div> 
-    <!--
-    <div>
-      <h3>Использование памяти (RAM)</h3>
+    <div class="item">
+      <h3>RAM usage:</h3>
+      <pre>{{ramInfo}}</pre>
+    </div>
     
+    <div class="item">
+      <h3>Diskpart usage:</h3>
+      <pre>{{diskpartInfo}}</pre>
     </div>
-
-    <div>
-      <h3>Использование дискового пространства</h3>
-
-    </div>
-
+    <!--
     <div>
       <h3>Сетевая активность</h3>
      
@@ -65,7 +66,9 @@
 
     </div> -->
   </div>
+  <div class="item">
+    <button class="btn" (click)="reboot()">Reboot VPS!</button>
+  </div>
 </div>
 
-<button class="btn" (click)="reboot()">Reboot VPS!</button>
 

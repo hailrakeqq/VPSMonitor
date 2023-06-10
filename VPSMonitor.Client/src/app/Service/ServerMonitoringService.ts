@@ -14,7 +14,8 @@ export class ServerMonitoringService {
     dataToSend = {
                 host: sessionStorage.getItem('host')?.split('@')[1],
                 username: sessionStorage.getItem('host')?.split('@')[0],
-                password: sessionStorage.getItem('password')
+                password: sessionStorage.getItem('password'),
+                command: ''
             }
 
     async getSystemInfo(): Promise<any> {
@@ -30,7 +31,7 @@ export class ServerMonitoringService {
         this.router.navigate(['/terminal'])
     }
 
-    async getCPUUsage(): Promise<any> {
+    async getCpuUsage(): Promise<any> {
         if (this.dataToSend.host != undefined) {
             const response = await HttpClient.httpRequest(
                 "POST",
@@ -43,6 +44,21 @@ export class ServerMonitoringService {
         this.router.navigate(['/terminal'])
     }
 
-    async getMemoryUsage(): Promise<any> {
+    async getRamUsage(): Promise<any> {
+        if (this.dataToSend.host != undefined) {
+            const response = await HttpClient.httpExecuteBashCommandRequest('free -h')
+            
+            return response;
+        } 
+        this.router.navigate(['/terminal'])
+    }
+
+    async getDiskpartUsage(): Promise<any>{
+        if (this.dataToSend.host != undefined) {
+            const response = await HttpClient.httpExecuteBashCommandRequest('df -h')
+            
+            return response;
+        } 
+        this.router.navigate(['/terminal'])
     }
 }

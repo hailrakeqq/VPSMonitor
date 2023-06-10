@@ -40,36 +40,6 @@ public class CoreController : Controller
       }
    }
 
-   // [HttpPost]
-   // [Route("GetResourcesUsageInfo")]
-   // public async Task<IActionResult> GetResourcesUsageInfo([FromBody] SshRequest request)
-   // {
-   //    using (var sshClient = _sshService.Connect(request.Host, request.Username, request.Password))
-   //    {
-   //       var commands = new List<Task<string>>
-   //       {
-   //          _sshService.ExecuteCommandAsync(sshClient, "mpstat -P ALL -o JSON"),
-   //          _sshService.ExecuteCommandAsync(sshClient, "free -h"),
-   //          _sshService.ExecuteCommandAsync(sshClient, "df -h"),
-   //          _sshService.ExecuteCommandAsync(sshClient, "uptime")
-   //       };
-   //
-   //       await Task.WhenAll(commands);
-   //
-   //       var responseTasks = new List<Task<string>>(4);
-   //       responseTasks.Add(Task.Run(() => Parser.mpstatCommandParse(commands[0].Result)));
-   //       responseTasks.Add(Task.Run(() => Parser.freeCommandParse(commands[1].Result)));
-   //       responseTasks.Add(Task.Run(() => Parser.dfCommandParse(commands[2].Result)));
-   //       responseTasks.Add(commands[3]);
-   //
-   //       await Task.WhenAll(responseTasks);
-   //       
-   //       var response = responseTasks.Select(t => t.Result).ToList();
-   //
-   //       return Ok(response);
-   //    }
-   // }
-
    [HttpPost]
    [Route("GetSystemInfo")]
    public async Task<IActionResult> GetSystemInfo([FromBody] SshRequest request)
@@ -99,12 +69,24 @@ public class CoreController : Controller
 
    [HttpPost]
    [Route("GetCpuInfo")]
-   public async Task<IActionResult> GetCpuUsage([FromBody] SshRequest request)
+   public async Task<IActionResult> GetCpuUsageInfo([FromBody] SshRequest request)
    {
       using (var sshClient = _sshService.Connect(request.Host, request.Username, request.Password))
       {
          string result = await _sshService.ExecuteCommandAsync(sshClient, "mpstat -P ALL -o JSON");
          return Ok(Parser.mpstatCommandParse(result));
+      }
+   }
+
+   [HttpPost]
+   [Route("GetRamInfo")]
+   public async Task<IActionResult> GetRamUsageInfo([FromBody] SshRequest request)
+   {
+      using (var sshClient = _sshService.Connect(request.Host, request.Username, request.Password))
+      {
+         string result = await _sshService.ExecuteCommandAsync(sshClient, "free -h");
+         return Ok(result);
+         return Ok(Parser.freeCommandParse(result));
       }
    }
 }

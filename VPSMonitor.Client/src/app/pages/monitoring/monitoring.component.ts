@@ -12,6 +12,8 @@ export class MonitoringComponent {
   loading: boolean = true
   systemInfo: systemInfo = { hostname: '', os: '', kernel: '', cpuArchitecture: '', dateTime: '' };
   cpuInfo: string[] = []
+  ramInfo: string = ''
+  diskpartInfo: string = ''
 
   constructor(private router: Router, private monitoringService: ServerMonitoringService) { }
   
@@ -19,12 +21,10 @@ export class MonitoringComponent {
     const start = performance.now();
     
     this.systemInfo = await this.monitoringService.getSystemInfo();
-    //console.log(this.systemInfo);
+    this.cpuInfo = await this.monitoringService.getCpuUsage();
+    this.ramInfo = await this.monitoringService.getRamUsage();
+    this.diskpartInfo = await this.monitoringService.getDiskpartUsage();
     
-    this.cpuInfo = await this.monitoringService.getCPUUsage();
-    console.log(this.cpuInfo);
-    
-
     const end = performance.now()
     console.log(`execution time: ${(end - start / 1000)} seconds`);
     this.loading = false
