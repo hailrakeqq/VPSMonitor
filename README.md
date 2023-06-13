@@ -42,7 +42,7 @@ After build you can get access to services by next URL's:
   
 ### Features:
 - [X] User authentication
-- [ ] Obtaining information about status of the VPS
+- [X] Obtaining information about status of the VPS
 - [ ] File management
 - [ ] Proccess management 
 - [X] Execution bash scripts and other commands
