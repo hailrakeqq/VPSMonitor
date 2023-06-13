@@ -41,7 +41,26 @@ namespace VPSMonitor.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("refreshTokens");
+                    b.ToTable("refreshtokens");
+                });
+
+            modelBuilder.Entity("VPSMonitor.API.Entities.SshKey", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Ssh")
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("sshkeys");
                 });
 
             modelBuilder.Entity("VPSMonitor.API.Entities.User", b =>
@@ -58,22 +77,6 @@ namespace VPSMonitor.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("users");
-                });
-
-            modelBuilder.Entity("VPSMonitor.API.Entities.UsersSSHKeys", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
-
-                    b.Property<string>("SSHKey")
-                        .HasColumnType("text");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("usersSSHKeys");
                 });
 #pragma warning restore 612, 618
         }

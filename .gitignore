@@ -11,3 +11,7 @@
 
 /VPSMonitor.Tests/bin/*
 /VPSMonitor.Tests/obj/*
+
+/VPSMonitor.Core/bin/*
+/VPSMonitor.Core/obj/*
+

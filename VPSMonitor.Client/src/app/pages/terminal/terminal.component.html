@@ -1,0 +1,12 @@
+<div class="flex h-screen bg-black text-white m-auto p-2 bg-gray-900 rounded-lg console">
+    <div class="console-content">
+      <div class="console-output" #outputContainer *ngFor="let output of outputs">
+        <pre>{{ output }}</pre>
+      </div>
+      <div class="console-input">
+        <div class="console-input-prefix">></div>
+        <input type="text" [(ngModel)]="command" (keydown.enter)="handleCommand($event)" class="console-input-field">
+      </div>
+    </div>
+</div>
+

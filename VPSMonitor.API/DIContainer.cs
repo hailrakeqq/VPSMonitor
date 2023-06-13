@@ -21,4 +21,9 @@ public static class DIContainer
     {
         return services.AddTransient<IUserRepository, UserService>();
     }
+
+    public static IServiceCollection AddSSHService(this IServiceCollection services)
+    {
+        return services.AddSingleton<ISshRepository ,SshService>();
+    }
 }
