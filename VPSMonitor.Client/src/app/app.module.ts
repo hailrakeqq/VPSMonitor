@@ -13,6 +13,7 @@ import { SettingsComponent } from './pages/settings/settings.component';
 import { ModalComponent } from './components/modal/modal.component';
 import { TerminalComponent } from './pages/terminal/terminal.component';
 import { MonitoringComponent } from './pages/monitoring/monitoring.component';
+import { UsersComponent } from './pages/users/users.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { MonitoringComponent } from './pages/monitoring/monitoring.component';
     SettingsComponent,
     ModalComponent,
     TerminalComponent,
-    MonitoringComponent
+    MonitoringComponent,
+    UsersComponent
   ],
   imports: [
     BrowserModule,

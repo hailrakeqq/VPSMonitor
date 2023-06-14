@@ -29,6 +29,7 @@ export class HttpClient{
         return "data isn't valid"
     }
 
+    //TODO: сделать заметку для использование core controller
     static async httpRequest(method: string, url: string, itemToSend?: any, headers?: any): Promise<any>{
         const requestOptions = {
             method: method,
