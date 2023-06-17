@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
+import { HttpClient } from 'src/HttpClient';
 
 @Component({
   selector: 'app-terminal',
@@ -64,36 +65,10 @@ export class TerminalComponent {
     if (command === 'clear') {
       this.outputs = []
     } else {
-      const host = sessionStorage.getItem('host')?.split('@');
-      const password = sessionStorage.getItem('password')
-      if (host != undefined && password != undefined) {
-        const username = host[0]
-        const address = host[1];
-        const objectToSend = {
-          host: address,
-          username: username,
-          password: password,
-          command: command
-        }
-        
-        const request = await fetch(`http://localhost:5081/api/Core/ExecuteCommand`, {
-          method: 'POST',
-          headers: {
-            'Authorization': `bearer ${localStorage.getItem('access-token')}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(objectToSend)
-        })
-
-        if (request.status === 200) {
-          let response = await request.text()
-          console.log(response);
-          response = '\n' + response 
-          this.outputs.push(response)
-        }
-        return
-      }
-      this.outputs.push('Command not recognized');
+        let response = await HttpClient.httpExecuteBashCommandRequest(command);
+        console.log(response);
+        response = '\n' + response 
+        this.outputs.push(response)
     }
   }
 

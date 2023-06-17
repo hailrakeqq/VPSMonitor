@@ -50,4 +50,34 @@ public static class Parser
 
         return "Can't find root dir";
     }
+
+    public static List<string> permissionParse(string permissionValue)
+    {
+        List<string> parsedPermission = new List<string>();
+        /* example:
+            d rwx r-x---
+            |rwx| - user permissions
+            r - read 
+            w - write
+            x - execute
+            - - no permission 
+        */
+        for (int i = 1; i <= 3; i++)
+        {
+            switch (permissionValue[i])
+                {
+                    case 'x':
+                        parsedPermission.Add("Execute");
+                        continue;
+                    case 'w':
+                        parsedPermission.Add("Write");
+                        continue;
+                    case 'r':
+                        parsedPermission.Add("Read");
+                        continue;
+                }
+        }
+
+        return parsedPermission;
+    }
 }

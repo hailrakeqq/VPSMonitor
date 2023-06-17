@@ -86,7 +86,42 @@ public class CoreController : Controller
       {
          string result = await _sshService.ExecuteCommandAsync(sshClient, "free -h");
          return Ok(result);
-         return Ok(Parser.freeCommandParse(result));
+      }
+   }
+
+   [HttpPost]
+   [Route("GetUsers")]
+   public async Task<IActionResult> GetUserInfo([FromBody] SshRequest request)
+   {
+      using (var sshClient = _sshService.Connect(request.Host, request.Username, request.Password))
+      {
+         string result = await _sshService.ExecuteCommandAsync(sshClient, "ls -ld /home/*/");
+         Console.WriteLine("original string: " + result);
+         var lines = result.Split("\n");
+         var users = new List<LinuxUser>();
+         foreach (var line in lines)
+         {
+            Console.WriteLine("string after \"n\" split: " + line);
+            
+            string[] fields = line.Split(" ");
+            if (fields[0] != "")
+            {
+               var user = new LinuxUser()
+               {
+                  username = fields[2],
+                  permissions = Parser.permissionParse(fields[0])
+               };
+
+               int number;
+               if (Int32.TryParse(fields[2], out number))
+               {
+                  user.username = "root";
+               }
+               
+               users.Add(user);
+            }
+         }
+         return Ok(users);
       }
    }
 }
