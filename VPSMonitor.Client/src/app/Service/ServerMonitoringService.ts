@@ -22,7 +22,7 @@ export class ServerMonitoringService {
         if (this.dataToSend.host != undefined) {
             const response = await HttpClient.httpRequest(
                 "POST",
-                "http://localhost:5081/api/Core/GetSystemInfo",
+                "https://localhost:5081/api/Core/GetSystemInfo",
                 this.dataToSend,
                 this.headers)
             
@@ -35,7 +35,7 @@ export class ServerMonitoringService {
         if (this.dataToSend.host != undefined) {
             const response = await HttpClient.httpRequest(
                 "POST",
-                "http://localhost:5081/api/Core/GetCpuInfo",
+                "https://localhost:5081/api/Core/GetCpuInfo",
                 this.dataToSend,
                 this.headers)
             

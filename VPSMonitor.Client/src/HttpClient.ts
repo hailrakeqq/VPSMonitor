@@ -14,7 +14,7 @@ export class HttpClient{
                 command: command
             }
 
-        const request = await fetch(`http://localhost:5081/api/Core/ExecuteCommand`, {
+        const request = await fetch(`https://localhost:5081/api/Core/ExecuteCommand`, {
             method: "POST",
             headers: {
                 'Authorization': `bearer ${localStorage.getItem('access-token')}`,

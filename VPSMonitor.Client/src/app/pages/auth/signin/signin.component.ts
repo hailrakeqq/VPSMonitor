@@ -18,7 +18,7 @@ export class SignInComponent {
                 Password: this.password
             }
 
-            const request = await fetch(`http://localhost:5081/api/Auth/Login`, {
+            const request = await fetch(`https://localhost:5081/api/Auth/Login`, {
                 method: 'POST',
                 headers: { 'content-type': 'application/json' },
                 body: JSON.stringify(userData)

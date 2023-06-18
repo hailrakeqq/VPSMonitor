@@ -29,7 +29,7 @@ export class UsersComponent {
       }
   
       const response = await HttpClient.httpRequest("POST",
-        "http://localhost:5081/api/Core/GetUsers",
+        "https://localhost:5081/api/Core/GetUsers",
         body, header)
   
       this.users = await response

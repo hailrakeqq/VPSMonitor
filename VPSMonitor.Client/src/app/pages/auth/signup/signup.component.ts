@@ -24,7 +24,7 @@ export class SignupComponent {
         ConfirmPassword: this.confirmPassword
       }
 
-      const request = await fetch(`http://localhost:5081/api/Auth/Registration`, {
+      const request = await fetch(`https://localhost:5081/api/Auth/Registration`, {
         method: 'POST',
         headers: {'content-type' : 'application/json'},
         body: JSON.stringify(userData)
