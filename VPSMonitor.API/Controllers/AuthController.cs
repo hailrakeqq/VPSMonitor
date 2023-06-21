@@ -59,6 +59,7 @@ public class AuthController : Controller
             return Unauthorized(currentUser);
 
         var newRefreshToken = _tokenService.GenerateRefreshToken(currentUser.Id!);
+        await _tokenService.UpdateRefreshTokenByUserId(newRefreshToken, currentUser.Id!);
         var loginResponse = new LoginResponse
         {
             Id = currentUser.Id,
@@ -66,7 +67,7 @@ public class AuthController : Controller
             AccessToken = _tokenService.GenerateAccessToken(currentUser),
             RefreshToken = newRefreshToken.RefreshToken
         };
-        _tokenService.UpdateRefreshTokenByUserId(newRefreshToken, currentUser.Id!);
+         
         return Ok(loginResponse);
     }
 

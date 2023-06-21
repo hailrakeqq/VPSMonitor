@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using Newtonsoft.Json.Linq;
+using VPSMonitor.Core.Entities;
 
 namespace VPSMonitor.Core;
 
@@ -79,5 +80,33 @@ public static class Parser
         }
 
         return parsedPermission;
+    }
+
+    public static List<LinuxUser> parseGetUserCommand(string input)
+    {
+        var lines = input.Split("\n");
+        var users = new List<LinuxUser>();
+        foreach (var line in lines)
+        {
+            string[] fields = line.Split(" ");
+            if (fields[0] != "")
+            {
+                var user = new LinuxUser()
+                {
+                    username = fields[2],
+                    permissions = Parser.permissionParse(fields[0])
+                };
+
+                int number;
+                if (Int32.TryParse(fields[2], out number))
+                {
+                    user.username = "root";
+                }
+               
+                users.Add(user);
+            }
+        }
+
+        return users;
     }
 }

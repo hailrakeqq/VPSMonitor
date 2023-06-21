@@ -1,6 +1,26 @@
 <h1>Users list</h1>
+<button (click)="handleModalOpened()" class="btn">Add new user.</button>
 <div>
     <pre *ngFor="let user of users">
         {{user.username}} - {{user.permissions}}
     </pre>
 </div>
+
+<app-modal *ngIf="isModalOpen" (closed)="handleModalClosed()" title="Add new user">
+    <form (ngSubmit)="addNewUser()">
+  <label>
+    Username:
+    <input type="text" [(ngModel)]="newUsername" name="newUsername" required>
+  </label>
+  <label>
+    Password:
+    <input type="password" [(ngModel)]="password" name="password" required>
+  </label>
+  <label>
+    Confirm Password:
+    <input type="password" [(ngModel)]="ConfirmPassword" name="ConfirmPassword" required>
+  </label>
+  <p>ADD SOMETHING LIKE CHOOSE USER ROLE</p>
+  <button type="submit">Add User!</button>
+</form>
+</app-modal>

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace VPSMonitor.API.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class update : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -23,7 +23,7 @@ namespace VPSMonitor.API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_refreshTokens", x => x.Id);
+                    table.PrimaryKey("PK_refreshtokens", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -38,19 +38,6 @@ namespace VPSMonitor.API.Migrations
                 {
                     table.PrimaryKey("PK_users", x => x.Id);
                 });
-
-            migrationBuilder.CreateTable(
-                name: "sshkeys",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "text", nullable: false),
-                    UserId = table.Column<string>(type: "text", nullable: true),
-                    SSHKey = table.Column<string>(type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_usersSSHKeys", x => x.Id);
-                });
         }
 
         /// <inheritdoc />
@@ -61,9 +48,6 @@ namespace VPSMonitor.API.Migrations
 
             migrationBuilder.DropTable(
                 name: "users");
-
-            migrationBuilder.DropTable(
-                name: "sshkeys");
         }
     }
 }

@@ -44,25 +44,6 @@ namespace VPSMonitor.API.Migrations
                     b.ToTable("refreshtokens");
                 });
 
-            modelBuilder.Entity("VPSMonitor.API.Entities.SshKey", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Ssh")
-                        .HasColumnType("text");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Username")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("sshkeys");
-                });
-
             modelBuilder.Entity("VPSMonitor.API.Entities.User", b =>
                 {
                     b.Property<string>("Id")

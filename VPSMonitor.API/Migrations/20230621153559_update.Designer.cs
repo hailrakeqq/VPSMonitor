@@ -12,8 +12,8 @@ using VPSMonitor.API;
 namespace VPSMonitor.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230602150408_UpdateSshKey")]
-    partial class UpdateSshKey
+    [Migration("20230621153559_update")]
+    partial class update
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,25 +45,6 @@ namespace VPSMonitor.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("refreshtokens");
-                });
-
-            modelBuilder.Entity("VPSMonitor.API.Entities.SshKey", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Ssh")
-                        .HasColumnType("text");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Username")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("sshkeys");
                 });
 
             modelBuilder.Entity("VPSMonitor.API.Entities.User", b =>

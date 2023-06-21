@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { HttpClient } from 'src/HttpClient';
 import '../../entities/user'
 import '../../entities/dataToSend'
-import { JsonPipe } from '@angular/common';
+import { Toolchain } from 'src/toolchain';
 
 @Component({
   selector: 'app-users',
@@ -11,6 +11,10 @@ import { JsonPipe } from '@angular/common';
 })
 export class UsersComponent {
   users: user[] = []
+  isModalOpen: boolean = false
+  newUsername: string = ''
+  password: string = ''
+  ConfirmPassword: string = ''
 
   async ngOnInit() {
     const header = {
@@ -29,11 +33,43 @@ export class UsersComponent {
       }
   
       const response = await HttpClient.httpRequest("POST",
-        "https://localhost:5081/api/Core/GetUsers",
+        "https://localhost:5081/api/CoreUserCrud/GetUsers",
         body, header)
   
       this.users = await response
       this.users.forEach(item => item.permissions.join(", "));
+    }
+  }
+
+  handleModalOpened(): void{
+    this.isModalOpen = true
+  }
+
+  handleModalClosed(): void{
+    this.isModalOpen = false
+  }
+
+
+  async addNewUser(): Promise<void>{
+    const hostData = {
+      host: sessionStorage.getItem('host'),
+      password: sessionStorage.getItem('password')
+    }
+
+    const dataToSend: newUserDataToSend = {
+      hostAddress: hostData.host?.split('@')[1],
+      hostUsername: hostData.host?.split('@')[0],
+      hostPassword: hostData.password,
+      userUsername: this.newUsername,
+      userPassword: this.password,
+      userConfirmPassword: this.ConfirmPassword
+    };
+    
+    if (Toolchain.ValidateInputNewUserData(dataToSend)) {
+      console.log(dataToSend);
+      
+    } else {
+      alert('error')
     }
   }
 }

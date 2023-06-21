@@ -1,4 +1,4 @@
-namespace VPSMonitor.API.Entities;
+namespace VPSMonitor.Core.Entities;
 
 public class LinuxUser
 {

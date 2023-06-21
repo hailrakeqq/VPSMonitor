@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using VPSMonitor.API.Entities;
 using VPSMonitor.API.Repository;
@@ -6,6 +7,7 @@ using VPSMonitor.Core;
 namespace VPSMonitor.API.Controllers;
 
 [ApiController]
+[Authorize]
 [Route("api/[controller]")]
 public class CoreController : Controller
 {
@@ -27,7 +29,7 @@ public class CoreController : Controller
 
       try
       {
-         var sshClient = _sshService.Connect(request.Host, request.Username,request.Password);
+         var sshClient = _sshService.Connect(request.Host, request.Username, request.Password);
 
          var response = await _sshService.ExecuteCommandAsync(sshClient, request.Command);
          _sshService.Disconnect(sshClient);
@@ -46,23 +48,25 @@ public class CoreController : Controller
    {
       using (var sshClient = _sshService.Connect(request.Host, request.Username, request.Password))
       {
-         string[] commands = { "hostname",
-            "cat /etc/os-release | grep -e '^PRETTY_NAME='",
-            "uname -r", "uname -m", "date"};
-         var commandResult = new List<string>(commands.Length);
-         
-         foreach (var command in commands)
+         string[] commands =
          {
-            commandResult.Add(await _sshService.ExecuteCommandAsync(sshClient, command));
-         }
+            "hostname",
+            "cat /etc/os-release | grep -e '^PRETTY_NAME='",
+            "uname -r", "uname -m", "date"
+         };
+
+         var commandTasks = commands.Select(command => _sshService.ExecuteCommandAsync(sshClient, command)).ToList();
+         await Task.WhenAll(commandTasks);
+
+         var commandResults = commandTasks.Select(task => task.Result).ToList();
 
          return Ok(new SystemInfo()
          {
-            Hostname = commandResult[0],
-            OS = commandResult[1].Split("\"")[1],
-            Kernel = commandResult[2],
-            CpuArchitecture = commandResult[3],
-            DateTime = commandResult[4]
+            Hostname = commandResults[0],
+            OS = commandResults[1].Split("\"")[1],
+            Kernel = commandResults[2],
+            CpuArchitecture = commandResults[3],
+            DateTime = commandResults[4]
          });
       }
    }
@@ -86,42 +90,6 @@ public class CoreController : Controller
       {
          string result = await _sshService.ExecuteCommandAsync(sshClient, "free -h");
          return Ok(result);
-      }
-   }
-
-   [HttpPost]
-   [Route("GetUsers")]
-   public async Task<IActionResult> GetUserInfo([FromBody] SshRequest request)
-   {
-      using (var sshClient = _sshService.Connect(request.Host, request.Username, request.Password))
-      {
-         string result = await _sshService.ExecuteCommandAsync(sshClient, "ls -ld /home/*/");
-         Console.WriteLine("original string: " + result);
-         var lines = result.Split("\n");
-         var users = new List<LinuxUser>();
-         foreach (var line in lines)
-         {
-            Console.WriteLine("string after \"n\" split: " + line);
-            
-            string[] fields = line.Split(" ");
-            if (fields[0] != "")
-            {
-               var user = new LinuxUser()
-               {
-                  username = fields[2],
-                  permissions = Parser.permissionParse(fields[0])
-               };
-
-               int number;
-               if (Int32.TryParse(fields[2], out number))
-               {
-                  user.username = "root";
-               }
-               
-               users.Add(user);
-            }
-         }
-         return Ok(users);
       }
    }
 }

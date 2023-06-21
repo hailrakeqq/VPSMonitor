@@ -25,10 +25,10 @@ export class AuthErrorInterceptor {
             this.requestToUpdateAccessToken();
     }
 
-    private async requestToUpdateAccessToken(): Promise<void> {
+    private async requestToUpdateAccessToken(): Promise<void> {        
         const userId = localStorage.getItem('id') || '';
         const refreshToken = localStorage.getItem('refresh-token') || '';
-        const request = await fetch(`http://localhost:5081/api/Auth/refresh-token`, {
+        const request = await fetch(`https://localhost:5081/api/Auth/refresh-token`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -37,7 +37,7 @@ export class AuthErrorInterceptor {
             }
         })
         if (request.status == 200) {
-            var newAccessToken = await request.text()
+            var newAccessToken = await request.text()            
             localStorage.setItem('access-token', newAccessToken)
         }   
     }
