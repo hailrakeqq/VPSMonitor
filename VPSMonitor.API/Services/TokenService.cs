@@ -77,7 +77,9 @@ public sealed class TokenService : ITokenService
             existingRefreshToken.RefreshToken = newRefreshToken.RefreshToken;
             existingRefreshToken.TokenCreated = newRefreshToken.TokenCreated;
             existingRefreshToken.TokenExpires = newRefreshToken.TokenExpires;
-
+            
+            _context.refreshtokens.Update(existingRefreshToken);
+            
             await _context.SaveChangesAsync();
 
             return true;
