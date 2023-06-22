@@ -49,7 +49,7 @@ export class TerminalComponent {
   }
 
   async executeCommand(command: string): Promise<void> {
-    if (command.startsWith('sethost')) {
+    if (command.startsWith('sethost') || command.startsWith('changehost')) {
       const inputHost = command.substring(8).trim();
       if (inputHost.indexOf('@')) {
         this.hostAddress = inputHost;
@@ -76,7 +76,7 @@ export class TerminalComponent {
     
     this.vpsPassword = password.trim();
     sessionStorage.setItem('password', this.vpsPassword);
-    this.outputs.push(`Host set to: ${this.hostAddress}`);
+    this.outputs.push(`Host set to: ${this.hostAddress}\nTo Change host enter command \`changehost username@hostAddress\``);
   
     this.command = '';
     this.awaitingPassword = false;

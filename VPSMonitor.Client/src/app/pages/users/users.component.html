@@ -1,10 +1,35 @@
 <h1>Users list</h1>
 <button (click)="handleModalOpened()" class="btn">Add new user.</button>
-<div>
+
+<!-- <div>
     <pre *ngFor="let user of users">
         {{user.username}} - {{user.permissions}}
     </pre>
-</div>
+</div> -->
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>User ID</th>
+      <th>Username</th>
+      <th>User permissions</th>
+      <th>User Home Directory Path</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+   <tbody>
+    <tr *ngFor="let user of users">
+      <!-- <td>{{ user.id }}</td> -->
+      <td>here should be userid</td>
+      <td>{{ user.username }}</td>
+      <td>{{ user.permissions }}</td>
+      <td>here should be user home dir</td>
+      <!-- <td>{{ user.homeDir }}</td> -->
+      <td><button (click)="deleteUser(user.username)">Delete User</button></td>
+    </tr>
+  </tbody>
+</table>
+
 
 <app-modal *ngIf="isModalOpen" (closed)="handleModalClosed()" title="Add new user">
     <form (ngSubmit)="addNewUser()">

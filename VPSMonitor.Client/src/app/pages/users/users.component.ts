@@ -15,13 +15,12 @@ export class UsersComponent {
   newUsername: string = ''
   password: string = ''
   ConfirmPassword: string = ''
+  header = {
+     'Authorization': `bearer ${localStorage.getItem('access-token')}`,
+      'Content-Type': 'application/json'
+  }
 
   async ngOnInit() {
-    const header = {
-      'Authorization': `bearer ${localStorage.getItem('access-token')}`,
-      'Content-Type': 'application/json'
-    }
-
     const hostAddress = sessionStorage?.getItem('host')?.split('@');
     const password = sessionStorage.getItem('password');
 
@@ -34,9 +33,11 @@ export class UsersComponent {
   
       const response = await HttpClient.httpRequest("POST",
         "https://localhost:5081/api/CoreUserCrud/GetUsers",
-        body, header)
-  
+        body, this.header)
+      
       this.users = await response
+      console.log(this.users);
+      
       this.users.forEach(item => item.permissions.join(", "));
     }
   }
@@ -51,25 +52,34 @@ export class UsersComponent {
 
 
   async addNewUser(): Promise<void>{
-    const hostData = {
-      host: sessionStorage.getItem('host'),
-      password: sessionStorage.getItem('password')
-    }
-
+    const host = sessionStorage.getItem('host')?.split("@")[1]
+    const username = sessionStorage.getItem('host')?.split("@")[0]
+    const password = sessionStorage.getItem('password')
+  
+   
     const dataToSend: newUserDataToSend = {
-      hostAddress: hostData.host?.split('@')[1],
-      hostUsername: hostData.host?.split('@')[0],
-      hostPassword: hostData.password,
+      hostAddress: host,
+      hostUsername: username,
+      hostPassword: password,
       userUsername: this.newUsername,
       userPassword: this.password,
       userConfirmPassword: this.ConfirmPassword
     };
     
     if (Toolchain.ValidateInputNewUserData(dataToSend)) {
-      console.log(dataToSend);
+      const response = await fetch("https://localhost:5081/api/CoreUserCrud/CreateUser", {
+        method: "POST",
+        headers: this.header,
+        body: JSON.stringify(dataToSend)
+      })
+      console.log(response);
       
     } else {
       alert('error')
     }
+  }
+
+  deleteUser(username: string) {
+    alert(username)
   }
 }
