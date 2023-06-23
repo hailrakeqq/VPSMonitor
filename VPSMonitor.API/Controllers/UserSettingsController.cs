@@ -57,10 +57,10 @@ public class UserSettingsController : Controller
     
     [HttpDelete]
     [Route("DeleteAccount/{id:Guid}")]
-    public async Task<IActionResult> DeleteUserAccount([FromRoute] string userId)
+    public async Task<IActionResult> DeleteUserAccount([FromRoute] string userId, [FromBody] string confirmPassword)
     {
         var user = await _userRepository.GetItemById(userId);
-        if (user != null)
+        if (user != null && Toolchain.GenerateHash(confirmPassword) == user.Password)
         {
             await _userRepository.Delete(user.Id);
             return Ok("User account was seccessfully deleted.");
