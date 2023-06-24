@@ -21,10 +21,9 @@ public class AuthController : Controller
     [Route("Registration")]
     public async Task<IActionResult> CreateUser([FromBody] User user)
     {
-        //TODO: Give better name for variable
-        var isUserExist = await _userService.GetUserByEmail(user.Email);
+        var currentUser = await _userService.GetUserByEmail(user.Email);
 
-        if (isUserExist == null)
+        if (currentUser == null)
         {
             user = new User()
             {

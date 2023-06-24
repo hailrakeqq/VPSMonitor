@@ -52,8 +52,13 @@ export class AuthErrorInterceptor {
     }
 
     private retryOriginalRequest(originalResponse: Response): Promise<Response> {
-        const originalRequest = originalResponse.url;
-        return fetch(originalRequest);
+        const originalRequest = new Request(originalResponse.url);
+        const requestOptions: RequestInit = {
+            method: originalRequest.method,
+            headers: originalRequest.headers,
+            body: originalRequest.body
+        };
+        return fetch(originalRequest, requestOptions);
     }
 }
 

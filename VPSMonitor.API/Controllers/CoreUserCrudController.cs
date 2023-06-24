@@ -39,9 +39,10 @@ public class CoreUserCrudController : Controller
             string username = sshRequest.UserUsername;
             
             //Create user and home directory for created user
-            await _sshService.ExecuteCommandAsync(sshClient, $"useradd -m {username}");
-            //Grant rights to the user
-            await _sshService.ExecuteCommandAsync(sshClient, $"chmod -R {username}:{username} /home/{username}");
+            await _sshService.ExecuteCommandAsync(sshClient, $"sudo adduser --disabled-password --gecos '' {username}");
+            //Set password for created user
+            await _sshService.ExecuteCommandAsync(sshClient, $"echo '{username}:{sshRequest.UserPassword}' | sudo chpasswd");
+            
             return Ok();
         }
     }

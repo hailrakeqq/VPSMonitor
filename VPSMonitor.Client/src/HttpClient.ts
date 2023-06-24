@@ -22,15 +22,25 @@ export class HttpClient{
             },
                 body: JSON.stringify(objectToSend)
             })
-        
+
                 return await request.text()
             }
-
+        //TODO no valid data exception
         return "data isn't valid"
     }
 
-    //TODO: сделать заметку для использование core controller
-    static async httpRequest(method: string, url: string, itemToSend?: any, headers?: any): Promise<any>{
+    /**
+     * If using this function for make request to core controller, request body should look like this:
+     * 
+     * const body = {
+     *  host: "host address(VPS address)",
+     *  username: "username using for connect to VPS",
+     *  password: "password for connect to VPS",
+     *  command: "bash command to execute"
+     * }
+     * 
+     * */
+    static async httpRequest(method: string, url: string, itemToSend?: any, headers?: any): Promise<Response>{
         const requestOptions = {
             method: method,
             headers: headers,
@@ -43,18 +53,7 @@ export class HttpClient{
         if (itemToSend != null) {
             requestOptions.body = JSON.stringify(itemToSend)
         }
-        
 
-        const request = await fetch(url, requestOptions)
-        let response = ''
-
-        try {
-            response = await request.json()
-        } catch {
-            response = await request.text()
-        } finally {
-            return response
-        }
+        return await fetch(url, requestOptions)
     }
 }
-    

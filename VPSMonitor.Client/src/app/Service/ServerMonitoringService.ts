@@ -26,7 +26,7 @@ export class ServerMonitoringService {
                 this.dataToSend,
                 this.headers)
             
-            return response;
+            return response.json();
         }
         this.router.navigate(['/terminal'])
     }
@@ -39,7 +39,7 @@ export class ServerMonitoringService {
                 this.dataToSend,
                 this.headers)
             
-            return response;
+            return response.json();
         }
         this.router.navigate(['/terminal'])
     }
