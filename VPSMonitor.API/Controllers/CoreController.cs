@@ -92,4 +92,17 @@ public class CoreController : Controller
          return Ok(result);
       }
    }
+
+   [HttpPost]
+   [Route("GetNetworkInfo")]
+   public async Task<IActionResult> GetNetworkInfo([FromBody] SshRequest request)
+   {
+      using (var sshClient = _sshService.Connect(request.Host, request.Username, request.Password))
+      {
+         var ipAddrCommandOutput = await _sshService.ExecuteCommandAsync(sshClient, "ip addr show");
+         var gatewayCommandOutput = await _sshService.ExecuteCommandAsync(sshClient, "ip route show default");
+         var result = Parser.ParseNetworkInfo(ipAddrCommandOutput, gatewayCommandOutput);
+         return Ok(result);
+      }
+   }
 }

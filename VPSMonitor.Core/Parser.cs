@@ -109,4 +109,57 @@ public static class Parser
 
         return users;
     }
+
+    public static NetworkInfo ParseNetworkInfo(string ipAddressCommandOutput, string gatewayCommandOutput)
+    {
+        string ipAddress = "";
+        string netmask = "";
+        string gateway = "";
+        
+        string ipAddressPattern = @"inet (\d+\.\d+\.\d+\.\d+)";
+        string gatewayPattern = @"default via (\d+\.\d+\.\d+\.\d+)";
+
+        MatchCollection ipAddressMatches = Regex.Matches(ipAddressCommandOutput, ipAddressPattern);
+        Match gatewayMatch = Regex.Match(gatewayCommandOutput, gatewayPattern);
+
+        foreach (Match match in ipAddressMatches)
+        {
+            string address = match.Groups[1].Value;
+            if (!IsLocalAddress(address))
+            {
+                ipAddress = address;
+                break;
+            }
+        }
+
+        string netmaskPattern = $@"inet {ipAddress}/(?<Netmask>\d+)";
+        Match netmaskMatch = Regex.Match(ipAddressCommandOutput, netmaskPattern);
+        
+        if (netmaskMatch.Success)
+        {
+            netmask = '/' + netmaskMatch.Groups["Netmask"].Value;
+        }
+        
+        if (gatewayMatch.Success)
+        {
+            gateway = gatewayMatch.Groups[1].Value;
+        }
+        
+        oreturn new NetworkInfo()
+        {
+            IpAddress = ipAddress,
+            Gateway = gateway,
+            Netmask = netmask
+        };
+    }
+
+    private static bool IsLocalAddress(string ipAddress)
+    {
+        if (ipAddress.StartsWith("127.") || ipAddress.StartsWith("192.168."))
+            return true;
+        
+        return false;
+    }
+    
+    //TODO: додати парсер для нетмаски example: /24 = 255.255.255.0 
 }

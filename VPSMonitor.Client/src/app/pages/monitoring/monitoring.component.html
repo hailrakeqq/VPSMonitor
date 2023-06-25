@@ -16,6 +16,7 @@
       <h3>System Information:</h3>
       <ul>
         <li class="sysInfo-item">Hostname: {{systemInfo.hostname}}</li>
+        <li class="sysInfo-item">Hostname / rDNS: {{rdns}}</li>
         <li class="sysInfo-item">OS: {{systemInfo.os}}</li>
         <li class="sysInfo-item">Kernel: {{systemInfo.kernel}}</li>
         <li class="sysInfo-item">CPU architecture: {{systemInfo.cpuArchitecture}}</li>
@@ -40,31 +41,15 @@
       <h3>Diskpart usage:</h3>
       <pre>{{diskpartInfo}}</pre>
     </div>
-    <!--
-    <div>
-      <h3>Сетевая активность</h3>
-     
+
+    <div class="item">
+      <h3>Network details:</h3>
+      <!-- TODO: create table -->
+      <p>{{networkInfo.ipAddress}}</p>
+      <p>{{networkInfo.netmask}}</p>
+      <p>{{networkInfo.gateway}}</p>
     </div>
 
-    <div>
-      <h3>Системная нагрузка</h3>
-
-    </div>
-
-    <div>
-      <h3>Информация о пользователе</h3>
-
-    </div>
-
-    <div>
-      <h3>Логи и журналы</h3>
-
-    </div>
-
-    <div>
-      <h3>Управление сервером</h3>
-
-    </div> -->
   </div>
   <div class="item">
     <button class="btn" (click)="reboot()">Reboot VPS!</button>
