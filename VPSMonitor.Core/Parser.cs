@@ -1,4 +1,7 @@
+using System.Runtime.CompilerServices;
+using System.Text;
 using System.Text.RegularExpressions;
+using Microsoft.VisualBasic;
 using Newtonsoft.Json.Linq;
 using VPSMonitor.Core.Entities;
 
@@ -109,48 +112,51 @@ public static class Parser
 
         return users;
     }
-
+    
     public static NetworkInfo ParseNetworkInfo(string ipAddressCommandOutput, string gatewayCommandOutput)
     {
-        string ipAddress = "";
-        string netmask = "";
-        string gateway = "";
+        string ipAddress = ExtractIpAddress(ipAddressCommandOutput);
         
-        string ipAddressPattern = @"inet (\d+\.\d+\.\d+\.\d+)";
-        string gatewayPattern = @"default via (\d+\.\d+\.\d+\.\d+)";
+        return new NetworkInfo()
+        {
+            IpAddress = ipAddress,
+            Gateway = ExtractGateway(gatewayCommandOutput),
+            Netmask = ExtractNetmask(ipAddressCommandOutput, ipAddress)
+        };
+    }
 
-        MatchCollection ipAddressMatches = Regex.Matches(ipAddressCommandOutput, ipAddressPattern);
-        Match gatewayMatch = Regex.Match(gatewayCommandOutput, gatewayPattern);
-
+    private static string ExtractIpAddress(string ipAddressCommandOutput)
+    {
+        MatchCollection ipAddressMatches = Regex.Matches(ipAddressCommandOutput, @"inet (\d+\.\d+\.\d+\.\d+)");
+        
         foreach (Match match in ipAddressMatches)
         {
             string address = match.Groups[1].Value;
             if (!IsLocalAddress(address))
-            {
-                ipAddress = address;
-                break;
-            }
+                return address;
         }
 
-        string netmaskPattern = $@"inet {ipAddress}/(?<Netmask>\d+)";
-        Match netmaskMatch = Regex.Match(ipAddressCommandOutput, netmaskPattern);
+        return "";
+    }
+
+    private static string ExtractNetmask(string ipAddressCommandOutput, string ipAddress)
+    {
+        Match netmaskMatch = Regex.Match(ipAddressCommandOutput, $@"inet {ipAddress}/(?<Netmask>\d+)");
         
         if (netmaskMatch.Success)
         {
-            netmask = '/' + netmaskMatch.Groups["Netmask"].Value;
+            int integerNetmask = Convert.ToInt32(netmaskMatch.Groups["Netmask"].Value);
+            string netmask = ConvertPrefixLengthToMask(integerNetmask) + $"/{integerNetmask}";
+            return netmask;
         }
-        
-        if (gatewayMatch.Success)
-        {
-            gateway = gatewayMatch.Groups[1].Value;
-        }
-        
-        oreturn new NetworkInfo()
-        {
-            IpAddress = ipAddress,
-            Gateway = gateway,
-            Netmask = netmask
-        };
+
+        return "";
+    }
+
+    private static string ExtractGateway(string commandOutput)
+    {
+        Match match = Regex.Match(commandOutput, @"default via (\d+\.\d+\.\d+\.\d+)");
+        return match.Success ? match.Groups[1].Value : "";
     }
 
     private static bool IsLocalAddress(string ipAddress)
@@ -160,6 +166,19 @@ public static class Parser
         
         return false;
     }
-    
-    //TODO: додати парсер для нетмаски example: /24 = 255.255.255.0 
+
+    private static string ConvertPrefixLengthToMask(int prefixLength)
+    {
+        if (prefixLength < 0 || prefixLength > 32)
+        {
+            throw new ArgumentException("Invalid prefix length. The value must be between 0 and 32.");
+        }
+        int mask = (int)(uint.MaxValue << (32 - prefixLength));
+
+        byte[] octets = BitConverter.GetBytes(mask);
+
+        Array.Reverse(octets);
+
+        return string.Join(".", octets);
+    }
 }

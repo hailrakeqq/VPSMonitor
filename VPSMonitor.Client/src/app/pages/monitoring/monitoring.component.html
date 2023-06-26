@@ -45,14 +45,14 @@
     <div class="item">
       <h3>Network details:</h3>
       <!-- TODO: create table -->
-      <p>{{networkInfo.ipAddress}}</p>
-      <p>{{networkInfo.netmask}}</p>
-      <p>{{networkInfo.gateway}}</p>
+      <p>Ip address: {{networkInfo.ipAddress}}</p>
+      <p>Netmask: {{networkInfo.netmask}}</p>
+      <p>Gateway: {{networkInfo.gateway}}</p>
     </div>
 
-  </div>
-  <div class="item">
-    <button class="btn" (click)="reboot()">Reboot VPS!</button>
+    <div class="item">
+      <button class="btn" (click)="reboot()">Reboot VPS!</button>
+    </div>
   </div>
 </div>
 
