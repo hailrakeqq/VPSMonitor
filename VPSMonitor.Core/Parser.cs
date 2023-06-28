@@ -113,15 +113,25 @@ public static class Parser
         return users;
     }
     
-    public static NetworkInfo ParseNetworkInfo(string ipAddressCommandOutput, string gatewayCommandOutput)
+    public static NetworkInfo ParseNetworkInfo(string ipAddressCommandOutput, string gatewayCommandOutput, string gatewayIpV6CommandOutput)
     {
         string ipAddress = ExtractIpAddress(ipAddressCommandOutput);
-        
+        string ipAddressIpV6 = ExtractIpAddressIpv6(ipAddressCommandOutput);
+        string[] parsedIpV6 = ipAddressIpV6.Split('/');
         return new NetworkInfo()
         {
-            IpAddress = ipAddress,
-            Gateway = ExtractGateway(gatewayCommandOutput),
-            Netmask = ExtractNetmask(ipAddressCommandOutput, ipAddress)
+            IpV4NetworkInfo = new IpV4NetworkInfo()
+            {
+                IpAddress = ipAddress,
+                Gateway = ExtractGateway(gatewayCommandOutput),
+                Netmask = ExtractNetmask(ipAddressCommandOutput, ipAddress)
+            },
+            IpV6NetworkInfo = new IpV6NetworkInfo()
+            {
+                IpAddress = parsedIpV6[0],
+                Gateway = ExtractGatewayIpv6(gatewayIpV6CommandOutput),
+                Netmask = $"/{ipAddressIpV6.Split('/')[1]}"
+            }
         };
     }
 
@@ -146,7 +156,7 @@ public static class Parser
         if (netmaskMatch.Success)
         {
             int integerNetmask = Convert.ToInt32(netmaskMatch.Groups["Netmask"].Value);
-            string netmask = ConvertPrefixLengthToMask(integerNetmask) + $"/{integerNetmask}";
+            string netmask = ConvertPrefixLengthToMaskV4(integerNetmask) + $"/{integerNetmask}";
             return netmask;
         }
 
@@ -158,16 +168,25 @@ public static class Parser
         Match match = Regex.Match(commandOutput, @"default via (\d+\.\d+\.\d+\.\d+)");
         return match.Success ? match.Groups[1].Value : "";
     }
-
-    private static bool IsLocalAddress(string ipAddress)
+    
+    private static string ExtractIpAddressIpv6(string ipAddressCommandOutput)
     {
-        if (ipAddress.StartsWith("127.") || ipAddress.StartsWith("192.168."))
-            return true;
-        
-        return false;
+        Match match = Regex.Match(ipAddressCommandOutput, @"inet6 ([\w:]+/\d+) scope global");
+        return match.Success ? match.Groups[1].Value : "";
     }
 
-    private static string ConvertPrefixLengthToMask(int prefixLength)
+    private static string ExtractGatewayIpv6(string commandOutput)
+    {
+        Match match = Regex.Match(commandOutput, @"default via ([\da-fA-F:]+)");
+        return match.Success ? match.Groups[1].Value : "";
+    }
+    
+    private static bool IsLocalAddress(string ipAddress)
+    {
+        return ipAddress.StartsWith("127.") || ipAddress.StartsWith("192.168.") ? true : false;
+    }
+
+    private static string ConvertPrefixLengthToMaskV4(int prefixLength)
     {
         if (prefixLength < 0 || prefixLength > 32)
         {

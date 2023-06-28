@@ -45,9 +45,31 @@
     <div class="item">
       <h3>Network details:</h3>
       <!-- TODO: create table -->
-      <p>Ip address: {{networkInfo.ipAddress}}</p>
-      <p>Netmask: {{networkInfo.netmask}}</p>
-      <p>Gateway: {{networkInfo.gateway}}</p>
+
+       <table class="ip-table">
+            <tbody>
+                <tr>
+                    <th>IP v4</th>
+                    <td>
+                        <ul>
+                            <li><strong>IP Address:</strong> {{networkInfo.ipV4NetworkInfo.ipAddress}}</li>
+                            <li><strong>Netmask:</strong> {{networkInfo.ipV4NetworkInfo.netmask}}</li>
+                            <li><strong>Gateway:</strong> {{networkInfo.ipV4NetworkInfo.gateway}}</li>
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <th>IP v6</th>
+                    <td>
+                        <ul>
+                            <li><strong>IP Address:</strong> {{networkInfo.ipV6NetworkInfo.ipAddress}}</li>
+                            <li><strong>Netmask:</strong> {{networkInfo.ipV6NetworkInfo.netmask}}</li>
+                            <li><strong>Gateway:</strong> {{networkInfo.ipV6NetworkInfo.gateway}}</li>
+                        </ul>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
     <div class="item">

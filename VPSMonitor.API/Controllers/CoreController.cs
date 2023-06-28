@@ -101,7 +101,8 @@ public class CoreController : Controller
       {
          var ipAddrCommandOutput = await _sshService.ExecuteCommandAsync(sshClient, "ip addr show");
          var gatewayCommandOutput = await _sshService.ExecuteCommandAsync(sshClient, "ip route show default");
-         var result = Parser.ParseNetworkInfo(ipAddrCommandOutput, gatewayCommandOutput);
+         var gatewayIpV6CommandOutput = await _sshService.ExecuteCommandAsync(sshClient, " ip -6 route | grep ^default");
+         var result = Parser.ParseNetworkInfo(ipAddrCommandOutput, gatewayCommandOutput, gatewayIpV6CommandOutput);
          return Ok(result);
       }
    }

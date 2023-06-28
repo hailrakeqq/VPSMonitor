@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { HttpClient } from 'src/HttpClient';
 import { ServerMonitoringService } from 'src/app/Service/ServerMonitoringService';
 import "../../entities/systemInfo"
-import "../../entities/networkInfo"
+import { IpV4NetworkInfo, IpV6NetworkInfo, networkInfo } from "../../entities/networkInfo"
 
 
 @Component({
@@ -17,7 +17,10 @@ export class MonitoringComponent {
   cpuInfo: string[] = []
   ramInfo: string = ''
   diskpartInfo: string = ''
-  networkInfo: networkInfo = {ipAddress: '', netmask: '', gateway: ''}
+  networkInfo: networkInfo = {
+    ipV4NetworkInfo: new IpV4NetworkInfo(),
+    ipV6NetworkInfo: new IpV6NetworkInfo()
+  }
 
   constructor(private monitoringService: ServerMonitoringService) { }
   
@@ -31,11 +34,11 @@ export class MonitoringComponent {
     this.ramInfo = await this.monitoringService.getRamUsage();
     this.diskpartInfo = await this.monitoringService.getDiskpartUsage();
     this.networkInfo = await this.monitoringService.getNetworkInfo();
+
+    console.log(this.networkInfo);
     
     const end = performance.now()
     console.log(`execution time: ${(end - start / 1000)} seconds`);
-
-    console.log(`\nnetwork info:\n${this.networkInfo}`);
     
     this.loading = false
   }
