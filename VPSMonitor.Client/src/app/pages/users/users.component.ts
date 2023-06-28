@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient } from 'src/HttpClient';
-import '../../entities/user'
+import '../../entities/linuxUser'
 import '../../entities/dataToSend'
 import { Toolchain } from 'src/toolchain';
 
@@ -10,7 +10,8 @@ import { Toolchain } from 'src/toolchain';
   styleUrls: ['./users.component.scss']
 })
 export class UsersComponent {
-  users: user[] = []
+  isLoading: boolean = true
+  users: linuxUser[] = []
   isModalOpen: boolean = false
   newUsername: string = ''
   password: string = ''
@@ -38,11 +39,11 @@ export class UsersComponent {
         "https://localhost:5081/api/CoreUserCrud/GetUsers",
         body, this.header)
       
-      this.users = await response.json()
-      console.log(this.users);
-      
+      this.users = await response.json()            
       this.users.forEach(item => item.permissions.join(", "));
     }
+
+    this.isLoading = false
   }
 
   handleModalOpened(): void{

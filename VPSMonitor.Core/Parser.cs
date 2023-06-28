@@ -23,7 +23,7 @@ public static class Parser
         JArray cpuLoadArray = (JArray)jsonObject["sysstat"]["hosts"][0]["statistics"][0]["cpu-load"];
         var idleValues = cpuLoadArray.Select(item => (double)item["idle"]).ToArray();
         string[] result = new string[idleValues.Length];
-        
+
         for (int i = 0; i < idleValues.Length; i++)
         {
             if (i == 0)
@@ -69,50 +69,49 @@ public static class Parser
         for (int i = 1; i <= 3; i++)
         {
             switch (permissionValue[i])
-                {
-                    case 'x':
-                        parsedPermission.Add("Execute");
-                        continue;
-                    case 'w':
-                        parsedPermission.Add("Write");
-                        continue;
-                    case 'r':
-                        parsedPermission.Add("Read");
-                        continue;
-                }
+            {
+                case 'x':
+                    parsedPermission.Add("Execute");
+                    continue;
+                case 'w':
+                    parsedPermission.Add("Write");
+                    continue;
+                case 'r':
+                    parsedPermission.Add("Read");
+                    continue;
+            }
         }
 
         return parsedPermission;
     }
 
-    public static List<LinuxUser> parseGetUserCommand(string input)
+    public static List<LinuxUser> parseGetUserCommand(string usernameAndHomeDirectoryPathOutput, string userIdOutput)
     {
-        var lines = input.Split("\n");
+        var linesOfUsernameAndHomeDirectory = usernameAndHomeDirectoryPathOutput.Split("\n");
+        var linesOfUserId = userIdOutput.Split("\n");
         var users = new List<LinuxUser>();
-        foreach (var line in lines)
+
+        for (int i = 0; i < linesOfUserId.Length; i++)
         {
-            string[] fields = line.Split(" ");
-            if (fields[0] != "")
+            string[] fieldsOfOfUsernameAndHomeDirectory = linesOfUsernameAndHomeDirectory[i].Split(" ");
+
+            if (fieldsOfOfUsernameAndHomeDirectory[0] != "" && linesOfUserId[i] != "")
             {
+                string userId = linesOfUserId[i].Split(':')[1];
                 var user = new LinuxUser()
                 {
-                    username = fields[2],
-                    permissions = Parser.permissionParse(fields[0])
+                    Id = userId,
+                    Username = fieldsOfOfUsernameAndHomeDirectory[2],
+                    Permissions = Parser.permissionParse(fieldsOfOfUsernameAndHomeDirectory[0]),
+                    HomeDirectoryPath = fieldsOfOfUsernameAndHomeDirectory.Where(x => x.StartsWith("/")).FirstOrDefault()
                 };
 
-                int number;
-                if (Int32.TryParse(fields[2], out number))
-                {
-                    user.username = "root";
-                }
-               
                 users.Add(user);
             }
         }
-
         return users;
     }
-    
+
     public static NetworkInfo ParseNetworkInfo(string ipAddressCommandOutput, string gatewayCommandOutput, string gatewayIpV6CommandOutput)
     {
         string ipAddress = ExtractIpAddress(ipAddressCommandOutput);
@@ -138,7 +137,7 @@ public static class Parser
     private static string ExtractIpAddress(string ipAddressCommandOutput)
     {
         MatchCollection ipAddressMatches = Regex.Matches(ipAddressCommandOutput, @"inet (\d+\.\d+\.\d+\.\d+)");
-        
+
         foreach (Match match in ipAddressMatches)
         {
             string address = match.Groups[1].Value;
@@ -152,7 +151,7 @@ public static class Parser
     private static string ExtractNetmask(string ipAddressCommandOutput, string ipAddress)
     {
         Match netmaskMatch = Regex.Match(ipAddressCommandOutput, $@"inet {ipAddress}/(?<Netmask>\d+)");
-        
+
         if (netmaskMatch.Success)
         {
             int integerNetmask = Convert.ToInt32(netmaskMatch.Groups["Netmask"].Value);
@@ -168,7 +167,7 @@ public static class Parser
         Match match = Regex.Match(commandOutput, @"default via (\d+\.\d+\.\d+\.\d+)");
         return match.Success ? match.Groups[1].Value : "";
     }
-    
+
     private static string ExtractIpAddressIpv6(string ipAddressCommandOutput)
     {
         Match match = Regex.Match(ipAddressCommandOutput, @"inet6 ([\w:]+/\d+) scope global");
@@ -180,7 +179,7 @@ public static class Parser
         Match match = Regex.Match(commandOutput, @"default via ([\da-fA-F:]+)");
         return match.Success ? match.Groups[1].Value : "";
     }
-    
+
     private static bool IsLocalAddress(string ipAddress)
     {
         return ipAddress.StartsWith("127.") || ipAddress.StartsWith("192.168.") ? true : false;

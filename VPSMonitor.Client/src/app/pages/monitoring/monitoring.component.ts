@@ -34,8 +34,6 @@ export class MonitoringComponent {
     this.ramInfo = await this.monitoringService.getRamUsage();
     this.diskpartInfo = await this.monitoringService.getDiskpartUsage();
     this.networkInfo = await this.monitoringService.getNetworkInfo();
-
-    console.log(this.networkInfo);
     
     const end = performance.now()
     console.log(`execution time: ${(end - start / 1000)} seconds`);

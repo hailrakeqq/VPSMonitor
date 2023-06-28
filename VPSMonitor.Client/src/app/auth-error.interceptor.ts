@@ -3,18 +3,18 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class AuthErrorInterceptor {
     
-    interceptRequest(request: Request): Request {
+    interceptRequest(request: Request): Request {        
         return request;
     }
 
-    async interceptResponse(response: Response, originalRequestMethod: string): Promise<Response> {
+    async interceptResponse(response: Response, originalRequest: Request): Promise<Response> {
         if (response.status === 401 || response.status === 404) {
-            return await this.handleAuthError(response, originalRequestMethod);
+            return await this.handleAuthError(response, originalRequest);
         }
         return response;
     }
 
-    private handleAuthError(response: Response, originalRequestMethod: string): Promise<Response> {
+    private handleAuthError(response: Response, originalRequest: Request): Promise<Response> {
         const refreshToken = localStorage.getItem('refresh-token');
         const id = localStorage.getItem('id');
 
@@ -23,7 +23,7 @@ export class AuthErrorInterceptor {
             return Promise.reject(response);
         } else {
             return this.requestToUpdateAccessToken()
-                .then(() => this.retryOriginalRequest(response, originalRequestMethod))
+                .then(() => this.retryOriginalRequest(response, originalRequest))
                 .catch((error) => {
                     console.error('Access token update error:', error);
                     throw response;
@@ -44,21 +44,23 @@ export class AuthErrorInterceptor {
         });
         
         if (request.status === 200) {
-            const newAccessToken = await request.text();
+            const newAccessToken = await request.text();  
             localStorage.setItem('access-token', newAccessToken);
         } else {
             throw new Error('Access token update failed.');
         }
     }
 
-    private retryOriginalRequest(originalResponse: Response, originalRequestMethod: string): Promise<Response> {
-        const originalRequest = new Request(originalResponse.url);
+    private retryOriginalRequest(originalResponse: Response, originalRequest: Request): Promise<Response> {
+        //update access token to new:
+        originalRequest.headers.set('Authorization', `Bearer ${localStorage.getItem('access-token')}`)
+
         const requestOptions: RequestInit = {
-            method: originalRequestMethod,
+            method: originalRequest.method,
             headers: originalRequest.headers,
             body: originalRequest.body
         };
-        return fetch(originalRequest, requestOptions);
+        return fetch(originalResponse.url, requestOptions);
     }
 }
 
@@ -71,9 +73,10 @@ window.fetch = async function (input: RequestInfo | URL, init?: RequestInit): Pr
 
     try {
         const response = await originalFetch(interceptedRequest);
-        return authErrorInterceptor.interceptResponse(response, request.method);
+        return await authErrorInterceptor.interceptResponse(response, request);
     } catch (error) {
         console.error('Fetch error:', error);
         throw error;
     }
 };
+

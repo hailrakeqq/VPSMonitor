@@ -17,15 +17,17 @@ public class CoreUserCrudController : Controller
     {
         _sshService = sshRepository;
     }
-    
+
     [HttpPost]
     [Route("GetUsers")]
     public async Task<IActionResult> GetUserInfo([FromBody] SshRequest request)
     {
         using (var sshClient = _sshService.Connect(request.Host, request.Username, request.Password))
         {
-            string result = await _sshService.ExecuteCommandAsync(sshClient, "ls -ld /home/*/");
-            var parsedValue = Parser.parseGetUserCommand(result);
+            string usersAndTheirHomeDirectory = await _sshService.ExecuteCommandAsync(sshClient, "ls -ld /home/*/");
+            string usersId = await _sshService.ExecuteCommandAsync(sshClient, "stat -c \"% U:% u\" /home/*/");
+
+            var parsedValue = Parser.parseGetUserCommand(usersAndTheirHomeDirectory, usersId);
             return Ok(parsedValue);
         }
     }
@@ -37,12 +39,12 @@ public class CoreUserCrudController : Controller
         using (var sshClient = _sshService.Connect(sshRequest.HostAddress, sshRequest.HostUsername, sshRequest.HostPassword))
         {
             string username = sshRequest.UserUsername;
-            
+
             //Create user and home directory for created user
             await _sshService.ExecuteCommandAsync(sshClient, $"sudo adduser --disabled-password --gecos '' {username}");
             //Set password for created user
             await _sshService.ExecuteCommandAsync(sshClient, $"echo '{username}:{sshRequest.UserPassword}' | sudo chpasswd");
-            
+
             return Ok();
         }
     }
