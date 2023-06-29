@@ -3,18 +3,23 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.VisualBasic;
 using Newtonsoft.Json.Linq;
+using VPSMonitor.API.Entities;
 using VPSMonitor.Core.Entities;
 
 namespace VPSMonitor.Core;
 
 public static class Parser
 {
-    public static string freeCommandParse(string command)
+    public static SystemInfo ParseSystemInfoData(List<string> outputCommands)
     {
-        //example string: 
-        //total used free shared buff / cache available Mem: 1.9Gi 327Mi 611Mi 16Mi 1.0Gi 1.4Gi Swap: 975Mi 89Mi 886Mi 
-        string[] result = command.Split(": ")[1].Split('i');
-        return $"{result[1].Trim()} / {result[0].Trim()}";
+        return new SystemInfo()
+        {
+            Hostname = outputCommands[0],
+            OS = outputCommands[1].Split("\"")[1],
+            Kernel = outputCommands[2],
+            CpuArchitecture = outputCommands[3],
+            DateTime = outputCommands[4]
+        };
     }
 
     public static string[] mpstatCommandParse(string data)
@@ -35,24 +40,6 @@ public static class Parser
         }
 
         return result;
-    }
-
-    public static string dfCommandParse(string command)
-    {
-        string[] lines = command.Trim().Split('\n');
-
-        foreach (string line in lines)
-        {
-            string[] columns = line.Trim().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-
-            Regex rootDirectoryRegex = new Regex(@"^/\s*$");
-            if (rootDirectoryRegex.IsMatch(columns[columns.Length - 1]))
-            {
-                return $"{columns[2]} / {columns[1]}";
-            }
-        }
-
-        return "Can't find root dir";
     }
 
     public static List<string> permissionParse(string permissionValue)

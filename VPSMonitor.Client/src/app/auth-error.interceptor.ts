@@ -79,4 +79,3 @@ window.fetch = async function (input: RequestInfo | URL, init?: RequestInit): Pr
         throw error;
     }
 };
-

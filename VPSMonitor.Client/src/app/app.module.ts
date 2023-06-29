@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SignInComponent } from './pages/auth/signin/signin.component';
@@ -14,6 +14,7 @@ import { ModalComponent } from './components/modal/modal.component';
 import { TerminalComponent } from './pages/terminal/terminal.component';
 import { MonitoringComponent } from './pages/monitoring/monitoring.component';
 import { UsersComponent } from './pages/users/users.component';
+import { AuthErrorInterceptor } from './auth-error.interceptor';
 
 @NgModule({
   declarations: [
@@ -32,9 +33,12 @@ import { UsersComponent } from './pages/users/users.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule
   ],
-  providers: [],
+  providers: [
+        { provide: HTTP_INTERCEPTORS, useClass: AuthErrorInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
