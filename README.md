@@ -31,7 +31,7 @@ After build you can get access to services by next URL's:
 ```
     `http://localhost:4200` - it's our frontend
 
-    `http://localhost:5045` - it's our backend API
+    `https://localhost:5081` - it's our backend API
 
     `User ID={username};Password={password};Server=db;Port=5433;Database=vpsmonitor;Host=127.0.0.1;` - connection string to db
   ```
@@ -42,10 +42,11 @@ After build you can get access to services by next URL's:
   
 ### Features:
 - [X] User authentication
+- [X] Execution bash scripts and other commands
 - [X] Obtaining information about status of the VPS
+- [X] Linux users controls page
 - [ ] File management
 - [ ] Proccess management 
-- [X] Execution bash scripts and other commands
 
 #### Technology stack:
 - ASP.NET Core WebAPI
