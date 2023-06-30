@@ -1,16 +1,19 @@
 <div *ngIf="isLoading">Loading...</div>
 
 <div *ngIf="!isLoading">
-  <h1>Users list</h1>
-  <button (click)="handleModalOpened()" class="btn">Add new user.</button>
-  
+  <div class="item">
+    <h1>Users list</h1>
+    <button (click)="handleModalOpened()" class="btn">Add new user.</button>
+  </div>
+
   <table class="table">
     <thead>
       <tr>
-        <th>User ID</th>
+        <th *ngIf="!sortByDownId" (click)="sortUsersByIdDesc()">User ID ↑</th>
+        <th *ngIf="sortByDownId" (click)="sortUsersByIdAsc()">User ID ↓</th>
         <th>Username</th>
-        <th>User permissions</th>
-        <th>User Home Directory Path</th>
+        <th>Permissions</th>
+        <th>Home Directory Path</th>
         <th>Action</th>
       </tr>
     </thead>
@@ -39,7 +42,6 @@
       Confirm Password:
       <input type="password" [(ngModel)]="ConfirmPassword" name="ConfirmPassword" required>
     </label>
-    <p>ADD SOMETHING LIKE CHOOSE USER ROLE</p>
     <button type="submit">Add User!</button>
   </form>
   </app-modal>

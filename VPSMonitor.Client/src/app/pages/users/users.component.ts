@@ -11,6 +11,7 @@ import { Toolchain } from 'src/toolchain';
 })
 export class UsersComponent {
   isLoading: boolean = true
+  sortByDownId: boolean = false
   users: linuxUser[] = []
   isModalOpen: boolean = false
   newUsername: string = ''
@@ -92,5 +93,14 @@ export class UsersComponent {
     const response = await HttpClient.httpRequest("DELETE", "https://localhost:5081/api/CoreUserCrud/DeleteUser", dataToSend, this.header)
     if (response.status == 200)
       window.location.reload();
+  }
+
+  sortUsersByIdDesc() {
+    this.users.sort((a, b) => a.id - b.id)
+    this.sortByDownId = true
+  }
+  sortUsersByIdAsc() {
+    this.users.sort((a, b) => b.id - a.id)
+    this.sortByDownId = false
   }
 }

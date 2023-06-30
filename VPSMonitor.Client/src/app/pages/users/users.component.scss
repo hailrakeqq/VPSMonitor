@@ -1,5 +1,12 @@
+h1 {
+  @apply text-2xl font-bold mb-4;
+}
 h2 {
   @apply text-2xl font-bold mb-4;
+}
+
+.item{
+  margin-bottom: 20px
 }
 
 h3 {
@@ -52,3 +59,4 @@ textarea {
 .table tbody tr:nth-child(even) {
   background-color: #f9f9f9;
 }
+

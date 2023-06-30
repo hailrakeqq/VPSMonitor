@@ -1,5 +1,5 @@
 interface linuxUser {
-    id: string,
+    id: number,
     username: string,
     permissions: string[]
     homeDirectoryPath: string

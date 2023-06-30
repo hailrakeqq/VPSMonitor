@@ -87,7 +87,7 @@ public static class Parser
                 string userId = linesOfUserId[i].Split(':')[1];
                 var user = new LinuxUser()
                 {
-                    Id = userId,
+                    Id = Convert.ToInt32(userId),
                     Username = fieldsOfOfUsernameAndHomeDirectory[2],
                     Permissions = Parser.permissionParse(fieldsOfOfUsernameAndHomeDirectory[0]),
                     HomeDirectoryPath = fieldsOfOfUsernameAndHomeDirectory.Where(x => x.StartsWith("/")).FirstOrDefault()

@@ -32,6 +32,12 @@ public class CoreUserCrudController : Controller
         }
     }
 
+    /// <summary>
+    /// this function create linux user and home directory;
+    /// if users list is equals 1 => create user with 1001 id because it can create new user with root id(root id == 1000)
+    /// </summary>
+    /// <param name="sshRequest"></param>
+    /// <returns>Ok result</returns>
     [HttpPost]
     [Route("CreateUser")]
     public async Task<IActionResult> CreateLinuxUser([FromBody] SshRequestCoreForUserCrud sshRequest)
@@ -40,9 +46,7 @@ public class CoreUserCrudController : Controller
         {
             string username = sshRequest.UserUsername;
 
-            //Create user and home directory for created user
             await _sshService.ExecuteCommandAsync(sshClient, $"sudo adduser --disabled-password --gecos '' {username}");
-            //Set password for created user
             await _sshService.ExecuteCommandAsync(sshClient, $"echo '{username}:{sshRequest.UserPassword}' | sudo chpasswd");
 
             return Ok();
@@ -53,17 +57,20 @@ public class CoreUserCrudController : Controller
     [Route("ChangeUserData")]
     public async Task<IActionResult> ChangeLinuxUserData([FromBody] SshRequestCoreForUserCrud sshRequest)
     {
-
         return Ok();
     }
 
+    /// <summary>
+    /// Delete user and user home directory 
+    /// </summary>
+    /// <param name="sshRequest"></param>
+    /// <returns>ok result</returns>
     [HttpDelete]
     [Route("DeleteUser")]
     public async Task<IActionResult> DeleteLinuxUser([FromBody] SshRequestCoreForUserCrud sshRequest)
     {
         using (var sshClient = _sshService.Connect(sshRequest.HostAddress, sshRequest.HostUsername, sshRequest.HostPassword))
         {
-            //Delete user and user home directory 
             await _sshService.ExecuteCommandAsync(sshClient, $"userdel -r {sshRequest.UserUsername}");
 
             return Ok();
