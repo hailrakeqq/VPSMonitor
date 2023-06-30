@@ -7,14 +7,14 @@ export class AuthErrorInterceptor {
         return request;
     }
 
-    async interceptResponse(response: Response, originalRequest: Request): Promise<Response> {
+    async interceptResponse(response: Response, originalRequest?: RequestInit): Promise<Response> {
         if (response.status === 401 || response.status === 404) {
             return await this.handleAuthError(response, originalRequest);
         }
         return response;
     }
 
-    private handleAuthError(response: Response, originalRequest: Request): Promise<Response> {
+    private handleAuthError(response: Response, originalRequest?: RequestInit): Promise<Response> {
         const refreshToken = localStorage.getItem('refresh-token');
         const id = localStorage.getItem('id');
 
@@ -51,15 +51,16 @@ export class AuthErrorInterceptor {
         }
     }
 
-    private retryOriginalRequest(originalResponse: Response, originalRequest: Request): Promise<Response> {
-        //update access token to new:
-        originalRequest.headers.set('Authorization', `Bearer ${localStorage.getItem('access-token')}`)
-
+    private retryOriginalRequest(originalResponse: Response, originalRequest?: RequestInit): Promise<Response> {
         const requestOptions: RequestInit = {
-            method: originalRequest.method,
-            headers: originalRequest.headers,
-            body: originalRequest.body
+            method: originalRequest?.method,
+            headers: {
+                'Authorization': `bearer ${localStorage.getItem('access-token')}`,
+                'Content-Type': 'application/json'
+            },
+            body: originalRequest?.body
         };
+        
         return fetch(originalResponse.url, requestOptions);
     }
 }
@@ -73,7 +74,7 @@ window.fetch = async function (input: RequestInfo | URL, init?: RequestInit): Pr
 
     try {
         const response = await originalFetch(interceptedRequest);
-        return await authErrorInterceptor.interceptResponse(response, request);
+        return await authErrorInterceptor.interceptResponse(response, init);
     } catch (error) {
         console.error('Fetch error:', error);
         throw error;

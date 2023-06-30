@@ -84,7 +84,7 @@ public class CoreController : Controller
 
             var cpuUsageInfo = Parser.mpstatCommandParse(commandResults[5]);
             var ramUsageInfo = commandResults[6];
-            var discpartUsageInfo = commandResults[7];
+            var diskpartUsageInfo = commandResults[7];
             var networkInfo = Parser.ParseNetworkInfo(commandResults[8], commandResults[9], commandResults[10]);
 
             var result = new MonitoringPageData()
@@ -92,7 +92,7 @@ public class CoreController : Controller
                 SystemInfo = systemInfo,
                 CpuUsageInfo = cpuUsageInfo,
                 RamUsageInfo = ramUsageInfo,
-                DiscpartUsageInfo = discpartUsageInfo,
+                DiskpartUsageInfo = diskpartUsageInfo,
                 NetworkInfo = networkInfo
             };
 
