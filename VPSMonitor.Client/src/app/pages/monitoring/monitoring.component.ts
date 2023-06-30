@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 import { HttpClient } from 'src/HttpClient';
-import { ServerMonitoringService } from 'src/app/Service/ServerMonitoringService';
-import "../../entities/systemInfo"
+import { MonitoringPageData } from 'src/app/entities/monitoringPageData';
+
 @Component({
   selector: 'app-monitoring',
   templateUrl: './monitoring.component.html',
@@ -10,23 +9,33 @@ import "../../entities/systemInfo"
 })
 export class MonitoringComponent {
   loading: boolean = true
-  systemInfo: systemInfo = { hostname: '', os: '', kernel: '', cpuArchitecture: '', dateTime: '' };
-  cpuInfo: string[] = []
-  ramInfo: string = ''
-  diskpartInfo: string = ''
-
-  constructor(private router: Router, private monitoringService: ServerMonitoringService) { }
+  rdns: string | undefined = sessionStorage.getItem('host')?.split('@')[1]
+  data: MonitoringPageData | undefined
   
   async ngOnInit() {
     const start = performance.now();
+
+    const headers = { 
+      'Authorization': `bearer ${localStorage.getItem('access-token')}`,
+      'Content-Type': 'application/json'
+    }
+
+    const body = {
+      host: sessionStorage.getItem('host')?.split('@')[1],
+      username: sessionStorage.getItem('host')?.split('@')[0],
+      password: sessionStorage.getItem('password'),
+      command: ''
+    }
+
+    const request = await HttpClient.httpRequest("POST", "https://localhost:5081/api/Core/GetAllDataForMonitoringPage", body, headers)
+    // console.log(await request.json());
     
-    this.systemInfo = await this.monitoringService.getSystemInfo();
-    this.cpuInfo = await this.monitoringService.getCpuUsage();
-    this.ramInfo = await this.monitoringService.getRamUsage();
-    this.diskpartInfo = await this.monitoringService.getDiskpartUsage();
+    this.data = await request.json();
+
     
     const end = performance.now()
     console.log(`execution time: ${(end - start / 1000)} seconds`);
+    
     this.loading = false
   }
   

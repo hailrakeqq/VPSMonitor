@@ -1,74 +1,67 @@
-<!-- 
-<h1>VPS resources usage: </h1>
-<ul>
-  <li><strong>CPU Usage:</strong> {{cpuUsage}}</li>
-  <li><strong>Memory Usage:</strong> {{memoryUsage}}</li>
-  <li><strong>Diskpart Usage:</strong> {{diskpartUsage}}</li>
-  <li><strong>Upload:</strong> {{uptime}}</li>
-</ul> -->
 <div>
   <h2>Monitoring VPS</h2>
 
   <div *ngIf="loading">Loading...</div>
-
-  <div *ngIf="!loading">
-    <div class="item">
-      <h3>System Information:</h3>
-      <ul>
-        <li class="sysInfo-item">Hostname: {{systemInfo.hostname}}</li>
-        <li class="sysInfo-item">OS: {{systemInfo.os}}</li>
-        <li class="sysInfo-item">Kernel: {{systemInfo.kernel}}</li>
-        <li class="sysInfo-item">CPU architecture: {{systemInfo.cpuArchitecture}}</li>
-        <li class="sysInfo-item">Date Time: {{systemInfo.dateTime}}</li>
-      </ul>
-    </div>
-
-    <div class="item">
-      <h3>Processor usage(CPU):</h3>
-      <ul>
-        <li class="cpu-item" *ngFor="let item of cpuInfo">
-          <pre>-{{item}}</pre>
-        </li>
-      </ul>
-    </div> 
-    <div class="item">
-      <h3>RAM usage:</h3>
-      <pre>{{ramInfo}}</pre>
-    </div>
-    
-    <div class="item">
-      <h3>Diskpart usage:</h3>
-      <pre>{{diskpartInfo}}</pre>
-    </div>
-    <!--
-    <div>
-      <h3>Сетевая активность</h3>
-     
-    </div>
-
-    <div>
-      <h3>Системная нагрузка</h3>
-
-    </div>
-
-    <div>
-      <h3>Информация о пользователе</h3>
-
-    </div>
-
-    <div>
-      <h3>Логи и журналы</h3>
-
-    </div>
-
-    <div>
-      <h3>Управление сервером</h3>
-
-    </div> -->
+<div *ngIf="!loading">
+  <div class="item">
+    <h3>System Information:</h3>
+    <ul>
+      <li class="sysInfo-item">Hostname: {{data?.systemInfo?.hostname}}</li>
+      <li class="sysInfo-item">Hostname / rDNS: {{rdns}}</li>
+      <li class="sysInfo-item">OS: {{data?.systemInfo?.os}}</li>
+      <li class="sysInfo-item">Kernel: {{data?.systemInfo?.kernel}}</li>
+      <li class="sysInfo-item">CPU architecture: {{data?.systemInfo?.cpuArchitecture}}</li>
+      <li class="sysInfo-item">Date Time: {{data?.systemInfo?.dateTime}}</li>
+    </ul>
   </div>
+
+  <div class="item">
+    <h3>Processor usage (CPU):</h3>
+    <ul>
+      <li class="cpu-item" *ngFor="let item of data?.cpuUsageInfo">
+        <pre>-{{item}}</pre>
+      </li>
+    </ul>
+  </div> 
+  <div class="item">
+    <h3>RAM usage:</h3>
+    <pre>{{data?.ramUsageInfo}}</pre>
+  </div>
+  
+  <div class="item">
+    <h3>Diskpart usage:</h3>
+    <pre>{{data?.diskpartUsageInfo}}</pre>
+  </div>
+
+  <div class="item">
+    <h3>Network details:</h3>
+     <table class="ip-table">
+          <tbody>
+              <tr>
+                  <th>IP v4</th>
+                  <td>
+                      <ul>
+                          <li><strong>IP Address:</strong> {{data?.networkInfo?.ipV4NetworkInfo?.ipAddress}}</li>
+                          <li><strong>Netmask:</strong> {{data?.networkInfo?.ipV4NetworkInfo?.netmask}}</li>
+                          <li><strong>Gateway:</strong> {{data?.networkInfo?.ipV4NetworkInfo?.gateway}}</li>
+                      </ul>
+                  </td>
+              </tr>
+              <tr>
+                  <th>IP v6</th>
+                  <td>
+                      <ul>
+                          <li><strong>IP Address:</strong> {{data?.networkInfo?.ipV6NetworkInfo?.ipAddress}}</li>
+                          <li><strong>Netmask:</strong> {{data?.networkInfo?.ipV6NetworkInfo?.netmask}}</li>
+                          <li><strong>Gateway:</strong> {{data?.networkInfo?.ipV6NetworkInfo?.gateway}}</li>
+                      </ul>
+                  </td>
+              </tr>
+          </tbody>
+      </table>
+  </div>
+
   <div class="item">
     <button class="btn" (click)="reboot()">Reboot VPS!</button>
   </div>
 </div>
-
-

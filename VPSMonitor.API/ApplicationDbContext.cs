@@ -10,6 +10,5 @@ public class ApplicationDbContext : DbContext
     }
 
     public DbSet<User> users { get; set; }
-    public DbSet<SshKey> sshkeys { get; set; }
     public DbSet<AuthRefreshToken> refreshtokens { get; set; }
 }

@@ -21,10 +21,9 @@ public class AuthController : Controller
     [Route("Registration")]
     public async Task<IActionResult> CreateUser([FromBody] User user)
     {
-        //TODO: Give better name for variable
-        var isUserExist = await _userService.GetUserByEmail(user.Email);
+        var currentUser = await _userService.GetUserByEmail(user.Email);
 
-        if (isUserExist == null)
+        if (currentUser == null)
         {
             user = new User()
             {
@@ -59,6 +58,7 @@ public class AuthController : Controller
             return Unauthorized(currentUser);
 
         var newRefreshToken = _tokenService.GenerateRefreshToken(currentUser.Id!);
+        await _tokenService.UpdateRefreshTokenByUserId(newRefreshToken, currentUser.Id!);
         var loginResponse = new LoginResponse
         {
             Id = currentUser.Id,
@@ -66,7 +66,7 @@ public class AuthController : Controller
             AccessToken = _tokenService.GenerateAccessToken(currentUser),
             RefreshToken = newRefreshToken.RefreshToken
         };
-        _tokenService.UpdateRefreshTokenByUserId(newRefreshToken, currentUser.Id!);
+         
         return Ok(loginResponse);
     }
 

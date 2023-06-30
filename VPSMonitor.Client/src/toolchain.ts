@@ -26,4 +26,24 @@ export class Toolchain{
             return true
         return false;
     }
+    static ValidateSessionStorageData():boolean {
+        const sessionStorageData = { 
+            host: sessionStorage.getItem('host'),
+            password: sessionStorage.getItem('password')
+        }
+        if (sessionStorageData.host != "" && sessionStorageData.host != undefined &&
+            sessionStorageData.password != "" && sessionStorageData.password != undefined)
+            return true;
+        
+        return false;
+    };
+    static ValidateInputNewUserData(user: newUserDataToSend): boolean {
+        if (user.userUsername != "" && user.userUsername != null &&
+            user.userPassword != "" && user.userPassword != null &&
+            user.userConfirmPassword != "" && user.userConfirmPassword != null &&
+            user.userPassword === user.userConfirmPassword)
+            return true;
+
+        return false;
+    }
 }

@@ -1,4 +1,4 @@
-interface systemInfo {
+export interface systemInfo {
     hostname: string,
     os: string, 
     kernel: string,

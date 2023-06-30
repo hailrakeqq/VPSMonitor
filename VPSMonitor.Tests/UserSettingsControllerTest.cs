@@ -102,7 +102,7 @@ public class UserSettingsControllerTest
         _mockUserRepository.Setup(repo => repo.GetItemById(userId)).ReturnsAsync(existingUser);
         
         // Act
-        var result = await _userSettingsController.DeleteUserAccount(userId) as OkObjectResult;
+        var result = await _userSettingsController.DeleteUserAccount(userId, "existingPasswordHash") as OkObjectResult;
 
         // Assert
         Assert.NotNull(result);
@@ -114,10 +114,11 @@ public class UserSettingsControllerTest
     {
         // Arrange
         var userId = "nonExistId";
+        var confirmPassword = "test";
         _mockUserRepository.Setup(repo => repo.GetItemById(userId)).ReturnsAsync((User)null);
         
         // Act
-        var result = await _userSettingsController.DeleteUserAccount(userId) as NotFoundResult;
+        var result = await _userSettingsController.DeleteUserAccount(userId, confirmPassword) as NotFoundResult;
         
         // Assert
         Assert.NotNull(result);

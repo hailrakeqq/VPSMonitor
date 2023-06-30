@@ -1,5 +1,16 @@
-/* You can add global styles to this file, and also import other style files */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
 
+
+input {
+  @apply border border-gray-300 rounded px-3 py-2 w-full mb-2;
+}
+
+h2 {
+  @apply text-2xl font-bold mb-4;
+}
+
+h3 {
+  @apply text-lg font-bold my-4;
+}

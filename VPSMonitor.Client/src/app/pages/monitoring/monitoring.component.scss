@@ -5,4 +5,24 @@
   @apply px-4 py-2 font-semibold text-white bg-blue-500 rounded-md shadow-md hover:bg-blue-600 transition-colors duration-300;
 }
 
+.ip-table {
+    border-collapse: collapse;
+    border: 1px solid #cbd5e0;
+    width: 100%;
+}
 
+.ip-table th {
+    padding: 0.5rem;
+    background-color: #edf2f7;
+    border: 1px solid #cbd5e0;
+}
+
+.ip-table td {
+    padding: 0.5rem;
+    border: 1px solid #cbd5e0;
+}
+
+.ip-table ul {
+    list-style-type: disc;
+    padding-left: 1.5rem;
+}
