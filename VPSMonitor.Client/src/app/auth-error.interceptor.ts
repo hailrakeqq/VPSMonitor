@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class AuthErrorInterceptor {
+
+    constructor(private router: Router) { }
     
     interceptRequest(request: Request): Request {        
         return request;
@@ -47,6 +50,8 @@ export class AuthErrorInterceptor {
             const newAccessToken = await request.text();  
             localStorage.setItem('access-token', newAccessToken);
         } else {
+            localStorage.clear()
+            this.router.navigate(['/signin'])
             throw new Error('Access token update failed.');
         }
     }
@@ -65,7 +70,7 @@ export class AuthErrorInterceptor {
     }
 }
 
-const authErrorInterceptor = new AuthErrorInterceptor();
+const authErrorInterceptor = new AuthErrorInterceptor(new Router);
 const originalFetch = window.fetch;
 
 window.fetch = async function (input: RequestInfo | URL, init?: RequestInit): Promise<Response> {

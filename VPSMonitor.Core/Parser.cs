@@ -214,18 +214,6 @@ namespace VPSMonitor.Core
 {
     public static class Parser
     {
-        public static async Task<SystemInfo> ParseSystemInfoDataAsync(List<string> outputCommands)
-        {
-            return new SystemInfo()
-            {
-                Hostname = outputCommands[0],
-                OS = GetOSName(outputCommands[1]),
-                Kernel = outputCommands[2],
-                CpuArchitecture = outputCommands[3],
-                DateTime = outputCommands[4]
-            };
-        }
-
         public static string GetOSName(string osReleaseOutput)
         {
             var match = Regex.Match(osReleaseOutput, @"PRETTY_NAME=\""(.*?)\""");
