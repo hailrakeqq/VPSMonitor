@@ -3,6 +3,7 @@ import { HttpClient } from 'src/HttpClient';
 import '../../entities/linuxUser'
 import '../../entities/dataToSend'
 import { Toolchain } from 'src/toolchain';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-users',
@@ -25,6 +26,8 @@ export class UsersComponent {
     'Content-Type': 'application/json'
   }
 
+  constructor(private router: Router) {}
+
   async ngOnInit() {
     const hostAddress = sessionStorage?.getItem('host')?.split('@');
     const password = sessionStorage.getItem('password');
@@ -42,6 +45,8 @@ export class UsersComponent {
       
       this.users = await response.json()            
       this.users.forEach(item => item.permissions.join(", "));
+    } else {
+      this.router.navigate(['/terminal'])
     }
 
     this.isLoading = false
