@@ -1,5 +1,4 @@
 export class HttpClient{
-
     static async httpExecuteBashCommandRequest(command: string): Promise<string> {
         const hostAddress = sessionStorage.getItem('host')?.split('@');
         const password = sessionStorage.getItem('password')
@@ -14,18 +13,20 @@ export class HttpClient{
                 command: command
             }
 
-        const request = await fetch(`https://localhost:5081/api/Core/ExecuteCommand`, {
-            method: "POST",
-            headers: {
-                'Authorization': `bearer ${localStorage.getItem('access-token')}`,
-                'Content-Type': 'application/json'
-            },
-                body: JSON.stringify(objectToSend)
-            })
+            const request = await fetch(`https://localhost:5081/api/Core/ExecuteCommand`, {
+                method: "POST",
+                headers: {
+                        'Authorization': `bearer ${localStorage.getItem('access-token')}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(objectToSend)
+                })
 
-                return await request.text()
-            }
-        //TODO no valid data exception
+            return await request.text()
+            
+        } else { 
+            window.location.href = '/signin'
+        }
         return "data isn't valid"
     }
 
