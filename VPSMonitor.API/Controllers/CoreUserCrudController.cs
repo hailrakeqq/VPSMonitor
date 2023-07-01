@@ -27,7 +27,7 @@ public class CoreUserCrudController : Controller
             string usersAndTheirHomeDirectory = await _sshService.ExecuteCommandAsync(sshClient, "ls -ld /home/*/");
             string usersId = await _sshService.ExecuteCommandAsync(sshClient, "stat -c \"% U:% u\" /home/*/");
 
-            var parsedValue = Parser.parseGetUserCommand(usersAndTheirHomeDirectory, usersId);
+            var parsedValue = await Parser.ParseGetUserCommandAsync(usersAndTheirHomeDirectory, usersId);
             return Ok(parsedValue);
         }
     }

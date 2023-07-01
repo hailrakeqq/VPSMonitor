@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using VPSMonitor.API.Entities;
 using VPSMonitor.API.Repository;
 using VPSMonitor.Core;
-using VPSMonitor.Core.Entities;
 
 namespace VPSMonitor.API.Controllers;
 
@@ -49,51 +48,44 @@ public class CoreController : Controller
     {
         using (var sshClient = _sshService.Connect(request.Host, request.Username, request.Password))
         {
-            string[] commands =
-            {
-                "hostname",
-                "cat /etc/os-release | grep -e '^PRETTY_NAME='",
-                "uname -r",
-                "uname -m",
-                "date",
-                "mpstat -P ALL -o JSON",
-                "free -h",
-                "df -h",
-                "ip addr show",
-                "ip route show default",
-                "ip -6 route | grep ^default"
-            };
+            string command = @"hostname; echo ""=========""; \
+            cat /etc/os-release | grep -e '^PRETTY_NAME='; echo ""=========""; \
+            uname -r; echo ""=========""; \
+            uname -m; echo ""=========""; \
+            date; echo ""=========""; \
+            mpstat -P ALL; echo ""=========""; \
+            free -h; echo ""=========""; \
+            df -h; echo ""=========""; \
+            ip addr show; echo ""=========""; \
+            ip route show default; echo ""=========""; \
+            ip -6 route | grep ^default";
 
-            // string command = string.Join(";", commands);
-            // var commandResult = await _sshService.ExecuteCommandAsync(sshClient, command);
-            // var commandResults = commandResult.Split('\n');
+            var commandsResults = await _sshService.ExecuteCommandAsync(sshClient, command);
+            var commandResults = commandsResults.Split("=========");
 
-            var commandTasks = commands.Select(command => Task.Run(() => _sshService.ExecuteCommandAsync(sshClient, command))).ToList();
-            await Task.WhenAll(commandTasks);
-
-            var commandResults = commandTasks.Select(task => task.Result).ToList();
-
-            var systemInfo = new SystemInfo()
+            var systemInfoTask = Task.Run(() => new SystemInfo()
             {
                 Hostname = commandResults[0],
-                OS = commandResults[1].Split("\"")[1],
+                OS = Parser.GetOSName(commandResults[1]),
                 Kernel = commandResults[2],
                 CpuArchitecture = commandResults[3],
                 DateTime = commandResults[4]
-            };
+            });
 
-            var cpuUsageInfo = Parser.mpstatCommandParse(commandResults[5]);
-            var ramUsageInfo = commandResults[6];
-            var diskpartUsageInfo = commandResults[7];
-            var networkInfo = Parser.ParseNetworkInfo(commandResults[8], commandResults[9], commandResults[10]);
+            var cpuUsageInfoTask = Task.Run(() => Parser.MpstatCommandParse(commandResults[5]));
+            var ramUsageInfoTask = Task.Run(() => commandResults[6]);
+            var diskpartUsageInfoTask = Task.Run(() => commandResults[7]);
+            var networkInfoTask = Parser.ParseNetworkInfoAsync(commandResults[8], commandResults[9], commandResults[10]);
+
+            await Task.WhenAll(systemInfoTask, cpuUsageInfoTask, ramUsageInfoTask, diskpartUsageInfoTask);
 
             var result = new MonitoringPageData()
             {
-                SystemInfo = systemInfo,
-                CpuUsageInfo = cpuUsageInfo,
-                RamUsageInfo = ramUsageInfo,
-                DiskpartUsageInfo = diskpartUsageInfo,
-                NetworkInfo = networkInfo
+                SystemInfo = systemInfoTask.Result,
+                CpuUsageInfo = cpuUsageInfoTask.Result,
+                RamUsageInfo = ramUsageInfoTask.Result,
+                DiskpartUsageInfo = diskpartUsageInfoTask.Result,
+                NetworkInfo = await networkInfoTask
             };
 
             return Ok(result);
@@ -138,7 +130,7 @@ public class CoreController : Controller
         using (var sshClient = _sshService.Connect(request.Host, request.Username, request.Password))
         {
             string result = await _sshService.ExecuteCommandAsync(sshClient, "mpstat -P ALL -o JSON");
-            return Ok(Parser.mpstatCommandParse(result));
+            return Ok(Parser.MpstatCommandParse(result));
         }
     }
 
@@ -162,7 +154,7 @@ public class CoreController : Controller
             var ipAddrCommandOutput = await _sshService.ExecuteCommandAsync(sshClient, "ip addr show");
             var gatewayCommandOutput = await _sshService.ExecuteCommandAsync(sshClient, "ip route show default");
             var gatewayIpV6CommandOutput = await _sshService.ExecuteCommandAsync(sshClient, "ip -6 route | grep ^default");
-            var result = Parser.ParseNetworkInfo(ipAddrCommandOutput, gatewayCommandOutput, gatewayIpV6CommandOutput);
+            var result = Parser.ParseNetworkInfoAsync(ipAddrCommandOutput, gatewayCommandOutput, gatewayIpV6CommandOutput);
             return Ok(result);
         }
     }
