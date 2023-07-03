@@ -15,6 +15,7 @@ import { TerminalComponent } from './pages/terminal/terminal.component';
 import { MonitoringComponent } from './pages/monitoring/monitoring.component';
 import { UsersComponent } from './pages/users/users.component';
 import { AuthErrorInterceptor } from './auth-error.interceptor';
+import { FileManagementPageComponent } from './pages/file-management-page/file-management-page.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { AuthErrorInterceptor } from './auth-error.interceptor';
     ModalComponent,
     TerminalComponent,
     MonitoringComponent,
-    UsersComponent
+    UsersComponent,
+    FileManagementPageComponent
   ],
   imports: [
     BrowserModule,

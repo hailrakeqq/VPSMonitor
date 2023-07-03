@@ -12,12 +12,12 @@ public class SshService : ISshRepository
     {
         return SshConnectionContext.Connect(host, username, password);
     }
-    
+
     public void Disconnect(SshClient sshClient)
     {
-        SshConnectionContext.Disconect(sshClient);
+        SshConnectionContext.Disconnect(sshClient);
     }
-    
+
     public async Task<string> ExecuteCommandAsync(SshClient sshClient, string command)
     {
         var commandResult = await Task.Run(() => sshClient.RunCommand(command));

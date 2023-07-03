@@ -9,12 +9,12 @@ public static class SshConnectionContext
         var connectionInfo =
             new ConnectionInfo(host, username, new PasswordAuthenticationMethod(username, password));
         var sshClient = new SshClient(connectionInfo);
-        
+
         sshClient.Connect();
         return sshClient;
     }
 
-    public static void Disconect(SshClient sshClient)
+    public static void Disconnect(SshClient sshClient)
     {
         sshClient.Disconnect();
         sshClient.Dispose();

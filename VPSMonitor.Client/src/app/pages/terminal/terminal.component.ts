@@ -55,6 +55,12 @@ export class TerminalComponent {
         this.hostAddress = inputHost;
         sessionStorage.setItem('host', this.hostAddress);
 
+        const username = this.hostAddress.split("@")[0]
+        if(username === 'root')
+          sessionStorage.setItem('userHomeDirectoryPath', '/root')
+        else
+          sessionStorage.setItem('userHomeDirectoryPath', `/home/${username}`)
+        
         this.awaitingPassword = true;
         this.outputs.push('Enter password:');
         return

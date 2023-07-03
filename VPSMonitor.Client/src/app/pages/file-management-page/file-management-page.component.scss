@@ -1,0 +1,42 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.list-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.file-name {
+  flex-grow: 1;
+}
+
+.checkbox-container {
+    width: 200;
+    height: auto;
+  align-self: flex-start;
+  align-items: right;
+  position: fixed;
+  top: 0;
+  right: 0;
+  margin-right: 35px;
+  @apply flex flex-col bg-gray-200 h-screen w-64;
+} 
+
+.item {
+    @apply py-2 px-4 hover:bg-gray-300 cursor-pointer;
+    margin-top: 100px;
+}
+
+.checkbox-label {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+}
+.checkbox{
+    margin-right: 10px;
+}

@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authentication;
 using VPSMonitor.API.Entities;
 using VPSMonitor.API.Repository;
 using VPSMonitor.API.Services;
@@ -16,7 +15,7 @@ public static class DIContainer
     {
         return services.AddSingleton<LoginResponse>();
     }
-    
+
     public static IServiceCollection AddUserService(this IServiceCollection services)
     {
         return services.AddTransient<IUserRepository, UserService>();
@@ -24,6 +23,11 @@ public static class DIContainer
 
     public static IServiceCollection AddSSHService(this IServiceCollection services)
     {
-        return services.AddSingleton<ISshRepository ,SshService>();
+        return services.AddSingleton<ISshRepository, SshService>();
+    }
+
+    public static IServiceCollection AddSftpService(this IServiceCollection services)
+    {
+        return services.AddSingleton<ISftpRepository, SftpService>();
     }
 }
