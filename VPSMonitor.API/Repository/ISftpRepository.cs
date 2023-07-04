@@ -9,7 +9,7 @@ public interface ISftpRepository
     void Disconnect(SftpClient sftpClient);
     List<SftpFile> GetAllFilesAndFolders(SftpClient sftpClient, string remoteDirectory);
     void CreateFolder(SftpClient sftpClient, string remoteDirectory, string folderName);
-    void UploadFile(SftpClient sftpClient, System.IO.Stream stream, string remoteFilePath);
+    void UploadFile(SftpClient sftpClient, Stream stream, string remoteFilePath);
     void DownloadFile(SftpClient sftpClient, string remoteFilePath, string localFilePath);
     void RenameFileOrFolder(SftpClient sftpClient, string currentPath, string newName);
     void CopyFileOrFolder(SftpClient sftpClient, string sourcePath, string destinationPath);

@@ -1,15 +1,14 @@
 <h2>SFTP Page</h2>
 
-<!-- List files and folders -->
-<!-- <input type="checkbox" [(ngModel)]="showAllFiles" (ngModelChange)="updateDisplayedArray()"> Show Hiden Files
-<ul>
-  <li *ngFor="let fileOrFolder of displayedArray">{{ fileOrFolder.name }}</li>
-</ul> -->
-
+<h3>Upload File</h3>
+<input type="file" multiple (change)="onFileSelected($event)">
+<button (click)="uploadFile()">Upload</button>
+<button (click)="downloadSelectedFile()">Download Selected File</button>
+<button (click)="deleteSelectedFile()">Delete Selected File</button>
 <div class="container">
-  <!-- <input type="checkbox" [(ngModel)]="showAllFiles" (ngModelChange)="updateDisplayedArray()"> Show Hidden Files -->
   <ul>
     <li *ngFor="let fileOrFolder of displayedArray" class="list-item">
+      <input type="checkbox" (change)="onFileCheckboxChange($event, fileOrFolder.fullName)" />
       <div class="file-name">{{ fileOrFolder.name }}</div>
     </li>
   </ul>
@@ -24,11 +23,7 @@
 </div>
 
 
-<!-- <h3>Upload File</h3>
-<input type="file" (change)="onFileSelected($event.target.files)">
-<input type="text" [(ngModel)]="remoteFilePath" placeholder="Remote File Path">
-<button (click)="uploadFile()">Upload</button>
-
+<!--
 <h3>Download File</h3>
 <input type="text" [(ngModel)]="remoteFilePath" placeholder="Remote File Path">
 <input type="text" [(ngModel)]="localFilePath" placeholder="Local File Path">

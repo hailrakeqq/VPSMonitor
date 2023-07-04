@@ -27,7 +27,7 @@ public class SftpService : ISftpRepository
         sftpClient.CreateDirectory($"{remoteDirectory}/{folderName}");
     }
 
-    public void UploadFile(SftpClient sftpClient, System.IO.Stream stream, string remoteFilePath)
+    public void UploadFile(SftpClient sftpClient, Stream stream, string remoteFilePath)
     {
         sftpClient.UploadFile(stream, remoteFilePath);
     }

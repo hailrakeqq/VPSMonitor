@@ -16,14 +16,13 @@
 }
 
 .checkbox-container {
-    width: 200;
-    height: auto;
+  width: 300;
+  height: auto;
   align-self: flex-start;
   align-items: right;
   position: fixed;
   top: 0;
   right: 0;
-  margin-right: 35px;
   @apply flex flex-col bg-gray-200 h-screen w-64;
 } 
 
@@ -38,5 +37,5 @@
     white-space: nowrap;
 }
 .checkbox{
-    margin-right: 10px;
+  margin-right: 10px;
 }
