@@ -7,7 +7,7 @@ public interface ISftpRepository
 {
     SftpClient Connect(string host, string username, string password);
     void Disconnect(SftpClient sftpClient);
-    List<SftpFile> ListAllFilesAndFolders(SftpClient sftpClient, string remoteDirectory);
+    List<SftpFile> GetAllFilesAndFolders(SftpClient sftpClient, string remoteDirectory);
     void CreateFolder(SftpClient sftpClient, string remoteDirectory, string folderName);
     void UploadFile(SftpClient sftpClient, System.IO.Stream stream, string remoteFilePath);
     void DownloadFile(SftpClient sftpClient, string remoteFilePath, string localFilePath);

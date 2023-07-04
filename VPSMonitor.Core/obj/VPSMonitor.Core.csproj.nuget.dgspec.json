@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/home/hailrake/media/code/VPSMonitor/VPSMonitor.Core/VPSMonitor.Core.csproj": {}
+    "D:\\project\\VPSMonitor\\VPSMonitor.Core\\VPSMonitor.Core.csproj": {}
   },
   "projects": {
-    "/home/hailrake/media/code/VPSMonitor/VPSMonitor.Core/VPSMonitor.Core.csproj": {
+    "D:\\project\\VPSMonitor\\VPSMonitor.Core\\VPSMonitor.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/hailrake/media/code/VPSMonitor/VPSMonitor.Core/VPSMonitor.Core.csproj",
+        "projectUniqueName": "D:\\project\\VPSMonitor\\VPSMonitor.Core\\VPSMonitor.Core.csproj",
         "projectName": "VPSMonitor.Core",
-        "projectPath": "/home/hailrake/media/code/VPSMonitor/VPSMonitor.Core/VPSMonitor.Core.csproj",
-        "packagesPath": "/home/hailrake/.nuget/packages/",
-        "outputPath": "/home/hailrake/media/code/VPSMonitor/VPSMonitor.Core/obj/",
+        "projectPath": "D:\\project\\VPSMonitor\\VPSMonitor.Core\\VPSMonitor.Core.csproj",
+        "packagesPath": "C:\\Users\\hailr\\.nuget\\packages\\",
+        "outputPath": "D:\\project\\VPSMonitor\\VPSMonitor.Core\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/hailrake/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\hailr\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
@@ -63,7 +63,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/7.0.108/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.305\\RuntimeIdentifierGraph.json"
         }
       }
     }

@@ -22,7 +22,7 @@ public class SftpController : Controller
     {
         using (var client = _sftpService.Connect(request.Host, request.Username, request.Password))
         {
-            var filesAndFolders = _sftpService.ListAllFilesAndFolders(client, request.UserHomeDirectoryPath);
+            var filesAndFolders = _sftpService.GetAllFilesAndFolders(client, request.UserHomeDirectoryPath);
             return Ok(filesAndFolders);
         }
     }

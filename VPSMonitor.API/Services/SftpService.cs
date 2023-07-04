@@ -17,7 +17,7 @@ public class SftpService : ISftpRepository
         SftpConnectionContext.Disconnect(sftpClient);
     }
 
-    public List<SftpFile> ListAllFilesAndFolders(SftpClient sftpClient, string remoteDirectory)
+    public List<SftpFile> GetAllFilesAndFolders(SftpClient sftpClient, string remoteDirectory)
     {
         return sftpClient.ListDirectory(remoteDirectory).ToList();
     }

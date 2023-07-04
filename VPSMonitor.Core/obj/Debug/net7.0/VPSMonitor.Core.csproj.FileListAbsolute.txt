@@ -10,3 +10,15 @@
 /home/hailrake/media/code/VPSMonitor/VPSMonitor.Core/obj/Debug/net7.0/refint/VPSMonitor.Core.dll
 /home/hailrake/media/code/VPSMonitor/VPSMonitor.Core/obj/Debug/net7.0/VPSMonitor.Core.pdb
 /home/hailrake/media/code/VPSMonitor/VPSMonitor.Core/obj/Debug/net7.0/ref/VPSMonitor.Core.dll
+D:\project\VPSMonitor\VPSMonitor.Core\bin\Debug\net7.0\VPSMonitor.Core.deps.json
+D:\project\VPSMonitor\VPSMonitor.Core\bin\Debug\net7.0\VPSMonitor.Core.dll
+D:\project\VPSMonitor\VPSMonitor.Core\bin\Debug\net7.0\VPSMonitor.Core.pdb
+D:\project\VPSMonitor\VPSMonitor.Core\obj\Debug\net7.0\VPSMonitor.Core.csproj.AssemblyReference.cache
+D:\project\VPSMonitor\VPSMonitor.Core\obj\Debug\net7.0\VPSMonitor.Core.GeneratedMSBuildEditorConfig.editorconfig
+D:\project\VPSMonitor\VPSMonitor.Core\obj\Debug\net7.0\VPSMonitor.Core.AssemblyInfoInputs.cache
+D:\project\VPSMonitor\VPSMonitor.Core\obj\Debug\net7.0\VPSMonitor.Core.AssemblyInfo.cs
+D:\project\VPSMonitor\VPSMonitor.Core\obj\Debug\net7.0\VPSMonitor.Core.csproj.CoreCompileInputs.cache
+D:\project\VPSMonitor\VPSMonitor.Core\obj\Debug\net7.0\VPSMonitor.Core.dll
+D:\project\VPSMonitor\VPSMonitor.Core\obj\Debug\net7.0\refint\VPSMonitor.Core.dll
+D:\project\VPSMonitor\VPSMonitor.Core\obj\Debug\net7.0\VPSMonitor.Core.pdb
+D:\project\VPSMonitor\VPSMonitor.Core\obj\Debug\net7.0\ref\VPSMonitor.Core.dll
