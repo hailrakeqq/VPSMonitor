@@ -2,29 +2,33 @@
 
 <h3>Upload File</h3>
 <input type="file" multiple (change)="onFileSelected($event)">
-<button (click)="uploadFile()">Upload</button>
-<button (click)="downloadSelectedFile()">Download Selected File</button>
-<button (click)="deleteSelectedFile()">Delete Selected File</button>
+<div class="buttons">
+  <button class="btn" (click)="uploadFile()">Upload</button>
+  <button class="btn" (click)="downloadSelectedFile()">Download Selected File</button>
+  <button class="btn" (click)="deleteSelectedFile()">Delete Selected File</button>
+</div>
 <div class="container">
-  <ul>
-    <li *ngFor="let fileOrFolder of displayedArray" class="list-item">
-      <input type="checkbox" (change)="onFileCheckboxChange($event, fileOrFolder.fullName)" />
+  <ul class="file-list">
+  <li *ngFor="let fileOrFolder of displayedArray" class="list-item">
+    <div class="file-info">
+      <input type="checkbox" [(ngModel)]="fileOrFolder.isSelected" (change)="onFileCheckboxChange($event, fileOrFolder.fullName)" />
       <div class="file-name">{{ fileOrFolder.name }}</div>
-    </li>
-  </ul>
+    </div>
+  </li>
+</ul>
+
   <div class="checkbox-container">
-    <div class="item">
+    <div class="item-first">
       <label class="checkbox-label">
         <input class="checkbox" type="checkbox" [(ngModel)]="showAllFiles" (ngModelChange)="updateDisplayedArray()">
         Show Hidden Files
       </label>
     </div>
+    <div class="item">
+      <label class="checkbox-label">
+        <input class="checkbox" type="checkbox" [(ngModel)]="isAllFilesSelected" (ngModelChange)="selectAllFiles()">
+        Select All Files
+      </label>
+    </div>
    </div>
 </div>
-
-
-<!--
-<h3>Download File</h3>
-<input type="text" [(ngModel)]="remoteFilePath" placeholder="Remote File Path">
-<input type="text" [(ngModel)]="localFilePath" placeholder="Local File Path">
-<button (click)="downloadFile()">Download</button>  -->
