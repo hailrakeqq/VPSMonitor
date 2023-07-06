@@ -12,7 +12,7 @@
   <li *ngFor="let fileOrFolder of displayedArray" class="list-item">
     <div class="file-info">
       <input type="checkbox" [(ngModel)]="fileOrFolder.isSelected" (change)="onFileCheckboxChange($event, fileOrFolder.fullName)" />
-      <div class="file-name">{{ fileOrFolder.name }}</div>
+      <div class="file-name" (click)="openItem(fileOrFolder.name)">{{ fileOrFolder.name }}</div>
     </div>
   </li>
 </ul>

@@ -177,4 +177,19 @@ export class FileManagementPageComponent {
       link.click()
       URL.revokeObjectURL(url)
   }
+
+  async openItem(fileOrFolderName: string) { 
+    const itemName = this.getParsedFilename(fileOrFolderName)
+    if (this.isFolder(itemName)) {
+      
+    } else {
+      alert(`***item is file: opening file.***`)
+    }
+  }
+
+  isFolder(itemName: string): boolean {
+    if (!itemName.startsWith('.') && itemName.includes('.'))
+      return false;
+    return true;
+  }
 }
