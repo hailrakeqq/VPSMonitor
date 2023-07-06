@@ -31,7 +31,7 @@ public class SftpController : Controller
     }
 
     [HttpPost("upload")]
-    public async Task<IActionResult> UploadFile(IFormCollection form)
+    public IActionResult UploadFile(IFormCollection form)
     {
         var formData = HttpContext.Request.Form;
         var files = formData.Files;
@@ -93,8 +93,11 @@ public class SftpController : Controller
     }
 
     [HttpDelete("delete")]
-    public IActionResult DeleteFileOrFolder(string path)
+    public IActionResult DeleteFilesOrFolder([FromBody] SftpRequest sftpRequest)
     {
+        using (var client = _sftpService.Connect(sftpRequest.Host, sftpRequest.Username, sftpRequest.Password))
+            _sftpService.DeleteFileOrFolder(client, sftpRequest.SelectedFiles);
+
         return Ok();
     }
 

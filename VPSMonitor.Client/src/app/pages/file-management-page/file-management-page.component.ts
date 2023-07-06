@@ -85,7 +85,10 @@ export class FileManagementPageComponent {
         body: formData
       })
 
-      console.log(await request.text());
+      if (request.status == 200)
+        window.location.reload()
+      else
+        alert("Error was occurate when you tried to delete files");
     }
   }
 
@@ -134,14 +137,15 @@ export class FileManagementPageComponent {
       console.log(await response.text());  
     }  
   }
-  //TODO: implement this function
-  async downloadFolder() {
-    this.filesAndFolders.forEach(item => item.isSelected = true)
-    this.downloadSelectedFile(this.currentDirectory)
-  }
 
-  deleteSelectedFile() {
-      alert("***delete***\n" + this.selectedFiles.toString().split(',').join('\n'))
+  async deleteSelectedFile() {
+    alert("***delete***\n" + this.selectedFiles.toString().split(',').join('\n'))
+
+    this.body.SelectedFiles = this.selectedFiles
+    const response = await HttpClient.httpRequest("DELETE", "https://localhost:5081/api/Sftp/delete", this.body, this.header)
+    if (response.status == 200)
+      window.location.reload()
+    else alert("--------error!!!--------")
   }
 
   getParsedFilename(filePath: string): string {

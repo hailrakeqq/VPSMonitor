@@ -16,7 +16,7 @@ public interface ISftpRepository
     void RenameFileOrFolder(SftpClient sftpClient, string currentPath, string newName);
     void CopyFileOrFolder(SftpClient sftpClient, string sourcePath, string destinationPath);
     void MoveFileOrFolder(SftpClient sftpClient, string sourcePath, string destinationPath);
-    void DeleteFileOrFolder(SftpClient sftpClient, string path);
-    bool FileExists(SftpClient sftpClient, string path);
+    void DeleteFileOrFolder(SftpClient client, string[] itemsToDelete);
+    bool IsFileExists(SftpClient sftpClient, string path);
     void ChangePermissions(SftpClient sftpClient, string path, string permissions);
 }

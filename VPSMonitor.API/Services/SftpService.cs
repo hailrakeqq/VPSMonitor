@@ -140,10 +140,45 @@ public class SftpService : ISftpRepository
         throw new NotImplementedException();
     }
 
-    public void DeleteFileOrFolder(SftpClient sftpClient, string path)
+    #region Delete File Or Folder
+    public void DeleteFileOrFolder(SftpClient client, string[] itemsToDelete)
     {
-        sftpClient.Delete(path);
+        foreach (var item in itemsToDelete)
+        {
+            if (!IsFileExists(client, item))
+                continue;
+
+            if (Path.HasExtension(item))
+            {
+                client.Delete(item);
+                continue;
+            }
+
+            DeleteDirectoryRecursive(client, item);
+        }
     }
+
+    private void DeleteDirectoryRecursive(SftpClient client, string directory)
+    {
+        var directoryContents = client.ListDirectory(directory);
+
+        foreach (var entry in directoryContents)
+        {
+            if (entry.Name == "." || entry.Name == "..")
+                continue;
+
+            var entryPath = Path.Combine(directory, entry.Name);
+
+            if (entry.IsDirectory)
+                DeleteDirectoryRecursive(client, entryPath);
+            else
+                client.DeleteFile(entryPath);
+        }
+
+        client.DeleteDirectory(directory);
+    }
+
+    #endregion
 
     public void MoveFileOrFolder(SftpClient sftpClient, string sourcePath, string destinationPath)
     {
@@ -151,7 +186,7 @@ public class SftpService : ISftpRepository
     }
 
 
-    public bool FileExists(SftpClient sftpClient, string path)
+    public bool IsFileExists(SftpClient sftpClient, string path)
     {
         return sftpClient.Exists(path);
     }
