@@ -1,5 +1,8 @@
+using System.IO.Compression;
+using Microsoft.AspNetCore.Mvc;
 using Renci.SshNet;
 using Renci.SshNet.Sftp;
+using VPSMonitor.API.Entities;
 using VPSMonitor.API.Repository;
 using VPSMonitor.Core.Infrastructure;
 
@@ -7,6 +10,7 @@ namespace VPSMonitor.API.Services;
 
 public class SftpService : ISftpRepository
 {
+    #region sftp connection functio
     public SftpClient Connect(string host, string username, string password)
     {
         return SftpConnectionContext.Connect(host, username, password);
@@ -16,6 +20,100 @@ public class SftpService : ISftpRepository
     {
         SftpConnectionContext.Disconnect(sftpClient);
     }
+
+    #endregion
+
+    #region Download files and directory
+
+    public async Task<byte[]> DownloadFile(SftpClient client, string file, Stream stream)
+    {
+        await Task.Run(() => client.DownloadFile(file, stream));
+
+        stream.Position = 0;
+
+        byte[] fileBytes = ((MemoryStream)stream).ToArray();
+        return fileBytes;
+    }
+
+    public async Task<byte[]> CreateZipArchive(SftpRequest sftpRequest, SftpClient client, Stream stream)
+    {
+        string tempDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+        Directory.CreateDirectory(tempDir);
+
+        string zipPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + ".zip");
+        try
+        {
+            await DownloadFilesAsync(sftpRequest.SelectedFiles, client, tempDir);
+
+            stream.Position = 0;
+
+            ZipFile.CreateFromDirectory(tempDir, zipPath);
+
+            byte[] zipBytes = await System.IO.File.ReadAllBytesAsync(zipPath);
+            return zipBytes;
+        }
+        finally
+        {
+            Cleanup(tempDir, zipPath);
+        }
+    }
+
+    private async Task DownloadFilesAsync(string[] files, SftpClient client, string destinationDirectory)
+    {
+        foreach (var file in files)
+        {
+            string itemName = Path.GetFileName(file);
+            string filePath = Path.Combine(destinationDirectory, itemName);
+
+            if (!Path.HasExtension(file))
+            {
+                string[] splitedFile = file.Split('/');
+                string directoryName = splitedFile[splitedFile.Length - 1];
+                string subDirectory = Path.Combine(destinationDirectory, directoryName);
+                Directory.CreateDirectory(subDirectory);
+                await DownloadFilesRecursivelyAsync(client, file, subDirectory);
+            }
+            else
+            {
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    client.DownloadFile(file, fileStream);
+            }
+        }
+    }
+
+    private async Task DownloadFilesRecursivelyAsync(SftpClient client, string remotePath, string localPath)
+    {
+        Directory.CreateDirectory(localPath);
+        var remoteFiles = client.ListDirectory(remotePath);
+
+        foreach (var remoteFile in remoteFiles)
+        {
+            if (remoteFile.FullName[remoteFile.FullName.Length - 1] == '.')
+                continue;
+
+            string itemName = remoteFile.Name;
+            string itemRemotePath = remoteFile.FullName;
+            string itemLocalPath = Path.Combine(localPath, itemName);
+
+            if (remoteFile.IsDirectory)
+                await DownloadFilesRecursivelyAsync(client, itemRemotePath, itemLocalPath);
+            else
+            {
+                using (var fileStream = new FileStream(itemLocalPath, FileMode.Create))
+                    client.DownloadFile(itemRemotePath, fileStream);
+            }
+        }
+    }
+
+    private static void Cleanup(string tempDir, string zipPath)
+    {
+        Directory.Delete(tempDir, true);
+        System.IO.File.Delete(zipPath);
+    }
+
+    #endregion
+
+    #region Default filesystem function 
 
     public List<SftpFile> GetAllFilesAndFolders(SftpClient sftpClient, string remoteDirectory)
     {
@@ -32,14 +130,6 @@ public class SftpService : ISftpRepository
         sftpClient.UploadFile(stream, remoteFilePath);
     }
 
-    public void DownloadFile(SftpClient sftpClient, string remoteFilePath, string localFilePath)
-    {
-        using (var fileStream = File.Create(localFilePath))
-        {
-            sftpClient.DownloadFile(remoteFilePath, fileStream);
-        }
-    }
-
     public void RenameFileOrFolder(SftpClient sftpClient, string currentPath, string newName)
     {
         sftpClient.RenameFile(currentPath, newName);
@@ -50,15 +140,16 @@ public class SftpService : ISftpRepository
         throw new NotImplementedException();
     }
 
+    public void DeleteFileOrFolder(SftpClient sftpClient, string path)
+    {
+        sftpClient.Delete(path);
+    }
+
     public void MoveFileOrFolder(SftpClient sftpClient, string sourcePath, string destinationPath)
     {
         throw new NotImplementedException();
     }
 
-    public void DeleteFileOrFolder(SftpClient sftpClient, string path)
-    {
-        sftpClient.Delete(path);
-    }
 
     public bool FileExists(SftpClient sftpClient, string path)
     {
@@ -70,4 +161,6 @@ public class SftpService : ISftpRepository
         var permissionsValue = Convert.ToInt32(permissions, 8);
         sftpClient.ChangePermissions(path, (short)permissionsValue);
     }
+
+    #endregion
 }

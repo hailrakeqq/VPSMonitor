@@ -1,3 +1,4 @@
+import { HttpFeatureKind } from '@angular/common/http';
 import { splitNsName } from '@angular/compiler';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
@@ -117,38 +118,26 @@ export class FileManagementPageComponent {
     }
   }
 
-  async downloadSelectedFile() {
-    alert("***download***\n" + this.selectedFiles.toString().split(',').join('\n'))
-    
-    const header = {
-      'Authorization': `bearer ${localStorage.getItem('access-token')}`,
-      'Content-Type': 'application/json'
-    }
-
+  async downloadSelectedFile(downloadFileName?: string) {    
     this.body.SelectedFiles = this.selectedFiles
-
-    this.body.LocalFilePath = "/home/hailrake/media/Download"
-    const request = await fetch("https://localhost:5081/api/Sftp/download", {
-      method: "POST",
-      headers: header,
-      body: JSON.stringify(this.body),
-    })  
-
-    if (request.status == 200) {      
-      const blob = await request.blob()
-      console.log(blob);
-      
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url
-      link.download = this.getParsedFilename(this.selectedFiles[0])
-   
-      link.click()
-      URL.revokeObjectURL(url)
+    const response = await HttpClient.httpRequest("POST", "https://localhost:5081/api/Sftp/download", this.body, this.header)
   
+    if (response.status == 200) {    
+      const blob = await response.blob()
+
+      if(this.isAllFilesAndDirectorySelected())
+        this.downloadBlob(blob, this.currentDirectory)
+      else
+        this.downloadBlob(blob)
+      
     } else {
-      console.log(await request.text());  
+      console.log(await response.text());  
     }  
+  }
+  //TODO: implement this function
+  async downloadFolder() {
+    this.filesAndFolders.forEach(item => item.isSelected = true)
+    this.downloadSelectedFile(this.currentDirectory)
   }
 
   deleteSelectedFile() {
@@ -157,7 +146,31 @@ export class FileManagementPageComponent {
 
   getParsedFilename(filePath: string): string {
     const parsedPath = filePath.split('/');
-    const filename = parsedPath[parsedPath.length - 1];
-    return filename;
+    return parsedPath[parsedPath.length - 1];
+  }
+
+  isAllFilesAndDirectorySelected(): boolean {
+    for (let file of this.filesAndFolders) 
+      if (!file.isSelected)
+        return false
+    
+    return true
+  }
+
+  downloadBlob(blob: Blob, filename?: string) {
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url
+      
+    if (blob.type == "application/zip" && this.selectedFiles.length == 1) 
+      link.download = `${this.getParsedFilename(this.selectedFiles[0])}.zip`
+    else if (blob.type == "application/zip" && this.isAllFilesAndDirectorySelected() && filename != undefined)
+      link.download = filename
+    else if (this.selectedFiles.length == 1) 
+      link.download = this.getParsedFilename(this.selectedFiles[0])
+    else link.download = "archive.zip"
+      
+      link.click()
+      URL.revokeObjectURL(url)
   }
 }

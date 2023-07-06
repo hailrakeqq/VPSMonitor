@@ -1,3 +1,4 @@
+using System.IO.Compression;
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -60,62 +61,52 @@ public class SftpController : Controller
     public async Task<FileContentResult> DownloadFile([FromBody] SftpRequest sftpRequest)
     {
         using (var client = _sftpService.Connect(sftpRequest.Host, sftpRequest.Username, sftpRequest.Password))
+        using (var stream = new MemoryStream())
         {
-            using (Stream stream = new MemoryStream())
+            if (sftpRequest.SelectedFiles.Length == 1 && Path.HasExtension(sftpRequest.SelectedFiles[0]))
             {
-                await Task.Run(() =>
-                {
-                    client.DownloadFile(sftpRequest.SelectedFiles[0], stream);
-                });
-
-                stream.Position = 0;
-
-                byte[] fileBytes = ((MemoryStream)stream).ToArray();
-
-                return File(fileBytes, "application/octet-stream");
+                var file = await _sftpService.DownloadFile(client, sftpRequest.SelectedFiles[0], stream);
+                return File(file, "application/octet-stream");
             }
+
+            var zipArchive = await _sftpService.CreateZipArchive(sftpRequest, client, stream);
+            return File(zipArchive, "application/zip");
         }
     }
 
-    // [HttpPut("rename")]
-    // public IActionResult RenameFileOrFolder(string currentPath, string newName)
-    // {
-    //     _sftpService.RenameFileOrFolder(currentPath, newName);
-    //     return Ok();
-    // }
+    [HttpPut("rename")]
+    public IActionResult RenameFileOrFolder(string currentPath, string newName)
+    {
+        return Ok();
+    }
 
-    // [HttpPost("copy")]
-    // public IActionResult CopyFileOrFolder(string sourcePath, string destinationPath)
-    // {
-    //     _sftpService.CopyFileOrFolder(sourcePath, destinationPath);
-    //     return Ok();
-    // }
+    [HttpPost("copy")]
+    public IActionResult CopyFileOrFolder(string sourcePath, string destinationPath)
+    {
+        return Ok();
+    }
 
-    // [HttpPost("move")]
-    // public IActionResult MoveFileOrFolder(string sourcePath, string destinationPath)
-    // {
-    //     _sftpService.MoveFileOrFolder(sourcePath, destinationPath);
-    //     return Ok();
-    // }
+    [HttpPost("move")]
+    public IActionResult MoveFileOrFolder(string sourcePath, string destinationPath)
+    {
+        return Ok();
+    }
 
-    // [HttpDelete("delete")]
-    // public IActionResult DeleteFileOrFolder(string path)
-    // {
-    //     _sftpService.DeleteFileOrFolder(path);
-    //     return Ok();
-    // }
+    [HttpDelete("delete")]
+    public IActionResult DeleteFileOrFolder(string path)
+    {
+        return Ok();
+    }
 
-    // [HttpGet("exists")]
-    // public IActionResult FileExists(string path)
-    // {
-    //     bool exists = _sftpService.FileExists(path);
-    //     return Ok(exists);
-    // }
+    [HttpGet("exists")]
+    public IActionResult FileExists(string path)
+    {
+        return Ok();
+    }
 
-    // [HttpPut("permissions")]
-    // public IActionResult ChangePermissions(string path, string permissions)
-    // {
-    //     _sftpService.ChangePermissions(path, permissions);
-    //     return Ok();
-    // }
+    [HttpPut("permissions")]
+    public IActionResult ChangePermissions(string path, string permissions)
+    {
+        return Ok();
+    }
 }
