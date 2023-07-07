@@ -30,7 +30,7 @@ import { FileManagementPageComponent } from './pages/file-management-page/file-m
     TerminalComponent,
     MonitoringComponent,
     UsersComponent,
-    FileManagementPageComponent
+    FileManagementPageComponent,
   ],
   imports: [
     BrowserModule,

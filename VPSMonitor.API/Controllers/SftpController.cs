@@ -26,7 +26,10 @@ public class SftpController : Controller
         using (var client = _sftpService.Connect(request.Host, request.Username, request.Password))
         {
             var filesAndFolders = _sftpService.GetAllFilesAndFolders(client, request.DirectoryPath);
-            return Ok(filesAndFolders);
+            if (filesAndFolders != null)
+                return Ok(filesAndFolders);
+
+            return NoContent();
         }
     }
 

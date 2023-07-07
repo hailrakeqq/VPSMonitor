@@ -117,8 +117,17 @@ public class SftpService : ISftpRepository
 
     public List<SftpFile> GetAllFilesAndFolders(SftpClient sftpClient, string remoteDirectory)
     {
-        return sftpClient.ListDirectory(remoteDirectory).ToList();
+        SftpFileAttributes attributes = sftpClient.GetAttributes(remoteDirectory);
+        if (attributes.IsDirectory)
+        {
+            var directory = sftpClient.ListDirectory(remoteDirectory).ToList();
+            if (directory.Any())
+                return directory;
+        }
+
+        return null;
     }
+
 
     public void CreateFolder(SftpClient sftpClient, string remoteDirectory, string folderName)
     {

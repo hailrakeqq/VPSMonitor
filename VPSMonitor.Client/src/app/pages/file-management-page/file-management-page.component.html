@@ -1,34 +1,48 @@
 <h2>SFTP Page</h2>
+<div *ngIf="isPageLoading">Loading...</div>
 
-<h3>Upload File</h3>
-<input type="file" multiple (change)="onFileSelected($event)">
-<div class="buttons">
-  <button class="btn" (click)="uploadFile()">Upload</button>
-  <button class="btn" (click)="downloadSelectedFile()">Download Selected File</button>
-  <button class="btn" (click)="deleteSelectedFile()">Delete Selected File</button>
-</div>
-<div class="container">
-  <ul class="file-list">
-  <li *ngFor="let fileOrFolder of displayedArray" class="list-item">
-    <div class="file-info">
-      <input type="checkbox" [(ngModel)]="fileOrFolder.isSelected" (change)="onFileCheckboxChange($event, fileOrFolder.fullName)" />
-      <div class="file-name" (click)="openItem(fileOrFolder.name)">{{ fileOrFolder.name }}</div>
-    </div>
-  </li>
-</ul>
 
-  <div class="checkbox-container">
-    <div class="item-first">
-      <label class="checkbox-label">
-        <input class="checkbox" type="checkbox" [(ngModel)]="showAllFiles" (ngModelChange)="updateDisplayedArray()">
-        Show Hidden Files
-      </label>
+<div *ngIf="!isPageLoading">
+  <h3>Upload File</h3>
+  <input type="file" multiple (change)="onFileSelected($event)">
+  <div class="buttons">
+    <button class="btn" (click)="uploadFile()">Upload</button>
+    <button class="btn" (click)="downloadSelectedFile()">Download Selected File</button>
+    <button class="btn" (click)="deleteSelectedFile()">Delete Selected File</button>
+  </div>
+  
+  <div class="file-path">
+      <a *ngFor="let word of getWords(currentDirectory)" (click)="redirectToPreviusDirectory(word)">{{ addSlashIfNeeded(word) }}</a>
+  </div>
+  
+  <div class="container">
+    <div *ngIf="filesAndFolders[0] == 'empty dir or file'">
+      <H1>NO CONTENT OR IT IS FILE</H1>
     </div>
-    <div class="item">
-      <label class="checkbox-label">
-        <input class="checkbox" type="checkbox" [(ngModel)]="isAllFilesSelected" (ngModelChange)="selectAllFiles()">
-        Select All Files
-      </label>
+    <div *ngIf="filesAndFolders[0] != 'empty dir or file'">
+      <ul class="file-list">
+        <li *ngFor="let fileOrFolder of displayedArray" class="list-item">
+          <div class="file-info">
+            <input type="checkbox" [(ngModel)]="fileOrFolder.isSelected" (change)="onFileCheckboxChange($event, fileOrFolder.fullName)" />
+            <div class="file-name" (click)="openItem(fileOrFolder.fullName)">{{ fileOrFolder.name }}</div>
+          </div>
+        </li>
+      </ul>
     </div>
-   </div>
+  
+    <div class="checkbox-container">
+      <div class="item-first">
+        <label class="checkbox-label">
+          <input class="checkbox" type="checkbox" [(ngModel)]="showAllFiles" (ngModelChange)="updateDisplayedArray()">
+          Show Hidden Files
+        </label>
+      </div>
+      <div class="item">
+        <label class="checkbox-label">
+          <input class="checkbox" type="checkbox" [(ngModel)]="isAllFilesSelected" (ngModelChange)="selectAllFiles()">
+          Select All Files
+        </label>
+      </div>
+     </div>
+  </div>
 </div>

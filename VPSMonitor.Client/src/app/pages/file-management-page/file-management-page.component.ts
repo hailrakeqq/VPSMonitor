@@ -11,6 +11,7 @@ import { sftpData } from 'src/app/entities/sftpData';
   styleUrls: ['./file-management-page.component.scss']
 })
 export class FileManagementPageComponent {
+  isPageLoading: boolean = true
   showAllFiles = false;
   isAllFilesSelected = false;
   uploadedFiles: FileList | undefined;
@@ -31,16 +32,29 @@ export class FileManagementPageComponent {
 
   async ngOnInit() {
     this.createBodyForHttpRequst()
+    
     this.filesAndFolders = await this.getListFilesAndFolders();
     this.displayedArray = this.filesAndFolders.filter(item => item.name[0] != '.')   
     this.currentDirectory = `/${this.filesAndFolders[0].fullName.split('/')[1]}`
+    this.isPageLoading = false;
   }
 
   async getListFilesAndFolders(): Promise<any> {      
     const request = await HttpClient.httpRequest("POST", "https://localhost:5081/api/Sftp/list",
       this.body, this.header)
     
-    return await request.json()
+    if (request.status == 200)
+      return await request.json()
+    
+    return "";
+    // let result = ''
+    // try {
+    //   result = await request.json()
+    // } catch {
+    //   result = await request.text()
+    // } finally { 
+    //   return result
+    // }
   }
 
   selectAllFiles() {
@@ -139,13 +153,11 @@ export class FileManagementPageComponent {
   }
 
   async deleteSelectedFile() {
-    alert("***delete***\n" + this.selectedFiles.toString().split(',').join('\n'))
-
     this.body.SelectedFiles = this.selectedFiles
     const response = await HttpClient.httpRequest("DELETE", "https://localhost:5081/api/Sftp/delete", this.body, this.header)
+
     if (response.status == 200)
       window.location.reload()
-    else alert("--------error!!!--------")
   }
 
   getParsedFilename(filePath: string): string {
@@ -178,13 +190,40 @@ export class FileManagementPageComponent {
       URL.revokeObjectURL(url)
   }
 
-  async openItem(fileOrFolderName: string) { 
+  async openItem(fileOrFolderName: string) {   
+    this.isPageLoading = true;
     const itemName = this.getParsedFilename(fileOrFolderName)
-    if (this.isFolder(itemName)) {
-      
-    } else {
-      alert(`***item is file: opening file.***`)
+
+    this.currentDirectory = fileOrFolderName
+    this.body.DirectoryPath = fileOrFolderName
+    const response = await this.getListFilesAndFolders()
+
+    if (response == "")
+      this.filesAndFolders = ["empty dir or file"]
+    else {
+      this.filesAndFolders = response;
+      this.displayedArray = this.filesAndFolders.filter(item => item.name[0] != '.')
     }
+ 
+    this.isPageLoading = false
+  }
+
+  getWords(text: string): string[] {
+    return text.split('/').filter(word => word.trim() !== '');
+  }
+  
+  async redirectToPreviusDirectory(item: string): Promise<void> {
+    if(item == 'root')
+      await this.openItem(`/${item}`)
+    else 
+      await this.openItem(item)
+  }
+
+  addSlashIfNeeded(word: string): string {
+    if (word === 'root') {
+      return '/' + word + '/';
+    }
+    return word + '/';
   }
 
   isFolder(itemName: string): boolean {
