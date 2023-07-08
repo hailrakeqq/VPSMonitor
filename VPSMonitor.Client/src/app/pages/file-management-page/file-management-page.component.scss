@@ -76,3 +76,16 @@
 .file-name {
   margin-left: 10px;
 }
+
+.checkboxs {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.checkboxs label {
+  font-size: 16px;
+  color: #333;
+  cursor: pointer;
+}
+

@@ -12,14 +12,18 @@ import { sftpData } from 'src/app/entities/sftpData';
 })
 export class FileManagementPageComponent {
   isPageLoading: boolean = true
-  showAllFiles = false;
-  isAllFilesSelected = false;
+  showAllFiles: boolean = false;
+  isAllFilesSelected: boolean = false;
+  isModalOpen: boolean = false
+  newItemIsFile: boolean = false;
+  newItemIsDirectory: boolean = false;
   uploadedFiles: FileList | undefined;
   selectedFiles: string[] = []
   filesAndFolders: any[] = [];
   displayedArray: any[] = [];
   currentDirectory: string = '';
   localFilePath: string = '';
+  newItemName: string = '';
   header = {
     'Authorization': `bearer ${localStorage.getItem('access-token')}`,
     'Content-Type': 'application/json'
@@ -47,14 +51,6 @@ export class FileManagementPageComponent {
       return await request.json()
     
     return "";
-    // let result = ''
-    // try {
-    //   result = await request.json()
-    // } catch {
-    //   result = await request.text()
-    // } finally { 
-    //   return result
-    // }
   }
 
   selectAllFiles() {
@@ -192,7 +188,6 @@ export class FileManagementPageComponent {
 
   async openItem(fileOrFolderName: string) {   
     this.isPageLoading = true;
-    const itemName = this.getParsedFilename(fileOrFolderName)
 
     this.currentDirectory = fileOrFolderName
     this.body.DirectoryPath = fileOrFolderName
@@ -206,6 +201,23 @@ export class FileManagementPageComponent {
     }
  
     this.isPageLoading = false
+  }
+
+  async createItem() {
+    this.body.newItemName = this.newItemName;
+    if (this.newItemIsDirectory)
+      this.body.newItemType = "directory"
+    else
+      this.body.newItemType = "file"
+    
+    console.log(this.body);
+    
+    const response = await HttpClient.httpRequest("POST", "https://localhost:5081/api/Sftp/create", this.body, this.header)
+
+    if (response.status == 200)
+      window.location.reload()
+    else
+      alert("something going wrong")
   }
 
   getWords(text: string): string[] {
@@ -230,5 +242,21 @@ export class FileManagementPageComponent {
     if (!itemName.startsWith('.') && itemName.includes('.'))
       return false;
     return true;
+  }
+
+  handleModalOpened(): void{
+    this.isModalOpen = true
+  }
+
+  handleModalClosed(): void{
+    this.isModalOpen = false
+  }
+
+  chooseDirectoryItemType() {
+    this.newItemIsFile = false
+  }
+
+  chooseFileItemType() {
+    this.newItemIsDirectory = false
   }
 }

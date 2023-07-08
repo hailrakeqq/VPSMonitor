@@ -9,6 +9,7 @@
     <button class="btn" (click)="uploadFile()">Upload</button>
     <button class="btn" (click)="downloadSelectedFile()">Download Selected File</button>
     <button class="btn" (click)="deleteSelectedFile()">Delete Selected File</button>
+    <button class="btn" (click)="handleModalOpened()">Create Item</button>
   </div>
   
   <div class="file-path">
@@ -45,4 +46,25 @@
       </div>
      </div>
   </div>
+
+  <app-modal *ngIf="isModalOpen" (closed)="handleModalClosed()" title="Add new item">
+
+    <form (ngSubmit)="createItem()">
+      <div class="mb-4">
+        <label for="newItem" class="block font-bold">New Item Name:</label>
+        <input type="text" id="newItem" class="border border-gray-300 rounded px-3 py-2 w-full" [(ngModel)]="newItemName" ngModel name="newItemName" >
+      </div>
+      <div class="checkboxs">
+        <input type="radio" id="file"  (change)="chooseFileItemType()" [(ngModel)]="newItemIsFile" name="radioButtons" value="file">
+        <label for="file">File</label><br>
+
+        <input type="radio" id="directory" (change)="chooseDirectoryItemType()" [(ngModel)]="newItemIsDirectory" name="radioButtons" value="directory">
+        <label for="directory">Directory</label>
+      </div>
+      <br><br>
+     
+      <button class="btn" type="submit">Create Item</button>
+    </form>
+
+   </app-modal>
 </div>

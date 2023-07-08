@@ -8,4 +8,6 @@ public class SftpRequest
     public string DirectoryPath { get; set; }
     public string LocalFilePath { get; set; }
     public string[] SelectedFiles { get; set; }
+    public string newItemName { get; set; }
+    public string newItemType { get; set; }
 }

@@ -1,5 +1,4 @@
 using System.IO.Compression;
-using Microsoft.AspNetCore.Mvc;
 using Renci.SshNet;
 using Renci.SshNet.Sftp;
 using VPSMonitor.API.Entities;
@@ -128,10 +127,14 @@ public class SftpService : ISftpRepository
         return null;
     }
 
-
     public void CreateFolder(SftpClient sftpClient, string remoteDirectory, string folderName)
     {
         sftpClient.CreateDirectory($"{remoteDirectory}/{folderName}");
+    }
+
+    public void CreateFile(SftpClient sftpClient, string remoteDirectory, string fileName)
+    {
+        sftpClient.Create($"{remoteDirectory}/{fileName}");
     }
 
     public void UploadFile(SftpClient sftpClient, Stream stream, string remoteFilePath)

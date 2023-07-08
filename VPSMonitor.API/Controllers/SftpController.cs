@@ -77,6 +77,22 @@ public class SftpController : Controller
         }
     }
 
+    [HttpPost("create")]
+    public async Task<IActionResult> CreateItem([FromBody] SftpRequest sftpRequest)
+    {
+        using (var client = _sftpService.Connect(sftpRequest.Host, sftpRequest.Username, sftpRequest.Password))
+        {
+            if (sftpRequest.newItemType == "directory")
+            {
+                _sftpService.CreateFolder(client, sftpRequest.DirectoryPath, sftpRequest.newItemName);
+                return Ok();
+            }
+
+            _sftpService.CreateFile(client, sftpRequest.DirectoryPath, sftpRequest.newItemName);
+            return Ok();
+        }
+    }
+
     [HttpPut("rename")]
     public IActionResult RenameFileOrFolder(string currentPath, string newName)
     {

@@ -6,4 +6,6 @@ export interface sftpData {
   LocalFilePath?: string;
   SelectedFiles: string[]
   files?: FileList;
+  newItemName?: string;
+  newItemType?: string;
 }

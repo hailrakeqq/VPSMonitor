@@ -12,6 +12,7 @@ public interface ISftpRepository
     Task<byte[]> CreateZipArchive(SftpRequest sftpRequest, SftpClient client, Stream stream);
     Task<byte[]> DownloadFile(SftpClient client, string file, Stream stream);
     void CreateFolder(SftpClient sftpClient, string remoteDirectory, string folderName);
+    void CreateFile(SftpClient sftpClient, string remoteDirectory, string fileName);
     void UploadFile(SftpClient sftpClient, Stream stream, string remoteFilePath);
     void RenameFileOrFolder(SftpClient sftpClient, string currentPath, string newName);
     void CopyFileOrFolder(SftpClient sftpClient, string sourcePath, string destinationPath);
