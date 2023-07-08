@@ -17,6 +17,7 @@ export class FileManagementPageComponent {
   isModalOpen: boolean = false
   newItemIsFile: boolean = false;
   newItemIsDirectory: boolean = false;
+  isButtonDisabled: boolean = true;
   uploadedFiles: FileList | undefined;
   selectedFiles: string[] = []
   filesAndFolders: any[] = [];
@@ -24,6 +25,8 @@ export class FileManagementPageComponent {
   currentDirectory: string = '';
   localFilePath: string = '';
   newItemName: string = '';
+  selectedFile: any; 
+  contextMenuStyle: any = {};
   header = {
     'Authorization': `bearer ${localStorage.getItem('access-token')}`,
     'Content-Type': 'application/json'
@@ -75,6 +78,7 @@ export class FileManagementPageComponent {
     }
   }
 
+  
   async uploadFile() {
     if (this.uploadedFiles && this.currentDirectory) {
       const formData = new FormData();
@@ -96,12 +100,12 @@ export class FileManagementPageComponent {
       })
 
       if (request.status == 200)
-        window.location.reload()
+      window.location.reload()
       else
-        alert("Error was occurate when you tried to delete files");
+      alert("Error was occurate when you tried to delete files");
     }
   }
-
+  
   private createBodyForHttpRequst(): void { 
     const connectionData = sessionStorage.getItem('host')?.split('@')
     const connectionPassword = sessionStorage.getItem('password');
@@ -119,38 +123,73 @@ export class FileManagementPageComponent {
       this.router.navigate(['/terminal'])
     }
   }
-
+  
   onFileCheckboxChange(event: any, file: any) {
     if (event.target.checked) {
       this.selectedFiles.push(file);
+      this.isButtonDisabled = false;
     } else {
       const index = this.selectedFiles.indexOf(file);
       if (index > -1) {
         this.selectedFiles.splice(index, 1);
       }
     }
+    if (this.selectedFiles.length == 0)
+    this.isButtonDisabled = true;
   }
-
+  
   async downloadSelectedFile(downloadFileName?: string) {    
+    alert("download")
+    if (this.selectedFiles.length == 0) {
+      alert("You should choose file to download")
+      return;
+    }
+    
     this.body.SelectedFiles = this.selectedFiles
     const response = await HttpClient.httpRequest("POST", "https://localhost:5081/api/Sftp/download", this.body, this.header)
-  
+    
     if (response.status == 200) {    
       const blob = await response.blob()
-
+      
       if(this.isAllFilesAndDirectorySelected())
-        this.downloadBlob(blob, this.currentDirectory)
+      this.downloadBlob(blob, this.currentDirectory)
       else
-        this.downloadBlob(blob)
+      this.downloadBlob(blob)
       
     } else {
       console.log(await response.text());  
     }  
   }
 
-  async deleteSelectedFile() {
-    this.body.SelectedFiles = this.selectedFiles
+  openContextMenu(event: MouseEvent, fileOrFolder: any) {
+    event.preventDefault();
+    this.selectedFile = fileOrFolder;
+    this.contextMenuStyle = {
+      position: 'absolute',
+      top: `${event.clientY}px`,
+      left: `${event.clientX}px`
+    };
+  }
+
+  async deleteSelectedFile(itemName?: string) {
+     if (this.selectedFiles.length == 0 && itemName == undefined) {
+      alert("You should choose file to delete")
+      return;
+     }
+    if (itemName != null) {
+      this.body.SelectedFiles.push(itemName)
+    } else {
+      this.body.SelectedFiles = this.selectedFiles
+    }
     const response = await HttpClient.httpRequest("DELETE", "https://localhost:5081/api/Sftp/delete", this.body, this.header)
+
+    if (response.status == 200)
+      window.location.reload()
+  }
+
+  async renameSelectedFile(itemName: string) {
+    this.body.SelectedFiles.push(itemName)
+    const response = await HttpClient.httpRequest("PUT", "https://localhost:5081/api/Sftp/rename", this.body, this.header)
 
     if (response.status == 200)
       window.location.reload()
@@ -209,9 +248,7 @@ export class FileManagementPageComponent {
       this.body.newItemType = "directory"
     else
       this.body.newItemType = "file"
-    
-    console.log(this.body);
-    
+        
     const response = await HttpClient.httpRequest("POST", "https://localhost:5081/api/Sftp/create", this.body, this.header)
 
     if (response.status == 200)
