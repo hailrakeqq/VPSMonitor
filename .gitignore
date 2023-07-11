@@ -10,6 +10,9 @@
 /VPSMonitor.API/obj/*
 /VPSMonitor.API/bin/*
 
+/VPSMonitor.Core/bin/*
+/VPSMonitor.Core/obj/*
+
 /VPSMonitor.Tests/bin/*
 /VPSMonitor.Tests/obj/*
 

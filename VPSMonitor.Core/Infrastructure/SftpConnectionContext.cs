@@ -2,7 +2,7 @@ using Renci.SshNet;
 
 namespace VPSMonitor.Core.Infrastructure;
 
-public class SftpConnectionContext
+public static class SftpConnectionContext
 {
     public static SftpClient Connect(string host, string username, string password)
     {

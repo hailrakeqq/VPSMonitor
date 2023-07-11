@@ -45,6 +45,10 @@ export class UsersComponent {
       
       this.users = await response.json()            
       this.users.forEach(item => item.permissions.join(", "));
+      this.users.map(user => {
+        if (user.username === 'root')
+          user.homeDirectoryPath = '/root'
+      })
     } else {
       this.router.navigate(['/terminal'])
     }

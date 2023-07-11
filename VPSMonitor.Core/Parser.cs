@@ -15,6 +15,7 @@ namespace VPSMonitor.Core
         {
             var lines = data.Split('\n', StringSplitOptions.RemoveEmptyEntries);
             var cpuLoads = new List<string>();
+            var osVersion = Environment.OSVersion;
 
             for (int i = 0; i < lines.Length; i++)
             {
@@ -22,15 +23,28 @@ namespace VPSMonitor.Core
 
                 if (fields[0] == "Linux" || fields[2] == "CPU")
                     continue;
-
+                
                 if (i == 2)
                 {
-                    cpuLoads.Add($"ALL: {Math.Round((100 - double.Parse(fields[12])), 2)}%");
-                    continue;
+                    if (osVersion.Platform == PlatformID.Win32NT)
+                    {
+                        cpuLoads.Add($"ALL: {Math.Round((100 - Convert.ToDouble(fields[12].Replace('.', ','))), 2)}%");
+                        continue;
+                    }
+                    else
+                    {
+                        cpuLoads.Add($"ALL: {Math.Round((100 - Convert.ToDouble(fields[12])), 2)}%");
+                        continue;
+                    }
                 }
 
                 else if (fields.Length >= 12)
-                    cpuLoads.Add($"{i - 3}: {Math.Round((100 - double.Parse(fields[12])), 2)}%");
+                {
+                    if (osVersion.Platform == PlatformID.Win32NT)
+                        cpuLoads.Add($"{i - 3}: {Math.Round((100 - Convert.ToDouble(fields[12].Replace('.', ','))), 2)}%");
+                    else
+                        cpuLoads.Add($"ALL: {Math.Round((100 - Convert.ToDouble(fields[12])), 2)}%");
+                }
             }
 
             return cpuLoads.ToArray();

@@ -31,7 +31,10 @@ constructor(private router: Router) { }
     }
     public TerminalPageRedirect(): void{
         this.router.navigate(['/terminal'])
-    }        
+    }   
+    public FileManagerPageRedirect(): void {
+        this.router.navigate(['/filemanager'])
+    }
     public SettingsRedirect(): void{
         this.router.navigate(['/settings'])
     }

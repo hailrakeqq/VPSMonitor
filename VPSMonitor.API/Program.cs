@@ -29,7 +29,7 @@ builder.Services.AddTokenService();
 builder.Services.AddLoginResponse();
 builder.Services.AddUserService();
 builder.Services.AddSSHService();
-
+builder.Services.AddSftpService();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

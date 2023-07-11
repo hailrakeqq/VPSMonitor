@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { HttpClient } from 'src/HttpClient';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-terminal',
@@ -49,12 +49,18 @@ export class TerminalComponent {
   }
 
   async executeCommand(command: string): Promise<void> {
-    if (command.startsWith('sethost') || command.startsWith('changehost')) {
+    if (command.startsWith('sethost')) {
       const inputHost = command.substring(8).trim();
       if (inputHost.indexOf('@')) {
         this.hostAddress = inputHost;
         sessionStorage.setItem('host', this.hostAddress);
 
+        const username = this.hostAddress.split("@")[0]
+        if (username === 'root')
+          sessionStorage.setItem('DirectoryPath', '/root')
+        else
+          sessionStorage.setItem('DirectoryPath', `/home/${username}`)
+        
         this.awaitingPassword = true;
         this.outputs.push('Enter password:');
         return
@@ -65,10 +71,10 @@ export class TerminalComponent {
     if (command === 'clear') {
       this.outputs = []
     } else {
-        let response = await HttpClient.httpExecuteBashCommandRequest(command);
-        console.log(response);
-        response = '\n' + response 
-        this.outputs.push(response)
+      let response = await HttpClient.httpExecuteBashCommandRequest(command);
+      console.log(response);
+      response = '\n' + response
+      this.outputs.push(response)
     }
   }
 
@@ -76,7 +82,7 @@ export class TerminalComponent {
     
     this.vpsPassword = password.trim();
     sessionStorage.setItem('password', this.vpsPassword);
-    this.outputs.push(`Host set to: ${this.hostAddress}\nTo Change host enter command \`changehost username@hostAddress\``);
+    this.outputs.push(`Host set to: ${this.hostAddress}\nTo Change host enter command \`sethost username@hostAddress\``);
   
     this.command = '';
     this.awaitingPassword = false;
@@ -86,4 +92,5 @@ export class TerminalComponent {
     this.outputs.unshift('> sethost (example: sethost testuser@test.server)');
     this.outputs.unshift('Enter the host:');
   }
+
 }

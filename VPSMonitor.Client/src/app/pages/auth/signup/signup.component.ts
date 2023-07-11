@@ -15,8 +15,6 @@ export class SignupComponent {
   constructor(private router: Router) {}
 
   public async Register(): Promise<void> {
-    //TODO: add reactive check is data valid
-
     if (Toolchain.ValidateInputData(this.email, this.password, this.confirmPassword)) {
       const userData = {
         Email: this.email,

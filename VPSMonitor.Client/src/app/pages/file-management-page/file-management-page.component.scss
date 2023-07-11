@@ -1,0 +1,115 @@
+.container {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.list-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.file-name {
+  white-space: nowrap;
+  flex-grow: 1;
+}
+
+.checkbox-container {
+  width: 300;
+  height: auto;
+  align-self: flex-start;
+  align-items: right;
+  position: fixed;
+  top: 0;
+  right: 0;
+  @apply flex flex-col bg-gray-200 h-screen w-64;
+} 
+
+.item {
+    @apply py-2 px-4 hover:bg-gray-300 cursor-pointer;
+}
+
+.item-first {
+    @apply py-2 px-4 hover:bg-gray-300 cursor-pointer;
+    margin-top: 100px;
+}
+
+.checkbox-label {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+}
+.checkbox{
+  margin-right: 10px;
+}
+
+.btn {
+  @apply bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded;
+  margin-left: 10px;
+}
+
+.file-path {
+  cursor: pointer;
+  margin-top: 20px;
+  font-size: 32px;
+}
+
+.file-list {
+  list-style: none;
+  padding: 0;
+}
+
+.list-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.file-info {
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+}
+
+.file-name {
+  margin-left: 10px;
+}
+
+.checkboxs {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.checkboxs label {
+  font-size: 16px;
+  color: #333;
+  cursor: pointer;
+}
+
+.context-menu {
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 5px;
+}
+
+.file-info {
+  display: flex;
+  align-items: center;
+}
+
+.context-menu-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.file-name {
+  margin-left: 10px;
+  cursor: pointer;
+}
