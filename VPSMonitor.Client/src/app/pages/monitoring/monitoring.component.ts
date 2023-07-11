@@ -16,8 +16,6 @@ export class MonitoringComponent {
   constructor(private router: Router) {}
 
   async ngOnInit() {
-    const start = performance.now();
-
     const parsedSessionStorage = sessionStorage.getItem('host')?.split('@') 
     const vpsPassword = sessionStorage.getItem('password');
     
@@ -35,8 +33,6 @@ export class MonitoringComponent {
       const request = await HttpClient.httpRequest("POST", "https://localhost:5081/api/Core/GetAllDataForMonitoringPage", body, headers)    
       this.data = await request.json();
       
-      const end = performance.now()
-      console.log(`execution time: ${(end - start / 1000)} seconds`);
     } else { 
       this.router.navigate(['/terminal'])
     }
