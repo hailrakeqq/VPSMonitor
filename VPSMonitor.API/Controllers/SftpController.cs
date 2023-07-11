@@ -14,23 +14,23 @@ namespace VPSMonitor.API.Controllers;
 public class SftpController : Controller
 {
     private readonly ISftpRepository _sftpService;
-
-    public SftpController(ISftpRepository sftpService)
+    private readonly ISshRepository _sshService;
+    public SftpController(ISftpRepository sftpService, ISshRepository sshService)
     {
         _sftpService = sftpService;
+        _sshService = sshService;
     }
 
     [HttpPost("list")]
     public IActionResult ListAllFilesAndFolders([FromBody] SftpRequest request)
     {
-        using (var client = _sftpService.Connect(request.Host, request.Username, request.Password))
-        {
-            var filesAndFolders = _sftpService.GetAllFilesAndFolders(client, request.DirectoryPath);
-            if (filesAndFolders != null)
-                return Ok(filesAndFolders);
+        using var client = _sftpService.Connect(request.Host, request.Username, request.Password);
+        var filesAndFolders = _sftpService.GetAllFilesAndFolders(client, request.DirectoryPath);
 
-            return NoContent();
-        }
+        if (filesAndFolders != null)
+            return Ok(filesAndFolders);
+
+        return NoContent();
     }
 
     [HttpPost("upload")]
@@ -42,72 +42,70 @@ public class SftpController : Controller
         string username = formData["username"];
         string password = formData["password"];
 
-        using (var client = _sftpService.Connect(host, username, password))
+        using var client = _sftpService.Connect(host, username, password);
+        foreach (var file in files)
         {
-            foreach (var file in files)
-            {
-                if (file == null || file.Length == 0)
-                    return BadRequest("No file selected for upload.");
+            if (file == null || file.Length == 0)
+                return BadRequest("No file selected for upload.");
 
-                string directoryPath = $"{formData["remoteFilePath"]}/{file.FileName}";
+            string directoryPath = $"{formData["remoteFilePath"]}/{file.FileName}";
 
-                using (var stream = file.OpenReadStream())
-                {
-                    _sftpService.UploadFile(client, stream, directoryPath);
-                }
-            }
-            return Ok();
+            using var stream = file.OpenReadStream();
+            _sftpService.UploadItem(client, stream, directoryPath);
         }
+        return Ok();
     }
 
     [HttpPost("download")]
     public async Task<FileContentResult> DownloadFile([FromBody] SftpRequest sftpRequest)
     {
-        using (var client = _sftpService.Connect(sftpRequest.Host, sftpRequest.Username, sftpRequest.Password))
-        using (var stream = new MemoryStream())
+        using var client = _sftpService.Connect(sftpRequest.Host, sftpRequest.Username, sftpRequest.Password);
+        using var stream = new MemoryStream();
+        if (sftpRequest.SelectedFiles.Length == 1 && Path.HasExtension(sftpRequest.SelectedFiles[0]))
         {
-            if (sftpRequest.SelectedFiles.Length == 1 && Path.HasExtension(sftpRequest.SelectedFiles[0]))
-            {
-                var file = await _sftpService.DownloadFile(client, sftpRequest.SelectedFiles[0], stream);
-                return File(file, "application/octet-stream");
-            }
-
-            var zipArchive = await _sftpService.CreateZipArchive(sftpRequest, client, stream);
-            return File(zipArchive, "application/zip");
+            var file = await _sftpService.DownloadFileAsync(client, sftpRequest.SelectedFiles[0], stream);
+            return File(file, "application/octet-stream");
         }
+
+        var zipArchive = await _sftpService.CreateZipArchiveAsync(sftpRequest, client, stream);
+        return File(zipArchive, "application/zip");
     }
 
     [HttpPost("create")]
     public async Task<IActionResult> CreateItem([FromBody] SftpRequest sftpRequest)
     {
-        using (var client = _sftpService.Connect(sftpRequest.Host, sftpRequest.Username, sftpRequest.Password))
+        using var client = _sftpService.Connect(sftpRequest.Host, sftpRequest.Username, sftpRequest.Password);
+        if (sftpRequest.NewItemType == "directory")
         {
-            if (sftpRequest.newItemType == "directory")
-            {
-                _sftpService.CreateFolder(client, sftpRequest.DirectoryPath, sftpRequest.newItemName);
-                return Ok();
-            }
-
-            _sftpService.CreateFile(client, sftpRequest.DirectoryPath, sftpRequest.newItemName);
+            _sftpService.CreateFolder(client, sftpRequest.DirectoryPath, sftpRequest.NewItemName);
             return Ok();
         }
+
+        _sftpService.CreateFile(client, sftpRequest.DirectoryPath, sftpRequest.NewItemName);
+        return Ok();
     }
 
     [HttpPut("rename")]
-    public IActionResult RenameFileOrFolder(string currentPath, string newName)
+    public IActionResult RenameFileOrFolder([FromBody] SftpRequest sftpRequest)
     {
+        using var client = _sftpService.Connect(sftpRequest.Host, sftpRequest.Username, sftpRequest.Password);
+        _sftpService.RenameItem(client, sftpRequest.ItemPath, sftpRequest.NewItemName);
         return Ok();
     }
 
-    [HttpPost("copy")]
-    public IActionResult CopyFileOrFolder(string sourcePath, string destinationPath)
+    [HttpPut("copy")]
+    public IActionResult CopyFileOrFolder([FromBody] SftpRequest sftpRequest)
     {
+        using var client = _sshService.Connect(sftpRequest.Host, sftpRequest.Username, sftpRequest.Password);
+            _sftpService.CopyItem(client, sftpRequest.SourcePath, sftpRequest.DestinationPath);
         return Ok();
     }
 
-    [HttpPost("move")]
-    public IActionResult MoveFileOrFolder(string sourcePath, string destinationPath)
+    [HttpPut("move")]
+    public IActionResult MoveFileOrFolder([FromBody] SftpRequest sftpRequest)
     {
+        using var client = _sshService.Connect(sftpRequest.Host, sftpRequest.Username, sftpRequest.Password);
+            _sftpService.MoveItem(client, sftpRequest.SourcePath, sftpRequest.DestinationPath);
         return Ok();
     }
 
@@ -115,8 +113,7 @@ public class SftpController : Controller
     public IActionResult DeleteFilesOrFolder([FromBody] SftpRequest sftpRequest)
     {
         using (var client = _sftpService.Connect(sftpRequest.Host, sftpRequest.Username, sftpRequest.Password))
-            _sftpService.DeleteFileOrFolder(client, sftpRequest.SelectedFiles);
-
+            _sftpService.DeleteItem(client, sftpRequest.SelectedFiles);
         return Ok();
     }
 

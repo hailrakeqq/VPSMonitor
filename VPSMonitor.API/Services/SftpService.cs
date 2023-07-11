@@ -24,7 +24,7 @@ public class SftpService : ISftpRepository
 
     #region Download files and directory
 
-    public async Task<byte[]> DownloadFile(SftpClient client, string file, Stream stream)
+    public async Task<byte[]> DownloadFileAsync(SftpClient client, string file, Stream stream)
     {
         await Task.Run(() => client.DownloadFile(file, stream));
 
@@ -34,7 +34,7 @@ public class SftpService : ISftpRepository
         return fileBytes;
     }
 
-    public async Task<byte[]> CreateZipArchive(SftpRequest sftpRequest, SftpClient client, Stream stream)
+    public async Task<byte[]> CreateZipArchiveAsync(SftpRequest sftpRequest, SftpClient client, Stream stream)
     {
         string tempDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
         Directory.CreateDirectory(tempDir);
@@ -137,23 +137,27 @@ public class SftpService : ISftpRepository
         sftpClient.Create($"{remoteDirectory}/{fileName}");
     }
 
-    public void UploadFile(SftpClient sftpClient, Stream stream, string remoteFilePath)
+    public void UploadItem(SftpClient sftpClient, Stream stream, string remoteFilePath)
     {
         sftpClient.UploadFile(stream, remoteFilePath);
     }
 
-    public void RenameFileOrFolder(SftpClient sftpClient, string currentPath, string newName)
+    public void RenameItem(SftpClient sftpClient, string currentPath, string newName)
     {
         sftpClient.RenameFile(currentPath, newName);
     }
 
-    public void CopyFileOrFolder(SftpClient sftpClient, string sourcePath, string destinationPath)
+    public void CopyItem(SshClient sshClient, string sourcePath, string destinationPath)
     {
-        throw new NotImplementedException();
+        sshClient.RunCommand($"cp {sourcePath} {destinationPath}");
+    }
+    public void MoveItem(SshClient sshClient, string sourcePath, string destinationPath)
+    {
+        sshClient.RunCommand($"mv {sourcePath} {destinationPath}");
     }
 
     #region Delete File Or Folder
-    public void DeleteFileOrFolder(SftpClient client, string[] itemsToDelete)
+    public void DeleteItem(SftpClient client, string[] itemsToDelete)
     {
         foreach (var item in itemsToDelete)
         {
@@ -192,12 +196,6 @@ public class SftpService : ISftpRepository
 
     #endregion
 
-    public void MoveFileOrFolder(SftpClient sftpClient, string sourcePath, string destinationPath)
-    {
-        throw new NotImplementedException();
-    }
-
-
     public bool IsFileExists(SftpClient sftpClient, string path)
     {
         return sftpClient.Exists(path);
@@ -210,4 +208,11 @@ public class SftpService : ISftpRepository
     }
 
     #endregion
+
+    private bool IsItemFolder(string path)
+    {
+        if (Path.HasExtension(path))
+            return false;
+        return true;
+    }   
 }

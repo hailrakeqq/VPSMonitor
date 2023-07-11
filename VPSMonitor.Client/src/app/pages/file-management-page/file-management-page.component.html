@@ -16,7 +16,7 @@
     <button class="btn" 
     [ngStyle]="{'background-color': isButtonDisabled ? 'gray' : '#3b82f6'}" 
     [disabled]="isButtonDisabled" 
-    (click)="deleteSelectedFile()">Delete Selected File</button>
+    (click)="deleteSelectedItem()">Delete Selected File</button>
   </div>
   
   <div class="file-path">
@@ -38,8 +38,10 @@
             </button>
           </div>
             <div class="context-menu" [ngStyle]="contextMenuStyle" *ngIf="fileOrFolder === selectedFile">
-              <button class="btn" (click)="deleteSelectedFile(fileOrFolder.name)">Delete</button>
-              <button class="btn" (click)="renameSelectedFile(fileOrFolder.name)">Rename</button>
+              <button class="btn" (click)="deleteSelectedItem(fileOrFolder.name)">Delete</button>
+              <button class="btn" (click)="renameSelectedItem(fileOrFolder.fullName)">Rename</button>
+              <button class="btn" (click)="copyToSelectedItem(fileOrFolder.fullName)">Copy to</button>              
+              <button class="btn" (click)="moveToSelectedItem(fileOrFolder.fullName)">Move to</button>
             </div>
         </li>
       </ul>

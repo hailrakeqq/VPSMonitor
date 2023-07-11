@@ -24,7 +24,9 @@ export class FileManagementPageComponent {
   displayedArray: any[] = [];
   currentDirectory: string = '';
   localFilePath: string = '';
-  newItemName: string = '';
+  copyToPath: string | undefined | null = '';
+  moveToPath: string | undefined | null = '';
+  newItemName: string | undefined | null = '';
   selectedFile: any; 
   contextMenuStyle: any = {};
   header = {
@@ -42,8 +44,10 @@ export class FileManagementPageComponent {
     
     this.filesAndFolders = await this.getListFilesAndFolders();
     this.displayedArray = this.filesAndFolders.filter(item => item.name[0] != '.')   
-    this.currentDirectory = `/${this.filesAndFolders[0].fullName.split('/')[1]}`
+    this.currentDirectory = this.getCurrentDirectory(this.filesAndFolders[0].fullName)
     this.isPageLoading = false;
+    console.log(this.currentDirectory);
+    
   }
 
   async getListFilesAndFolders(): Promise<any> {      
@@ -116,7 +120,6 @@ export class FileManagementPageComponent {
         Username: connectionData[0],
         Password: connectionPassword,
         DirectoryPath: directoryPath,
-        LocalFilePath: '',
         SelectedFiles: []
       }
     } else {
@@ -171,7 +174,7 @@ export class FileManagementPageComponent {
     };
   }
 
-  async deleteSelectedFile(itemName?: string) {
+  async deleteSelectedItem(itemName?: string) {
      if (this.selectedFiles.length == 0 && itemName == undefined) {
       alert("You should choose file to delete")
       return;
@@ -187,14 +190,59 @@ export class FileManagementPageComponent {
       window.location.reload()
   }
 
-  async renameSelectedFile(itemName: string) {
-    this.body.SelectedFiles.push(itemName)
+  async renameSelectedItem(fullName: string) {
+    this.newItemName = prompt("Enter new name:")
+    if (this.newItemName != null) {
+      this.body.newItemName = this.newItemName
+      this.body.ItemPath = fullName
+    }
     const response = await HttpClient.httpRequest("PUT", "https://localhost:5081/api/Sftp/rename", this.body, this.header)
+
+    this.newItemName = ''
 
     if (response.status == 200)
       window.location.reload()
   }
 
+  async copyToSelectedItem(itemPath: string) {
+    this.copyToPath = prompt("Enter new path to move item:")
+    if (this.copyToPath != null) {
+      this.body.DestinationPath = this.copyToPath
+      this.body.SourcePath = itemPath
+
+      const response = await HttpClient.httpRequest("PUT", "https://localhost:5081/api/Sftp/copy", this.body, this.header)
+      console.log(this.body);
+      
+      this.copyToPath = ''
+  
+      if (response.status == 200)
+        window.location.reload()
+    }
+  }
+
+  async moveToSelectedItem(itemPath: string) {
+    this.moveToPath = prompt("Enter new path to move item:")
+    if (this.moveToPath != null) {
+      this.body.DestinationPath = this.moveToPath
+      this.body.SourcePath = itemPath
+    }
+    console.log(this.body);
+    
+    const response = await HttpClient.httpRequest("PUT", "https://localhost:5081/api/Sftp/move", this.body, this.header)
+    this.moveToPath = ''
+
+    if (response.status == 200)
+      window.location.reload()
+  }
+
+  getCurrentDirectory(path: string) {
+    const lastSlashIndex = path.lastIndexOf('/');
+    if (lastSlashIndex !== -1) {
+      return path.substring(0, lastSlashIndex);
+    }
+    return path;
+  } 
+  
   getParsedFilename(filePath: string): string {
     const parsedPath = filePath.split('/');
     return parsedPath[parsedPath.length - 1];
@@ -243,7 +291,8 @@ export class FileManagementPageComponent {
   }
 
   async createItem() {
-    this.body.newItemName = this.newItemName;
+    if(this.newItemName != undefined)
+      this.body.newItemName = this.newItemName;
     if (this.newItemIsDirectory)
       this.body.newItemType = "directory"
     else

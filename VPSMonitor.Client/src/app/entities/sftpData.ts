@@ -3,8 +3,10 @@ export interface sftpData {
   Username: string;
   Password: string;
   DirectoryPath: string;
-  LocalFilePath?: string;
+  ItemPath?: string;
   SelectedFiles: string[]
+  DestinationPath?: string,
+  SourcePath?: string,
   files?: FileList;
   newItemName?: string;
   newItemType?: string;
