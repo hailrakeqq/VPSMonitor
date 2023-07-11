@@ -207,12 +207,5 @@ public class SftpService : ISftpRepository
         sftpClient.ChangePermissions(path, (short)permissionsValue);
     }
 
-    #endregion
-
-    private bool IsItemFolder(string path)
-    {
-        if (Path.HasExtension(path))
-            return false;
-        return true;
-    }   
+    #endregion  
 }

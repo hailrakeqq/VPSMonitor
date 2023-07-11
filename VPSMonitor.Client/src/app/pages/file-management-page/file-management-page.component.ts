@@ -210,13 +210,8 @@ export class FileManagementPageComponent {
       this.body.DestinationPath = this.copyToPath
       this.body.SourcePath = itemPath
 
-      const response = await HttpClient.httpRequest("PUT", "https://localhost:5081/api/Sftp/copy", this.body, this.header)
-      console.log(this.body);
-      
+      await HttpClient.httpRequest("PUT", "https://localhost:5081/api/Sftp/copy", this.body, this.header)
       this.copyToPath = ''
-  
-      if (response.status == 200)
-        window.location.reload()
     }
   }
 
@@ -226,13 +221,9 @@ export class FileManagementPageComponent {
       this.body.DestinationPath = this.moveToPath
       this.body.SourcePath = itemPath
     }
-    console.log(this.body);
     
-    const response = await HttpClient.httpRequest("PUT", "https://localhost:5081/api/Sftp/move", this.body, this.header)
+    await HttpClient.httpRequest("PUT", "https://localhost:5081/api/Sftp/move", this.body, this.header)
     this.moveToPath = ''
-
-    if (response.status == 200)
-      window.location.reload()
   }
 
   getCurrentDirectory(path: string) {

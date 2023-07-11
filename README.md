@@ -45,7 +45,7 @@ After build you can get access to services by next URL's:
 - [X] Execution bash scripts and other commands
 - [X] Obtaining information about status of the VPS
 - [X] Linux users controls page
-- [ ] File management
+- [X] File management
 - [ ] Proccess management 
 
 #### Technology stack:
