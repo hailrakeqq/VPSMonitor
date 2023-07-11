@@ -35,11 +35,9 @@ export class TerminalComponent {
     this.hostAddress = sessionStorage.getItem('host');
     this.vpsPassword = sessionStorage.getItem('password')
 
-
     this.term.loadAddon(this.fitAddon);
     const terminal = document.getElementById('terminal')
   
- 
     if(terminal)
       this.term.open(terminal);
   
@@ -51,27 +49,30 @@ export class TerminalComponent {
 
     this.term.write(`${this.hostAddress}: `); 
     this.term.onData((data) => {
-     
-    if (data === '\r') {
-      const inputLine = this.userInput.trim();
-      this.userInput = ''; 
+      if (data === '\r') {
+        const inputLine = this.userInput.trim();
+        this.userInput = ''; 
 
-      console.log('Input Line:', inputLine);
-      if (this.awaitingPassword)
-        this.submitPassword(inputLine)
-      else 
-        this.executeCommand(inputLine)
-      
-      this.updatePS1();
-    } else if (data === '\x7f') {
-      if (this.userInput.length > 0) {
-        this.userInput = this.userInput.slice(0, -1);
-        this.term.write('\b \b');
+        console.log('Input Line:', inputLine);
+        if (this.awaitingPassword)
+          this.submitPassword(inputLine)
+        else 
+          this.executeCommand(inputLine)
+
+        this.updatePS1();
+      } else if (data === '\x7f') {
+        if (this.userInput.length > 0) {
+          this.userInput = this.userInput.slice(0, -1);
+          this.term.write('\b \b');
+        }
+      } else {
+        if (!this.awaitingPassword) {
+          this.userInput += data;
+          this.term.write(data);
+        } else {
+          this.userInput += data;
+        }
       }
-    } else {
-        this.userInput += data;
-        this.term.write(data);
-    }
     });
   }
 
@@ -89,10 +90,10 @@ export class TerminalComponent {
         sessionStorage.setItem('DirectoryPath', `/home/${username}`);
 
       this.awaitingPassword = true;
-      this.term.writeln('\nEnter password:');
+      this.term.write('\n\rEnter password:');
       return;
     } else {
-      this.term.write('Please provide a valid host');
+      this.term.write('\n\rPlease provide a valid host');
     }
   }
   if (command === 'clear') {
@@ -122,7 +123,7 @@ export class TerminalComponent {
     if (this.hostAddress != null) {
       const username = this.hostAddress.split('@')[0];
       const hostName = this.hostAddress.split('@')[1];
-      this.term.writeln(`Host set to: ${this.hostAddress}`);
+      this.term.writeln(`\r\nHost set to: ${this.hostAddress}`);
       this.term.writeln(`Welcome, ${username}@${hostName}`);
       this.term.writeln(`To change the host, enter the command 'sethost username@hostAddress'`);
     
@@ -133,7 +134,7 @@ export class TerminalComponent {
 
   promptHost(): void {
     this.term.write('> sethost (example: sethost testuser@test.server)');
-    this.term.write('Enter the host:');
+    this.term.write('\n\rEnter the host:');
   }
 
   updatePS1():void {
