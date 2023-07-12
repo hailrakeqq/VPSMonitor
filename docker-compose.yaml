@@ -5,10 +5,9 @@ services:
     build:
       context: .
     ports:
-      - "5045:80"
+      - "5081:80"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - VIRTUAL_HOST=94.156.35.125
     restart: always
  
   frontend:
