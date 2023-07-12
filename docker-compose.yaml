@@ -3,7 +3,7 @@ services:
     depends_on:
       - "db"
     build:
-      context: ./VPSMonitor.API/.
+      context: .
     ports:
       - "5045:80"
     environment:
