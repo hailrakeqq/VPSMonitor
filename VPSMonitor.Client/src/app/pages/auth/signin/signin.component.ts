@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { environment } from 'src/environments/environment';
 import { Toolchain } from 'src/toolchain';
 
 @Component({
@@ -17,8 +18,13 @@ export class SignInComponent {
                 Email: this.email,
                 Password: this.password
             }
-
-            const request = await fetch(`https://localhost:5081/api/Auth/Login`, {
+            let apiUrl = ''
+            if (environment.production)
+                apiUrl = environment.apiUrl
+            else
+                apiUrl = environment.apiUrl
+            
+            const request = await fetch(`${apiUrl}/api/Auth/Login`, {
                 method: 'POST',
                 headers: { 'content-type': 'application/json' },
                 body: JSON.stringify(userData)

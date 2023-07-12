@@ -1,6 +1,5 @@
-import { Injectable, inject } from '@angular/core';
-import { Router } from '@angular/router';
-
+import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
 @Injectable()
 export class AuthErrorInterceptor {
     
@@ -32,10 +31,16 @@ export class AuthErrorInterceptor {
         }
     }
 
-    private async requestToUpdateAccessToken(): Promise<void> {        
+    private async requestToUpdateAccessToken(): Promise<void> { 
+        let apiUrl = ''
+        if (environment.production)
+            apiUrl = environment.apiUrl
+        else
+            apiUrl = environment.apiUrl
+        
         const userId = localStorage.getItem('id') || '';
         const refreshToken = localStorage.getItem('refresh-token') || '';
-        const request = await fetch(`https://localhost:5081/api/Auth/refresh-token`, {
+        const request = await fetch(`${apiUrl}/api/Auth/refresh-token`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',

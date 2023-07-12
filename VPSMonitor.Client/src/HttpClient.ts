@@ -1,5 +1,13 @@
+import { environment } from './environments/environment'
 export class HttpClient{
+    
     static async httpExecuteBashCommandRequest(command: string): Promise<string> {
+        let apiUrl = ''
+        if (environment.production)
+            apiUrl = environment.apiUrl
+        else
+            apiUrl = environment.apiUrl
+        
         const hostAddress = sessionStorage.getItem('host')?.split('@');
         const password = sessionStorage.getItem('password')
 
@@ -13,7 +21,7 @@ export class HttpClient{
                 command: command
             }
 
-            const request = await fetch(`https://localhost:5081/api/Core/ExecuteCommand`, {
+            const request = await fetch(`${apiUrl}/api/Core/ExecuteCommand`, {
                 method: "POST",
                 headers: {
                         'Authorization': `bearer ${localStorage.getItem('access-token')}`,

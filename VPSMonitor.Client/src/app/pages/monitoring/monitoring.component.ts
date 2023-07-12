@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from 'src/HttpClient';
 import { MonitoringPageData } from 'src/app/entities/monitoringPageData';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-monitoring',
@@ -12,10 +13,12 @@ export class MonitoringComponent {
   loading: boolean = true
   rdns: string | undefined = sessionStorage.getItem('host')?.split('@')[1]
   data: MonitoringPageData | undefined
+  apiUrl: string = '';
   
   constructor(private router: Router) {}
 
   async ngOnInit() {
+    
     const parsedSessionStorage = sessionStorage.getItem('host')?.split('@') 
     const vpsPassword = sessionStorage.getItem('password');
     
@@ -30,7 +33,7 @@ export class MonitoringComponent {
         password: vpsPassword,
         command: ''
       }
-      const request = await HttpClient.httpRequest("POST", "https://localhost:5081/api/Core/GetAllDataForMonitoringPage", body, headers)    
+      const request = await HttpClient.httpRequest("POST", `${this.apiUrl}/api/Core/GetAllDataForMonitoringPage`, body, headers)    
       this.data = await request.json();
       
     } else { 
@@ -38,6 +41,12 @@ export class MonitoringComponent {
     }
     
     this.loading = false
+  }
+    setApiUrl():void {
+    if (environment.production)
+      this.apiUrl = environment.apiUrl
+    else 
+      this.apiUrl = environment.apiUrl
   }
   
   async reboot(): Promise<void> {

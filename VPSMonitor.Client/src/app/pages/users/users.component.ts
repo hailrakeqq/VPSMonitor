@@ -4,6 +4,7 @@ import '../../entities/linuxUser'
 import '../../entities/dataToSend'
 import { Toolchain } from 'src/toolchain';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-users',
@@ -25,10 +26,12 @@ export class UsersComponent {
     'Authorization': `bearer ${localStorage.getItem('access-token')}`,
     'Content-Type': 'application/json'
   }
+  apiUrl: string = '';
 
   constructor(private router: Router) {}
 
   async ngOnInit() {
+    this.setApiUrl();
     const hostAddress = sessionStorage?.getItem('host')?.split('@');
     const password = sessionStorage.getItem('password');
 
@@ -54,6 +57,12 @@ export class UsersComponent {
     }
 
     this.isLoading = false
+  }
+  setApiUrl():void {
+    if (environment.production)
+      this.apiUrl = environment.apiUrl
+    else 
+      this.apiUrl = environment.apiUrl
   }
 
   handleModalOpened(): void{
