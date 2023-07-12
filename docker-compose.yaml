@@ -8,6 +8,7 @@ services:
       - "5045:80"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - VIRTUAL_HOST=94.156.35.125
     restart: always
  
   frontend:
@@ -30,6 +31,16 @@ services:
       - app_data:/var/lib/postgresql/data
     networks:
       - dev
+
+  proxy: 
+    build: 
+      context: ./nginx/.
+
+    ports:
+      - "443:443"
+    depends_on: 
+      - backend
+      - frontend
 
 volumes:
   app_data:
