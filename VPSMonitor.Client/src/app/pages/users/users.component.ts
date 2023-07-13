@@ -36,17 +36,17 @@ export class UsersComponent {
     const password = sessionStorage.getItem('password');
 
     if (hostAddress != null && password != null) {
-      const body: dataToSend= { 
+      const body: dataToSend= {
         host: hostAddress[1],
         username: hostAddress[0],
         password: password
       }
-  
+
       const response = await HttpClient.httpRequest("POST",
-        "https://localhost:5081/api/CoreUserCrud/GetUsers",
+        `${this.apiUrl}/api/CoreUserCrud/GetUsers`,
         body, this.header)
-      
-      this.users = await response.json()            
+
+      this.users = await response.json()
       this.users.forEach(item => item.permissions.join(", "));
       this.users.map(user => {
         if (user.username === 'root')
@@ -61,7 +61,7 @@ export class UsersComponent {
   setApiUrl():void {
     if (environment.production)
       this.apiUrl = environment.apiUrl
-    else 
+    else
       this.apiUrl = environment.apiUrl
   }
 
@@ -82,7 +82,7 @@ export class UsersComponent {
       userPassword: this.password,
       userConfirmPassword: this.ConfirmPassword
     };
-    
+
     if (Toolchain.ValidateInputNewUserData(dataToSend)) {
       const response = await fetch("https://localhost:5081/api/CoreUserCrud/CreateUser", {
         method: "POST",
@@ -92,7 +92,7 @@ export class UsersComponent {
       console.log(response);
       if (response.status == 200)
         window.location.reload();
-      
+
     } else {
       alert('error')
     }
@@ -107,7 +107,7 @@ export class UsersComponent {
       userPassword: this.password,
       userConfirmPassword: this.ConfirmPassword
     };
-    
+
     const response = await HttpClient.httpRequest("DELETE", "https://localhost:5081/api/CoreUserCrud/DeleteUser", dataToSend, this.header)
     if (response.status == 200)
       window.location.reload();
