@@ -1,5 +1,7 @@
 services:
   backend:
+    depends_on:
+      - db
     networks:
       - dev 
     build:

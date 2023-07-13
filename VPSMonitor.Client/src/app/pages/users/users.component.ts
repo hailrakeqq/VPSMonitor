@@ -84,7 +84,7 @@ export class UsersComponent {
     };
 
     if (Toolchain.ValidateInputNewUserData(dataToSend)) {
-      const response = await fetch("https://localhost:5081/api/CoreUserCrud/CreateUser", {
+      const response = await fetch(`${this.apiUrl}/api/CoreUserCrud/CreateUser`, {
         method: "POST",
         headers: this.header,
         body: JSON.stringify(dataToSend)
@@ -108,7 +108,7 @@ export class UsersComponent {
       userConfirmPassword: this.ConfirmPassword
     };
 
-    const response = await HttpClient.httpRequest("DELETE", "https://localhost:5081/api/CoreUserCrud/DeleteUser", dataToSend, this.header)
+    const response = await HttpClient.httpRequest("DELETE", `${this.apiUrl}/api/CoreUserCrud/DeleteUser`, dataToSend, this.header)
     if (response.status == 200)
       window.location.reload();
   }

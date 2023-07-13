@@ -14,16 +14,16 @@ export class MonitoringComponent {
   rdns: string | undefined = sessionStorage.getItem('host')?.split('@')[1]
   data: MonitoringPageData | undefined
   apiUrl: string = '';
-  
+
   constructor(private router: Router) {}
 
   async ngOnInit() {
-    
-    const parsedSessionStorage = sessionStorage.getItem('host')?.split('@') 
+
+    const parsedSessionStorage = sessionStorage.getItem('host')?.split('@')
     const vpsPassword = sessionStorage.getItem('password');
-    
+
     if (parsedSessionStorage != undefined && vpsPassword != undefined) {
-      const headers = { 
+      const headers = {
         'Authorization': `bearer ${localStorage.getItem('access-token')}`,
         'Content-Type': 'application/json'
       }
@@ -33,22 +33,22 @@ export class MonitoringComponent {
         password: vpsPassword,
         command: ''
       }
-      const request = await HttpClient.httpRequest("POST", `${this.apiUrl}/api/Core/GetAllDataForMonitoringPage`, body, headers)    
+      const request = await HttpClient.httpRequest("POST", `http://94.156.35.125:5081/api/Core/GetAllDataForMonitoringPage`, body, headers)
       this.data = await request.json();
-      
-    } else { 
+
+    } else {
       this.router.navigate(['/terminal'])
     }
-    
+
     this.loading = false
   }
     setApiUrl():void {
     if (environment.production)
       this.apiUrl = environment.apiUrl
-    else 
-      this.apiUrl = environment.apiUrl
+    else
+      this.apiUrl = `https://localhost:5081`
   }
-  
+
   async reboot(): Promise<void> {
     HttpClient.httpExecuteBashCommandRequest('reboot')
     alert("The VPS was successfully reloaded")
