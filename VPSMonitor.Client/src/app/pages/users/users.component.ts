@@ -4,6 +4,7 @@ import '../../entities/linuxUser'
 import '../../entities/dataToSend'
 import { Toolchain } from 'src/toolchain';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-users',
@@ -25,25 +26,27 @@ export class UsersComponent {
     'Authorization': `bearer ${localStorage.getItem('access-token')}`,
     'Content-Type': 'application/json'
   }
+  apiUrl: string = '';
 
   constructor(private router: Router) {}
 
   async ngOnInit() {
+    this.setApiUrl();
     const hostAddress = sessionStorage?.getItem('host')?.split('@');
     const password = sessionStorage.getItem('password');
 
     if (hostAddress != null && password != null) {
-      const body: dataToSend= { 
+      const body: dataToSend= {
         host: hostAddress[1],
         username: hostAddress[0],
         password: password
       }
-  
+
       const response = await HttpClient.httpRequest("POST",
-        "https://localhost:5081/api/CoreUserCrud/GetUsers",
+        `${this.apiUrl}/api/CoreUserCrud/GetUsers`,
         body, this.header)
-      
-      this.users = await response.json()            
+
+      this.users = await response.json()
       this.users.forEach(item => item.permissions.join(", "));
       this.users.map(user => {
         if (user.username === 'root')
@@ -54,6 +57,12 @@ export class UsersComponent {
     }
 
     this.isLoading = false
+  }
+  setApiUrl():void {
+    if (environment.production)
+      this.apiUrl = environment.apiUrl
+    else
+      this.apiUrl = environment.apiUrl
   }
 
   handleModalOpened(): void{
@@ -73,9 +82,9 @@ export class UsersComponent {
       userPassword: this.password,
       userConfirmPassword: this.ConfirmPassword
     };
-    
+
     if (Toolchain.ValidateInputNewUserData(dataToSend)) {
-      const response = await fetch("https://localhost:5081/api/CoreUserCrud/CreateUser", {
+      const response = await fetch(`${this.apiUrl}/api/CoreUserCrud/CreateUser`, {
         method: "POST",
         headers: this.header,
         body: JSON.stringify(dataToSend)
@@ -83,7 +92,7 @@ export class UsersComponent {
       console.log(response);
       if (response.status == 200)
         window.location.reload();
-      
+
     } else {
       alert('error')
     }
@@ -98,8 +107,8 @@ export class UsersComponent {
       userPassword: this.password,
       userConfirmPassword: this.ConfirmPassword
     };
-    
-    const response = await HttpClient.httpRequest("DELETE", "https://localhost:5081/api/CoreUserCrud/DeleteUser", dataToSend, this.header)
+
+    const response = await HttpClient.httpRequest("DELETE", `${this.apiUrl}/api/CoreUserCrud/DeleteUser`, dataToSend, this.header)
     if (response.status == 200)
       window.location.reload();
   }

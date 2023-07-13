@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient } from 'src/HttpClient';
+import { environment } from 'src/environments/environment';
 import { Toolchain } from 'src/toolchain';
 
 @Component({
@@ -17,7 +18,19 @@ export class SettingsComponent {
     'Authorization': `bearer ${localStorage.getItem('access-token')}`,
     'Content-Type': 'application/json'
   }
+  apiUrl: string = ''
 
+  ngOnInit() {
+    this.setApiUrl()
+  }
+
+  setApiUrl():void {
+    if (environment.production)
+      this.apiUrl = environment.apiUrl
+    else 
+      this.apiUrl = environment.apiUrl
+  }
+  
   async changeEmail(): Promise<void> {
     if (Toolchain.ValidateInputEmail(this.newEmail)) {
       const newUserData = {
@@ -25,7 +38,7 @@ export class SettingsComponent {
         ConfirmPassword: this.confirmPassword
       }
 
-      const request = await HttpClient.httpRequest("PUT",`http://localhost:5081/api/UserSettings/ChangeUserData/${localStorage.getItem('id')}`,newUserData,this.header)
+      const request = await HttpClient.httpRequest("PUT",`${this.apiUrl}/api/UserSettings/ChangeUserData/${localStorage.getItem('id')}`,newUserData,this.header)
 
       if (request.status == 200) {
         const response = await request.text()
@@ -41,7 +54,7 @@ export class SettingsComponent {
         ConfirmPassword: this.confirmPassword
       }
 
-      const request = await HttpClient.httpRequest("PUT",`http://localhost:5081/api/UserSettings/ChangeUserData/${localStorage.getItem('id')}`,newUserData,this.header)
+      const request = await HttpClient.httpRequest("PUT",`${this.apiUrl}/api/UserSettings/ChangeUserData/${localStorage.getItem('id')}`,newUserData,this.header)
 
       if (request.status == 200) {
         const response = await request.text()
@@ -55,7 +68,7 @@ export class SettingsComponent {
         ConfirmPassword: this.confirmPassword
       }
     
-      const request = await HttpClient.httpRequest("DELETE",`http://localhost:5081/api/UserSettings/DeleteAccount/${localStorage.getItem('id')}`,confirmPassword, this.header)
+      const request = await HttpClient.httpRequest("DELETE",`${this.apiUrl}/api/UserSettings/DeleteAccount/${localStorage.getItem('id')}`,confirmPassword, this.header)
 
       if (request.status == 200) {
         const response = await request.text()

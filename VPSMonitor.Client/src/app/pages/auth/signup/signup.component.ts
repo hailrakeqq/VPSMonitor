@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 import { Toolchain } from 'src/toolchain';
 
 @Component({
@@ -21,8 +22,13 @@ export class SignupComponent {
         Password: this.password,
         ConfirmPassword: this.confirmPassword
       }
-
-      const request = await fetch(`https://localhost:5081/api/Auth/Registration`, {
+      let apiUrl = ''
+      if (environment.production)
+        apiUrl = environment.apiUrl
+      else
+        apiUrl = environment.apiUrl
+      
+      const request = await fetch(`${apiUrl}/api/Auth/Registration`, {
         method: 'POST',
         headers: {'content-type' : 'application/json'},
         body: JSON.stringify(userData)

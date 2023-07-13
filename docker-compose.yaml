@@ -1,11 +1,13 @@
 services:
   backend:
     depends_on:
-      - "db"
+      - db
+    networks:
+      - dev 
     build:
-      context: ./VPSMonitor.API/.
+      context: .
     ports:
-      - "5045:80"
+      - "5081:80"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     restart: always
@@ -30,6 +32,16 @@ services:
       - app_data:/var/lib/postgresql/data
     networks:
       - dev
+
+  proxy: 
+    build: 
+      context: ./nginx/.
+
+    ports:
+      - "443:443"
+    depends_on: 
+      - backend
+      - frontend
 
 volumes:
   app_data:

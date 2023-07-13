@@ -37,26 +37,25 @@ export class TerminalComponent {
 
     this.term.loadAddon(this.fitAddon);
     const terminal = document.getElementById('terminal')
-  
+
     if(terminal)
       this.term.open(terminal);
-  
+
     this.fitAddon.fit();
 
     if (!this.hostAddress && !this.vpsPassword) {
       this.promptHost()
     }
 
-    this.term.write(`${this.hostAddress}: `); 
+    this.term.write(`${this.hostAddress}: `);
     this.term.onData((data) => {
       if (data === '\r') {
         const inputLine = this.userInput.trim();
-        this.userInput = ''; 
+        this.userInput = '';
 
-        console.log('Input Line:', inputLine);
         if (this.awaitingPassword)
           this.submitPassword(inputLine)
-        else 
+        else
           this.executeCommand(inputLine)
 
         this.updatePS1();
@@ -103,13 +102,13 @@ export class TerminalComponent {
 
     const formattedResponse = response.replace(/\n/g, '\r\n');
     const lines = formattedResponse.split('\n');
-    
+
     lines.forEach((line, index) => {
       if (index == 0)
         this.term.write('\n\r');
       else
-        this.term.write('\r'); 
-      
+        this.term.write('\r');
+
       this.term.writeln(line);
     });
     this.updatePS1();
@@ -119,14 +118,14 @@ export class TerminalComponent {
   submitPassword(password: string): void {
     this.vpsPassword = password.trim();
     sessionStorage.setItem('password', this.vpsPassword);
-  
+
     if (this.hostAddress != null) {
       const username = this.hostAddress.split('@')[0];
       const hostName = this.hostAddress.split('@')[1];
       this.term.writeln(`\r\nHost set to: ${this.hostAddress}`);
       this.term.writeln(`Welcome, ${username}@${hostName}`);
       this.term.writeln(`To change the host, enter the command 'sethost username@hostAddress'`);
-    
+
       this.command = '';
       this.awaitingPassword = false;
     }
@@ -138,6 +137,6 @@ export class TerminalComponent {
   }
 
   updatePS1():void {
-    this.term.write(`\r\n${this.hostAddress}: `);  
+    this.term.write(`\r\n${this.hostAddress}: `);
   }
 }

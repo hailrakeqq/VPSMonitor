@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from 'src/HttpClient';
 import { sftpData } from 'src/app/entities/sftpData';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-file-management-page',
@@ -28,6 +29,7 @@ export class FileManagementPageComponent {
   moveToPath: string | undefined | null = '';
   newItemName: string | undefined | null = '';
   selectedFile: any; 
+  apiUrl: string = '';
   contextMenuStyle: any = {};
   header = {
     'Authorization': `bearer ${localStorage.getItem('access-token')}`,
@@ -41,7 +43,7 @@ export class FileManagementPageComponent {
 
   async ngOnInit() {
     this.createBodyForHttpRequst()
-    
+    this.setApiUrl();
     this.filesAndFolders = await this.getListFilesAndFolders();
     this.displayedArray = this.filesAndFolders.filter(item => item.name[0] != '.')   
     this.currentDirectory = this.getCurrentDirectory(this.filesAndFolders[0].fullName)
@@ -49,9 +51,15 @@ export class FileManagementPageComponent {
     console.log(this.currentDirectory);
     
   }
+  setApiUrl():void {
+    if (environment.production)
+      this.apiUrl = environment.apiUrl
+    else 
+      this.apiUrl = environment.apiUrl
+  }
 
   async getListFilesAndFolders(): Promise<any> {      
-    const request = await HttpClient.httpRequest("POST", "https://localhost:5081/api/Sftp/list",
+    const request = await HttpClient.httpRequest("POST", `${this.apiUrl}/api/Sftp/list`,
       this.body, this.header)
     
     if (request.status == 200)
@@ -97,7 +105,7 @@ export class FileManagementPageComponent {
       const header = {
         'Authorization': `bearer ${localStorage.getItem('access-token')}`,
       }
-      const request = await fetch("https://localhost:5081/api/Sftp/upload", {
+      const request = await fetch(`${this.apiUrl}/api/Sftp/upload`, {
         method: "POST",
         headers: header,
         body: formData
@@ -149,7 +157,7 @@ export class FileManagementPageComponent {
     }
     
     this.body.SelectedFiles = this.selectedFiles
-    const response = await HttpClient.httpRequest("POST", "https://localhost:5081/api/Sftp/download", this.body, this.header)
+    const response = await HttpClient.httpRequest("POST", `${this.apiUrl}/api/Sftp/download`, this.body, this.header)
     
     if (response.status == 200) {    
       const blob = await response.blob()
@@ -184,7 +192,7 @@ export class FileManagementPageComponent {
     } else {
       this.body.SelectedFiles = this.selectedFiles
     }
-    const response = await HttpClient.httpRequest("DELETE", "https://localhost:5081/api/Sftp/delete", this.body, this.header)
+    const response = await HttpClient.httpRequest("DELETE", `${this.apiUrl}/api/Sftp/delete`, this.body, this.header)
 
     if (response.status == 200)
       window.location.reload()
@@ -196,7 +204,7 @@ export class FileManagementPageComponent {
       this.body.newItemName = this.newItemName
       this.body.ItemPath = fullName
     }
-    const response = await HttpClient.httpRequest("PUT", "https://localhost:5081/api/Sftp/rename", this.body, this.header)
+    const response = await HttpClient.httpRequest("PUT", `${this.apiUrl}/api/Sftp/rename`, this.body, this.header)
 
     this.newItemName = ''
 
@@ -210,7 +218,7 @@ export class FileManagementPageComponent {
       this.body.DestinationPath = this.copyToPath
       this.body.SourcePath = itemPath
 
-      await HttpClient.httpRequest("PUT", "https://localhost:5081/api/Sftp/copy", this.body, this.header)
+      await HttpClient.httpRequest("PUT", `${this.apiUrl}/api/Sftp/copy`, this.body, this.header)
       this.copyToPath = ''
     }
   }
@@ -222,7 +230,7 @@ export class FileManagementPageComponent {
       this.body.SourcePath = itemPath
     }
     
-    await HttpClient.httpRequest("PUT", "https://localhost:5081/api/Sftp/move", this.body, this.header)
+    await HttpClient.httpRequest("PUT", `${this.apiUrl}/api/Sftp/move`, this.body, this.header)
     this.moveToPath = ''
   }
 
@@ -289,7 +297,7 @@ export class FileManagementPageComponent {
     else
       this.body.newItemType = "file"
         
-    const response = await HttpClient.httpRequest("POST", "https://localhost:5081/api/Sftp/create", this.body, this.header)
+    const response = await HttpClient.httpRequest("POST", `${this.apiUrl}/api/Sftp/create`, this.body, this.header)
 
     if (response.status == 200)
       window.location.reload()
