@@ -1,18 +1,6 @@
- <div class="main">
-     <section class="information">
-        <div class="colored">
-            <h1 class="VSP" id="VPSMonitor">VPSMonitor</h1>
-          </div>
-          <hr>  
-            <div class="Monitor">
-                 <p> <span class="VPS2">VPSMonitor</span> - program that works with SSH.NET to monitoring and manage VPS resources, manage files, network configuration, and execute bash scripts and commands.</p>
-            </div> 
-        </section>  
-        <div class="links">
-            <a href="https://github.com/hailrakeqq/VPSMonitor">Github</a>
-        </div>
-            <div class="readme">
-<h2 id="floppy_disk-installation"> Installation</h2>
+<h1 id="vpsmonitor">VPSMonitor</h1>
+<p>VPSMonitor - program that works with SSH.NET to monitoring and manage VPS resources, manage files, network configuration, and execute bash scripts and commands.</p>
+<h2 id="-floppy_disk-installation">:floppy_disk: Installation</h2>
 <p>Requirement for build:</p>
 <ul>
 <li><code>.NET 7.0</code></li>
@@ -24,26 +12,49 @@
 <ol>
 <li><p>Clone the repository:
 For this step you need Git installed, but you can just download the zip file instead by clicking the button at the top of this page ☝️</p>
-<p> <code>git clone https://github.com/hailrakeqq/VPSMonitor.git</code></p>
-</li>
+<pre><code> git <span class="hljs-keyword">clone</span> <span class="hljs-title">https</span>://github.com/hailrakeqq/VPSMonitor.git
+</code></pre></li>
+</ol>
+<ol>
 <li><p>Navigate to the project directory:
 <em>(Type this into your CMD window, you&#39;re aiming to navigate the CMD window to the repository you just downloaded)</em></p>
-<p>  <code>cd VPSMonitor</code></p>
-</li>
+<pre><code> <span class="hljs-built_in">cd</span> VPSMonitor
+</code></pre></li>
+<li><p>Navigate to VPSMonitor.Client:</p>
+<pre><code> <span class="hljs-built_in">npm</span> i
+</code></pre><p> After return </p>
+<pre><code> <span class="hljs-built_in">cd</span> ..
+</code></pre></li>
 <li><p>Build with docker compose;
 Run:</p>
-<p> <code>docker compose -f &quot;docker-compose.yml&quot; up -d --build</code></p>
-</li>
+<pre><code> docker compose <span class="hljs-_">-f</span> <span class="hljs-string">"docker-compose.yml"</span> up <span class="hljs-_">-d</span> --build
+</code></pre></li>
+<li><p>Create db migration:</p>
+<pre><code> <span class="hljs-keyword">cd</span> VPSMonitor.API
+ dotnet ef database <span class="hljs-keyword">update</span>
+</code></pre></li>
 </ol>
-<p>After build you can get access to services by next URL&#39;s:</p>
-<pre><code>    `http://localhost:4200` - it&#39;s our frontend
+<p>After build and create migrations you can get access to services by next URL&#39;s:</p>
+<pre><code>    http:<span class="hljs-comment">//localhost:4200 - it's our frontend</span>
 
-    `https://localhost:5081` - it&#39;s our backend API
+    https:<span class="hljs-comment">//localhost:5081 - it's our backend API</span>
 
-    <!-- `User ID={username};Password={password};Server=db;Port=5433;Database=vpsmonitor;Host=127.0.0.1;` - connection string to db -->
-</code></pre>
-<p><br>For stop docker compose work you can use next command:</p>
-<pre><code>`docker compose down`
-</code></pre>
-            </div>
- </div>
+    <!-- User ID={username};Password={password};Server=db;Port=<span class="hljs-number">5433</span>;Database=vpsmonitor;Host=<span class="hljs-number">127.0</span><span class="hljs-number">.0</span><span class="hljs-number">.1</span>; - connection string to db -->
+</code></pre><p><br>For stop docker compose work you can use next command:</p>
+<pre><code>docker compose down
+</code></pre><h3 id="features-">Features:</h3>
+<ul>
+<li>[X] User authentication</li>
+<li>[X] Execution bash scripts and other commands</li>
+<li>[X] Obtaining information about status of the VPS</li>
+<li>[X] Linux users controls page</li>
+<li>[X] File management</li>
+<li>[ ] Proccess management </li>
+</ul>
+<h4 id="technology-stack-">Technology stack:</h4>
+<ul>
+<li>ASP.NET Core WebAPI</li>
+<li>Angular </li>
+<li>SSH.NET</li>
+<li>PostgreSQL</li>
+</ul>
