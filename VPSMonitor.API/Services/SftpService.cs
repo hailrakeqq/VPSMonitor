@@ -53,7 +53,7 @@ public class SftpService : ISftpRepository
                 foreach (string file in files)
                 {
                     string relativePath = Path.GetRelativePath(tempDir, file);
-                    zipArchive.CreateEntryFromFile(file, relativePath, CompressionLevel.Optimal);
+                    zipArchive.CreateEntryFromFile(file, relativePath, CompressionLevel.Fastest);
                 }
             }
 
