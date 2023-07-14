@@ -5,7 +5,6 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SignInComponent } from './pages/auth/signin/signin.component';
-import { AboutComponent } from './pages/about/about.component';
 import { HomeComponent } from './pages/home/home.component';
 import { SignupComponent } from './pages/auth/signup/signup.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
@@ -21,7 +20,6 @@ import { FileManagementPageComponent } from './pages/file-management-page/file-m
   declarations: [
     AppComponent,
     SignInComponent,
-    AboutComponent,
     HomeComponent,
     SignupComponent,
     SidebarComponent,

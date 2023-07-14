@@ -1,2 +1,49 @@
-<p>home works!</p>
-<p>hello - {{user.email}}</p>
+ <div class="main">
+     <section class="information">
+        <div class="colored">
+            <h1 class="VSP" id="VPSMonitor">VPSMonitor</h1>
+          </div>
+          <hr>  
+            <div class="Monitor">
+                 <p> <span class="VPS2">VPSMonitor</span> - program that works with SSH.NET to monitoring and manage VPS resources, manage files, network configuration, and execute bash scripts and commands.</p>
+            </div> 
+        </section>  
+        <div class="links">
+            <a href="https://github.com/hailrakeqq/VPSMonitor">Github</a>
+        </div>
+            <div class="readme">
+<h2 id="floppy_disk-installation"> Installation</h2>
+<p>Requirement for build:</p>
+<ul>
+<li><code>.NET 7.0</code></li>
+<li><code>NodeJS</code></li>
+<li><code>PostgreSQL</code></li>
+<li><code>Docker</code></li>
+</ul>
+<p><em>The following commands should be executed in a CMD, Bash or Powershell window. To do this, go to a folder on your computer, click in the folder path at the top and type CMD, then press enter.</em></p>
+<ol>
+<li><p>Clone the repository:
+For this step you need Git installed, but you can just download the zip file instead by clicking the button at the top of this page ☝️</p>
+<p> <code>git clone https://github.com/hailrakeqq/VPSMonitor.git</code></p>
+</li>
+<li><p>Navigate to the project directory:
+<em>(Type this into your CMD window, you&#39;re aiming to navigate the CMD window to the repository you just downloaded)</em></p>
+<p>  <code>cd VPSMonitor</code></p>
+</li>
+<li><p>Build with docker compose;
+Run:</p>
+<p> <code>docker compose -f &quot;docker-compose.yml&quot; up -d --build</code></p>
+</li>
+</ol>
+<p>After build you can get access to services by next URL&#39;s:</p>
+<pre><code>    `http://localhost:4200` - it&#39;s our frontend
+
+    `https://localhost:5081` - it&#39;s our backend API
+
+    <!-- `User ID={username};Password={password};Server=db;Port=5433;Database=vpsmonitor;Host=127.0.0.1;` - connection string to db -->
+</code></pre>
+<p><br>For stop docker compose work you can use next command:</p>
+<pre><code>`docker compose down`
+</code></pre>
+            </div>
+ </div>

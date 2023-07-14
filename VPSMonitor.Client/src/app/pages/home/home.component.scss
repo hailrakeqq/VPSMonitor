@@ -1,0 +1,205 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+* { 
+    /* position: relative; */
+    font-family: 'Poppins', sans-serif;
+    // background: #5d5f77;
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+    scroll-behavior: smooth;
+
+}
+.main{
+    width: 70%;
+    height: 70%;
+}
+
+.readme {
+    font-size: 20px;    
+}
+
+.go-top{
+    position: fixed;
+    left: 20px;
+    top: 50%;
+    border-radius: 20px;
+    transform: translateY(-50%);
+    font-size: 20px;
+    cursor: pointer;
+    padding: 10px 15px;
+    color: rgba(0,51,153,0.5);
+    border: 1px solid rgba(0,51,153,0.5);
+    background-color: #186cb8;
+}
+.go-top:hover{
+    color: rgba(0,51,153,0.8);
+    border: 1px solid rgba(0,51,153,0.8);
+    background-color: #186cb8;
+}
+/*  глобальные переменные для цветов, в которые  окрашивается текст */
+:root {
+    --color-1: #000000;
+    --color-2: #000000;
+    --color-3: #000000;
+    --color-4: #000000;
+    --color-5: #000000;
+  }
+  
+.colored {
+    line-height: 1;
+    display: grid;
+    place-items: center;
+  }
+.VSP {
+
+    font-family: 'Poppins', sans-serif;    font-size: 10vw;
+    font-weight: 10;
+  
+    width: -webkit-min-content;
+    width: -moz-min-content;
+    width: min-content;
+
+    margin: auto;
+
+    text-transform: uppercase;
+
+    background: linear-gradient(219deg, 
+      #186cb8 19%, 
+      transparent 19%,transparent 20%, 
+      #2a9a9f 20%, #2a9a9f  39%,
+      transparent 39%,transparent 40%, 
+      #f1b211 40%,#f1b211 59% ,
+      transparent 59%,transparent 60%, 
+      #e83611 60%,#e83611 79%,
+      transparent 79%, transparent 80%, 
+      #f9002f 80%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+p{
+    color:rgb(0, 0, 0)
+}
+.information{
+    position: relative;
+    height: 525px;
+}
+.Monitor{
+    height: 50px;
+    width: 1100px;
+    position: absolute;
+    top: 275px;
+    left: 80px;
+    font-size: 28px;
+}
+.VPS2{
+    font-size: 44px;
+}
+.block{
+    position: absolute;
+    left: 1250px;
+    width: 350px;
+    height: 280px;
+    border: whitesmoke 1px solid;
+    color: whitesmoke;
+}
+ul{
+    margin: auto;
+    font-size: 24px;
+}
+.bi{
+    font-size: 24px;
+}
+.we{
+    color: white;
+    position: absolute;
+    top: 600px;
+    left: 650px;
+    font-size: 74px;
+}
+.information{
+    width: auto;
+    height:525px;
+}
+.box{
+    width: auto;
+    height: 2000px;
+}
+.dog{
+    display: flex;
+    justify-content: center;
+    margin-top: 25px;
+    color: rgb(0, 0, 0);
+    font-size: 64px;
+}
+.border, .border1,.border2,.border3{
+    padding: .2em .4em;
+    margin-top: .25em;
+    font-size: 85%;
+    white-space: break-spaces;
+    border-radius: 6px;
+    width: 110px;
+}
+.build{
+    padding: 15px;
+}
+
+.following{
+    font-size: 18px;
+    padding-left: 15px;
+}
+.Clone{
+    padding-left: 20px;
+    font-size: 26px;
+}
+.git-clone{
+   font-size: 25px;
+   padding-left: 53px;
+}
+.Navigate{
+    padding-left: 20px;
+    font-size: 26px;
+}
+.cd{
+    font-size: 25px;
+    padding-left: 53px;
+}
+.docker{
+    padding-left: 20px;
+    font-size: 26px;
+}
+.docker-compose{
+    font-size: 25px;
+    padding-left: 53px;
+}
+.URL{
+    font-size: 18px;
+    padding-left: 15px;
+}
+.after-box{
+    /* border: 1px solid black; */
+    padding: 15px;
+    line-height: 54px;
+    border-radius: 25px;
+}
+.stop-docker{
+    padding-left: 20px;
+    font-size: 26px;
+}
+.down{
+    font-size: 18px;
+    padding-left: 30px;
+}
+.Features{
+    padding-left: 15px;
+    font-size: 32px;
+}
+ul{
+    list-style: none;
+}
+.Technology{
+    padding-left: 15px;
+    font-size: 32px;
+}
+.uu{
+    list-style: inside;
+}
