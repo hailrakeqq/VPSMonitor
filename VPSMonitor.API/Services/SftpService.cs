@@ -40,16 +40,31 @@ public class SftpService : ISftpRepository
         Directory.CreateDirectory(tempDir);
 
         string zipPath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + ".zip");
+
         try
         {
             await DownloadFilesAsync(sftpRequest.SelectedFiles, client, tempDir);
 
+            using (FileStream zipStream = new FileStream(zipPath, FileMode.Create))
+            using (ZipArchive zipArchive = new ZipArchive(zipStream, ZipArchiveMode.Create))
+            {
+                string[] files = Directory.GetFiles(tempDir, "*", SearchOption.AllDirectories);
+
+                foreach (string file in files)
+                {
+                    string relativePath = Path.GetRelativePath(tempDir, file);
+                    zipArchive.CreateEntryFromFile(file, relativePath, CompressionLevel.Optimal);
+                }
+            }
+
             stream.Position = 0;
 
-            ZipFile.CreateFromDirectory(tempDir, zipPath);
-
-            byte[] zipBytes = await System.IO.File.ReadAllBytesAsync(zipPath);
-            return zipBytes;
+            using (FileStream zipFileStream = File.OpenRead(zipPath))
+            {
+                byte[] zipBytes = new byte[zipFileStream.Length];
+                await zipFileStream.ReadAsync(zipBytes.AsMemory(0, zipBytes.Length));
+                return zipBytes;
+            }
         }
         finally
         {
