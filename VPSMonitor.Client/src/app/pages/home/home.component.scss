@@ -83,36 +83,29 @@ p{
     height: 525px;
 }
 .Monitor{
-    height: 150px;
-    width: 1000px;
+    height: 50px;
+    width: 1100px;
     position: absolute;
     top: 275px;
-    left: 70px;
+    left: 80px;
     font-size: 28px;
 }
 .VPS2{
     font-size: 44px;
 }
-
 .block{
     position: absolute;
-    left: 1150px;
+    left: 1250px;
     width: 350px;
     height: 280px;
-    // border: black 1px solid;
+    border: whitesmoke 1px solid;
     color: whitesmoke;
 }
 ul{
     margin: auto;
     font-size: 24px;
 }
-.text77{
-    padding: 50px;
-}
 .bi{
-    position: absolute;
-    margin: 3px;
-    left: 5px;
     font-size: 24px;
 }
 .we{
@@ -128,7 +121,7 @@ ul{
 }
 .box{
     width: auto;
-    height: 1000px;
+    height: 2000px;
 }
 .dog{
     display: flex;
@@ -150,20 +143,20 @@ ul{
 }
 
 .following{
-    font-size: 25px;
+    font-size: 18px;
     padding-left: 15px;
 }
 .Clone{
     padding-left: 20px;
-    font-size: 18px;
+    font-size: 26px;
 }
 .git-clone{
-   font-size: 18px;
+   font-size: 25px;
    padding-left: 53px;
 }
 .Navigate{
     padding-left: 20px;
-    font-size: 18px;
+    font-size: 26px;
 }
 .cd{
     font-size: 25px;
@@ -174,11 +167,11 @@ ul{
     font-size: 26px;
 }
 .docker-compose{
-    font-size: 18px;
+    font-size: 25px;
     padding-left: 53px;
 }
 .URL{
-    font-size: 28px;
+    font-size: 18px;
     padding-left: 15px;
 }
 .after-box{
