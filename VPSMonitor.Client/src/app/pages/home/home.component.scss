@@ -35,7 +35,6 @@
     border: 1px solid rgba(0,51,153,0.8);
     background-color: #186cb8;
 }
-/*  глобальные переменные для цветов, в которые  окрашивается текст */
 :root {
     --color-1: #000000;
     --color-2: #000000;
@@ -84,29 +83,36 @@ p{
     height: 525px;
 }
 .Monitor{
-    height: 50px;
-    width: 1100px;
+    height: 150px;
+    width: 1000px;
     position: absolute;
     top: 275px;
-    left: 80px;
+    left: 70px;
     font-size: 28px;
 }
 .VPS2{
     font-size: 44px;
 }
+
 .block{
     position: absolute;
-    left: 1250px;
+    left: 1150px;
     width: 350px;
     height: 280px;
-    border: whitesmoke 1px solid;
+    // border: black 1px solid;
     color: whitesmoke;
 }
 ul{
     margin: auto;
     font-size: 24px;
 }
+.text77{
+    padding: 50px;
+}
 .bi{
+    position: absolute;
+    margin: 3px;
+    left: 5px;
     font-size: 24px;
 }
 .we{
@@ -122,7 +128,7 @@ ul{
 }
 .box{
     width: auto;
-    height: 2000px;
+    height: 1000px;
 }
 .dog{
     display: flex;
@@ -144,20 +150,20 @@ ul{
 }
 
 .following{
-    font-size: 18px;
+    font-size: 25px;
     padding-left: 15px;
 }
 .Clone{
     padding-left: 20px;
-    font-size: 26px;
+    font-size: 18px;
 }
 .git-clone{
-   font-size: 25px;
+   font-size: 18px;
    padding-left: 53px;
 }
 .Navigate{
     padding-left: 20px;
-    font-size: 26px;
+    font-size: 18px;
 }
 .cd{
     font-size: 25px;
@@ -168,11 +174,11 @@ ul{
     font-size: 26px;
 }
 .docker-compose{
-    font-size: 25px;
+    font-size: 18px;
     padding-left: 53px;
 }
 .URL{
-    font-size: 18px;
+    font-size: 28px;
     padding-left: 15px;
 }
 .after-box{
