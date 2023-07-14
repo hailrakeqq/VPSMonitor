@@ -14,20 +14,34 @@ Requirement for build:
 1. Clone the repository:
 For this step you need Git installed, but you can just download the zip file instead by clicking the button at the top of this page ☝️
 
-    `git clone https://github.com/hailrakeqq/VPSMonitor.git`
+        git clone https://github.com/hailrakeqq/VPSMonitor.git
   
 
 2. Navigate to the project directory:
 *(Type this into your CMD window, you're aiming to navigate the CMD window to the repository you just downloaded)*
 
-     `cd VPSMonitor`
+        cd VPSMonitor
 
-3. Build with docker compose;
+3. Navigate to VPSMonitor.Client:
+
+        npm i
+
+    After return 
+
+        cd ..
+
+4. Build with docker compose;
 Run:
 
-    `docker compose -f "docker-compose.yml" up -d --build`
+        docker compose -f "docker-compose.yml" up -d --build
 
-After build you can get access to services by next URL's:
+5. Create db migration:
+
+        cd VPSMonitor.API
+        dotnet ef database update
+
+   
+After build and create migrations you can get access to services by next URL's:
 ```
     `http://localhost:4200` - it's our frontend
 
