@@ -14,9 +14,6 @@ constructor(private router: Router) { }
     public HomeRedirect(): void{
         this.router.navigate([''])
     }
-    public AboutRedirect(): void{
-        this.router.navigate(['/about'])
-    }
     public SignInRedirect(): void{
         this.router.navigate(['/signin'])
     }
